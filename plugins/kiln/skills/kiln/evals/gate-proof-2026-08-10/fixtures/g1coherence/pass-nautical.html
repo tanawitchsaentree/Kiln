@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html><head><style>
+body { margin:0; background:#e9e4d3; font-family:'Courier New',monospace; }
+.chart { position:relative; width:640px; height:400px; background:#dcd6bf; border:1px solid #2b2b2b; margin:20px auto; }
+.sea { position:absolute; left:0; top:0; width:640px; height:220px; background:#bcd7d9; border-bottom:1px solid #2b2b2b; }
+.land { position:absolute; left:0; top:220px; width:640px; height:180px; background:#d8cfa6; }
+.channel { position:absolute; left:60px; top:40px; width:520px; height:60px; background:#a9c9cc; border:1px solid #2b2b2b; }
+.contour { position:absolute; border:1px solid #6b6b58; border-radius:50%; }
+.c1{left:100px; top:60px; width:120px; height:70px;}
+.c2{left:90px; top:50px; width:150px; height:90px;}
+.hazard { position:absolute; left:300px; top:100px; width:14px; height:14px; background:#c0392b; border:1px solid #2b2b2b; transform:rotate(45deg); }
+.label { position:absolute; font-size:10px; color:#2b2b2b; letter-spacing:0.5px; }
+.l1 { left:318px; top:96px; }
+.l2 { left:150px; top:130px; }
+.sounding { position:absolute; font-size:9px; color:#2b2b2b; font-variant-numeric: tabular-nums; }
+.compass { position:absolute; right:30px; bottom:30px; width:70px; height:70px; border:1px solid #2b2b2b; border-radius:50%; }
+.compass:after{content:"N"; position:absolute; top:2px; left:31px; font-size:10px;}
+</style></head>
+<body>
+<div class="chart">
+  <div class="sea"></div>
+  <div class="land"></div>
+  <div class="channel"></div>
+  <div class="contour c1"></div>
+  <div class="contour c2"></div>
+  <div class="hazard"></div>
+  <div class="label l1">WK 4.2m</div>
+  <div class="label l2">CH ANCHORAGE</div>
+  <div class="sounding" style="left:200px; top:90px;">12</div>
+  <div class="sounding" style="left:230px; top:150px;">8</div>
+  <div class="sounding" style="left:400px; top:70px;">22</div>
+  <div class="compass"></div>
+</div>
+</body></html>

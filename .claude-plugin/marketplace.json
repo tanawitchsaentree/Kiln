@@ -1,0 +1,12 @@
+{
+  "name": "kiln-marketplace",
+  "owner": { "name": "kiln" },
+  "description": "kiln — the design-system orchestrator skill, bundled with the sub-skills it calls into (docs-engine, spacing-engine, form-language, variant-foundry).",
+  "plugins": [
+    {
+      "name": "kiln",
+      "source": "./plugins/kiln",
+      "description": "Design-system orchestrator: lineage + intensity vector, audit/extend, docs-site content model, spacing gates, form-language derivation, and a K-candidate variant foundry."
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+  "reactRoot": "../../packages/react",
+  "docsPagesDir": "src/app/components",
+  "json": false
+}

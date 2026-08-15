@@ -1,0 +1,13 @@
+{
+  "typography": {
+    "scale": {
+      "$description": "Type sizes chosen to look right on screen during design review",
+      "step--2": { "$value": "11px",  "$description": "looked right" },
+      "step--1": { "$value": "13px",  "$description": "looked right" },
+      "step-0":  { "$value": "16px",  "$description": "base" },
+      "step-1":  { "$value": "19px",  "$description": "looked right" },
+      "step-2":  { "$value": "27px",  "$description": "looked right" },
+      "step-3":  { "$value": "34px",  "$description": "looked right, slightly bigger for hero" }
+    }
+  }
+}
