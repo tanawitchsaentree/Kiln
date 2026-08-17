@@ -1,0 +1,11 @@
+{
+  "name": "kiln-plugin-installer",
+  "version": "1.0.0",
+  "description": "One-command installer for the kiln Claude Code plugin marketplace",
+  "bin": {
+    "kiln-install": "./bin/install.js"
+  },
+  "author": { "name": "tanawitchsaentree" },
+  "homepage": "https://github.com/tanawitchsaentree/Kiln",
+  "license": "MIT"
+}

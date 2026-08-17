@@ -22,6 +22,12 @@ rather than making them separate things to remember to run:
 
 ## Install
 
+```bash
+npx github:tanawitchsaentree/Kiln
+```
+
+That runs both setup steps for you. If you'd rather do it by hand, or from inside Claude Code:
+
 ```
 /plugin marketplace add tanawitchsaentree/Kiln
 /plugin install kiln@kiln-marketplace
