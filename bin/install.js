@@ -15,10 +15,15 @@ function run(args) {
   return result.status ?? 1;
 }
 
-// Safe to run this whole script again any time to pick up new commits: `marketplace add` on an
-// already-added marketplace updates its config in place rather than erroring, `marketplace
-// update` re-fetches the repo, and `plugin install` on an already-installed plugin re-installs
-// the latest version from that marketplace. Same command for first install and every update.
+// `update` is the same three commands as a fresh install (marketplace add on an already-added
+// marketplace updates config in place, marketplace update re-fetches the repo, plugin install on
+// an already-installed plugin re-installs the latest version) — this mode exists so the command a
+// returning user types actually says "update," instead of asking them to remember that re-running
+// the install command is the update path.
+const mode = process.argv[2] === 'update' ? 'update' : 'install';
+
+console.log(mode === 'update' ? 'Updating kiln to the latest commit...\n' : 'Installing kiln...\n');
+
 const addStatus = run(['plugin', 'marketplace', 'add', 'tanawitchsaentree/Kiln']);
 if (addStatus !== 0) {
   process.exit(addStatus);
@@ -35,10 +40,14 @@ if (installStatus === 0) {
   // it ran has no way to know a plugin changed underneath it — the plugin loader only reads
   // installed plugins at session start, per Claude Code's own docs. Say so explicitly rather than
   // letting someone re-run this, see no error, and wonder why kiln still isn't there.
-  console.log('\nkiln is installed (or updated to the latest commit).');
+  console.log(mode === 'update' ? '\nkiln is up to date.' : '\nkiln is installed.');
   console.log('If you have a Claude Code session already open, run /reload-plugins inside it');
   console.log('(or start a new session) before kiln shows up — this script cannot do that for you.');
   console.log('Then try: kiln study <image or URL>');
-  console.log('\nRun this same npx command again any time later to update.');
+  console.log(
+    mode === 'update'
+      ? '\nRun this update command again any time later.'
+      : '\nRun `npx github:tanawitchsaentree/Kiln update` any time later to update.'
+  );
 }
 process.exit(installStatus);

@@ -26,8 +26,15 @@ rather than making them separate things to remember to run:
 npx github:tanawitchsaentree/Kiln
 ```
 
-That runs the setup for you. Run the exact same command again any time to update to the latest
-commit — it's safe to re-run, and there's no separate update command to remember.
+To update later:
+
+```bash
+npx github:tanawitchsaentree/Kiln update
+```
+
+Both run the same three steps under the hood (it's safe to run either one any time), but the
+second one is the command to reach for once kiln is already installed and you just want the latest
+commit.
 
 If you'd rather do it by hand, or from inside Claude Code:
 
