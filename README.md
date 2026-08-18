@@ -26,12 +26,18 @@ rather than making them separate things to remember to run:
 npx github:tanawitchsaentree/Kiln
 ```
 
-That runs both setup steps for you. If you'd rather do it by hand, or from inside Claude Code:
+That runs the setup for you. Run the exact same command again any time to update to the latest
+commit — it's safe to re-run, and there's no separate update command to remember.
+
+If you'd rather do it by hand, or from inside Claude Code:
 
 ```
 /plugin marketplace add tanawitchsaentree/Kiln
 /plugin install kiln@kiln-marketplace
 ```
+
+To update by hand later: `/plugin marketplace update kiln-marketplace`, then re-run
+`/plugin install kiln@kiln-marketplace`.
 
 Or from the CLI:
 
