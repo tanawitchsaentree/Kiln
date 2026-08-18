@@ -117,9 +117,8 @@ demonstrated that the restraint was never really the thesis.
 
 ## Gates — 14, mirroring the other two sets' shape but asking a different question
 
-Every gate below still needs evidence per this repo's standing discipline — a script output, a
-computed value, a screenshot, a file actually opened. "Not run" is still a legitimate answer; an
-unbacked yes is still not.
+Every gate below still needs evidence per `phases/7-gates.md`'s "Evidence discipline" section —
+read that first if you loaded this file directly rather than arriving at it through Phase 7.
 
 ### G1 — The refusal is named, specific, and costly
 

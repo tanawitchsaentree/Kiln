@@ -98,7 +98,7 @@ Load only when the condition fires. Each is named in the phase file that needs i
 | Expanding to a full system | `references/foundations/INDEX.md` |
 | More than one theme or brand | `references/foundations/theming.md` |
 | Shipping tokens to more than one consumer | `references/export.md` |
-| Designers work in a design tool alongside | `references/design-tool.md` |
+| Package or Program scale, or the brief mentions Figma, a library, or handoff | `references/design-tool.md` |
 | Package or Program scale | `references/scale.md` |
 | Building component packages | `references/package.md` |
 | Building the documentation surface | `references/docs-shell.md` |

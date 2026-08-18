@@ -8,10 +8,8 @@ boldness is judged on execution precision, because precision is the entire argum
 is making. A build that did declare restraint uses `gates-restraint.md` instead, even though its
 vector will also read as quiet by this file's own threshold.
 
-Every gate answer records what produced it: a computed value, a resolved build output, a
-screenshot, a script's exit code, a file actually opened. A gate answered from confidence is not
-answered — mark it **not run** rather than guessing, per `ORDER.md`'s non-negotiables. Not run is a
-usable result. An unbacked yes stops anyone from checking again, which is worse than a gap.
+Every gate below needs evidence per `phases/7-gates.md`'s "Evidence discipline" section — read
+that first if you loaded this file directly rather than arriving at it through Phase 7.
 
 **Not every gate here has been gate-proved to the same standard it asks of the systems it scores.**
 `evals/gate-proof-tally-2026-08-10/report.md` tracks which of these 14 gates have been mutation- or
