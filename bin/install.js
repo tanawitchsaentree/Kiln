@@ -31,7 +31,14 @@ if (updateStatus !== 0) {
 
 const installStatus = run(['plugin', 'install', 'kiln@kiln-marketplace']);
 if (installStatus === 0) {
-  console.log('\nkiln is installed (or updated to the latest commit). Try: kiln study <image or URL>');
-  console.log('Run this same command again any time to update.');
+  // This script runs outside any Claude Code session, so a session that was already open before
+  // it ran has no way to know a plugin changed underneath it — the plugin loader only reads
+  // installed plugins at session start, per Claude Code's own docs. Say so explicitly rather than
+  // letting someone re-run this, see no error, and wonder why kiln still isn't there.
+  console.log('\nkiln is installed (or updated to the latest commit).');
+  console.log('If you have a Claude Code session already open, run /reload-plugins inside it');
+  console.log('(or start a new session) before kiln shows up — this script cannot do that for you.');
+  console.log('Then try: kiln study <image or URL>');
+  console.log('\nRun this same npx command again any time later to update.');
 }
 process.exit(installStatus);

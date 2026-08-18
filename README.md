@@ -46,6 +46,10 @@ claude plugin marketplace add tanawitchsaentree/Kiln
 claude plugin install kiln@kiln-marketplace
 ```
 
+**If you already have a Claude Code session open**, none of the above take effect in it
+automatically — the plugin loader only reads installed plugins at session start. Run
+`/reload-plugins` inside that session (or start a new one) before kiln shows up.
+
 ## Use
 
 Once installed, just describe what you're building — a design system, a docs site, an audit of an
