@@ -43,8 +43,9 @@ If you'd rather do it by hand, or from inside Claude Code:
 /plugin install kiln@kiln-marketplace
 ```
 
-To update by hand later: `/plugin marketplace update kiln-marketplace`, then re-run
-`/plugin install kiln@kiln-marketplace`.
+To update by hand later: `/plugin marketplace update kiln-marketplace`, then
+`/plugin update kiln@kiln-marketplace` — not `/plugin install` again, which reports "already
+installed" and stops without checking for a newer version.
 
 Or from the CLI:
 
@@ -53,9 +54,13 @@ claude plugin marketplace add tanawitchsaentree/Kiln
 claude plugin install kiln@kiln-marketplace
 ```
 
-**If you already have a Claude Code session open**, none of the above take effect in it
-automatically — the plugin loader only reads installed plugins at session start. Run
-`/reload-plugins` inside that session (or start a new one) before kiln shows up.
+To update by hand later from the CLI: `claude plugin marketplace update kiln-marketplace`, then
+`claude plugin update kiln@kiln-marketplace`.
+
+**Restart Claude Code after any install or update** — fully quit and reopen, not just a new
+session. Verified directly: `claude plugin update` itself reports "Restart to apply changes," and
+a plugin that's merely "already installed" per `claude plugin install` does not mean it's the
+latest version.
 
 ## Use
 

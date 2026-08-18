@@ -15,11 +15,6 @@ function run(args) {
   return result.status ?? 1;
 }
 
-// `update` is the same three commands as a fresh install (marketplace add on an already-added
-// marketplace updates config in place, marketplace update re-fetches the repo, plugin install on
-// an already-installed plugin re-installs the latest version) — this mode exists so the command a
-// returning user types actually says "update," instead of asking them to remember that re-running
-// the install command is the update path.
 const mode = process.argv[2] === 'update' ? 'update' : 'install';
 
 console.log(mode === 'update' ? 'Updating kiln to the latest commit...\n' : 'Installing kiln...\n');
@@ -29,20 +24,36 @@ if (addStatus !== 0) {
   process.exit(addStatus);
 }
 
-const updateStatus = run(['plugin', 'marketplace', 'update', 'kiln-marketplace']);
-if (updateStatus !== 0) {
-  process.exit(updateStatus);
+const marketplaceUpdateStatus = run(['plugin', 'marketplace', 'update', 'kiln-marketplace']);
+if (marketplaceUpdateStatus !== 0) {
+  process.exit(marketplaceUpdateStatus);
 }
 
-const installStatus = run(['plugin', 'install', 'kiln@kiln-marketplace']);
-if (installStatus === 0) {
-  // This script runs outside any Claude Code session, so a session that was already open before
-  // it ran has no way to know a plugin changed underneath it — the plugin loader only reads
-  // installed plugins at session start, per Claude Code's own docs. Say so explicitly rather than
-  // letting someone re-run this, see no error, and wonder why kiln still isn't there.
+// `plugin install` on an already-installed plugin reports "already installed" and stops — it
+// does NOT check the refreshed marketplace cache for a newer version. `plugin update` does that
+// version check, but only works on something already installed. Update mode tries `update` first
+// and falls back to `install` for someone who typed `update` before ever installing; install mode
+// calls `install` directly since there's nothing installed yet to update. Verified directly
+// against a real `claude` CLI (v2.1.234): plugin install alone silently left a stale 1.0.0
+// installed even after marketplace update had already pulled 1.1.0 — plugin update was the only
+// command that actually bumped the installed copy.
+let finalStatus;
+if (mode === 'update') {
+  finalStatus = run(['plugin', 'update', 'kiln@kiln-marketplace']);
+  if (finalStatus !== 0) {
+    finalStatus = run(['plugin', 'install', 'kiln@kiln-marketplace']);
+  }
+} else {
+  finalStatus = run(['plugin', 'install', 'kiln@kiln-marketplace']);
+}
+
+if (finalStatus === 0) {
+  // `claude plugin update`'s own success message says "Restart to apply changes" — trust that
+  // over a general "/reload-plugins usually works" claim, since it's the tool's own stated
+  // requirement for this specific path.
   console.log(mode === 'update' ? '\nkiln is up to date.' : '\nkiln is installed.');
-  console.log('If you have a Claude Code session already open, run /reload-plugins inside it');
-  console.log('(or start a new session) before kiln shows up — this script cannot do that for you.');
+  console.log('Restart Claude Code (fully quit and reopen, not just a new session) to pick this');
+  console.log('up in any session, new or already open — this script cannot do that for you.');
   console.log('Then try: kiln study <image or URL>');
   console.log(
     mode === 'update'
@@ -50,4 +61,4 @@ if (installStatus === 0) {
       : '\nRun `npx github:tanawitchsaentree/Kiln update` any time later to update.'
   );
 }
-process.exit(installStatus);
+process.exit(finalStatus);
