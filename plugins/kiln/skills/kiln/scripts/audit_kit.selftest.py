@@ -16,6 +16,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).parent))
+from audit_kit import find_kit_repo_root
+
 ROOT = Path(__file__).parent.parent
 AUDIT_SCRIPT = ROOT / "scripts" / "audit_kit.py"
 
@@ -159,40 +162,53 @@ def case_dead_load(failures):
 
 
 def case_superseded_bad_winner(failures):
-    target = ROOT.parent.parent / "agents" / "superseded" / "intake.md"
-    if not target.exists():
-        failures.append(f"superseded case: {target} not found")
-        return
+    """This marketplace repo ships no real superseded/ fixture to mutate (unlike a host repo that
+    adopted kiln directly) — build one from scratch, including whatever directories have to exist
+    for it, and remove exactly what this case created, nothing more."""
+    repo_root = find_kit_repo_root(ROOT)
+    superseded_dir = repo_root / ".claude" / "agents" / "superseded"
+    target = superseded_dir / ".audit-kit-selftest-fixture.md"
+    created_dirs = [
+        d for d in (repo_root / ".claude", repo_root / ".claude" / "agents", superseded_dir)
+        if not d.exists()
+    ]
 
-    def mutate(text):
-        return text.replace(
-            "Merged into `.claude/agents/interpreter.md`",
-            "Merged into `.claude/agents/nonexistent-winner.md`",
+    try:
+        superseded_dir.mkdir(parents=True, exist_ok=True)
+        target.write_text(
+            "SUPERSEDED\n\nMerged into `.claude/agents/nonexistent-winner.md`.\n", encoding="utf-8"
         )
-
-    def check(code, output):
+        code, output = run_audit()
         if code == 0:
-            return False, "planted nonexistent winner path did not cause a failing exit"
-        if "nonexistent-winner.md" not in output:
-            return False, f"failed but didn't name the planted winner — output: {output[:300]}"
-        return True, None
-
-    ok, reason = with_mutation(target, mutate, check, "superseded (bad winner path)")
-    if ok:
-        print("✓ superseded: planted nonexistent winner path correctly caught")
-    else:
-        failures.append(reason)
+            failures.append("superseded (bad winner path): planted nonexistent winner path did not cause a failing exit")
+        elif "nonexistent-winner.md" not in output:
+            failures.append(f"superseded (bad winner path): failed but didn't name the planted winner — output: {output[:300]}")
+        else:
+            print("✓ superseded: planted nonexistent winner path correctly caught")
+    finally:
+        target.unlink(missing_ok=True)
+        for d in reversed(created_dirs):
+            if d.exists() and not any(d.iterdir()):
+                d.rmdir()
 
 
 def case_superseded_duplicate_backlog(failures):
-    repo_root = ROOT.parent.parent.parent
-    real_backlog = repo_root / "BACKLOG.md"
-    fake_backlog = repo_root / "packages" / "BACKLOG.md"
-    if not real_backlog.exists():
-        failures.append("superseded (duplicate BACKLOG) case: no real BACKLOG.md found to duplicate")
-        return
+    """This marketplace repo ships no BACKLOG.md at all — create two temporary ones (there is no
+    real project content to duplicate) so the check has something real to count, and remove both
+    plus any directory made to hold the second copy. Also works unmodified in a host repo that
+    already has a real BACKLOG.md: that one is left alone, only the second copy is planted."""
+    repo_root = find_kit_repo_root(ROOT)
+    first = repo_root / "BACKLOG.md"
+    second_dir = repo_root / "packages"
+    second = second_dir / "BACKLOG.md"
+    first_created = not first.exists()
+    second_dir_created = not second_dir.exists()
+
     try:
-        fake_backlog.write_text(real_backlog.read_text(encoding="utf-8"), encoding="utf-8")
+        if first_created:
+            first.write_text("# BACKLOG\n\naudit_kit.selftest fixture — safe to delete.\n", encoding="utf-8")
+        second_dir.mkdir(parents=True, exist_ok=True)
+        second.write_text("# BACKLOG\n\naudit_kit.selftest fixture — safe to delete.\n", encoding="utf-8")
         code, output = run_audit()
         if code == 0:
             failures.append("superseded (duplicate BACKLOG): planted second BACKLOG.md did not cause a failing exit")
@@ -201,8 +217,11 @@ def case_superseded_duplicate_backlog(failures):
         else:
             print("✓ superseded: planted duplicate BACKLOG.md correctly caught")
     finally:
-        if fake_backlog.exists():
-            fake_backlog.unlink()
+        second.unlink(missing_ok=True)
+        if second_dir_created and second_dir.exists() and not any(second_dir.iterdir()):
+            second_dir.rmdir()
+        if first_created:
+            first.unlink(missing_ok=True)
 
 
 def main():

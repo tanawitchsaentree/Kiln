@@ -1,6 +1,6 @@
 ---
 name: form-language
-description: Derives a per-component-class form language (silhouette, depth treatment, corner logic, label placement, pressed metaphor) from a system's lineage, between Phase 1 (Foundations) and Phase 2 (Tokens). Use when a system's palette/spacing/type are locked but no decision states what a control's SHAPE and DEPTH should be — the Anatomy Contract covers behavior/API/states, never form, so nothing else in the pipeline asks this question. Also use to audit a shipped system for palette-survived-form-died drift.
+description: Derives a per-component-class form language (silhouette, depth treatment, corner logic, label placement, pressed metaphor) from a system's lineage, once its palette/spacing/type foundations are locked and before components get built — kiln's own Phase 6 (Expand), or the equivalent point in a project's own pipeline. Use when a system's palette/spacing/type are locked but no decision states what a control's SHAPE and DEPTH should be — a behavior/API/states contract covers everything except form, so nothing else in the pipeline asks this question. Also use to audit a shipped system for palette-survived-form-died drift.
 ---
 
 # Form Language

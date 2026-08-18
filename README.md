@@ -15,7 +15,7 @@ rather than making them separate things to remember to run:
 
 | Sub-skill | Called from | What it does |
 |---|---|---|
-| `docs-engine` | `kiln docs` | A real Bootstrap/MUI-grade documentation site — content model + gate set (G-D1-G-D8) |
+| `docs-engine` | `kiln docs` | A real Bootstrap/MUI-grade documentation site — content model + gate set (G-D1-G-D11) |
 | `spacing-engine` | Phase 6, via the tokens foundation | Spacing rules actually measured in a browser instead of eyeballed — turns "spacing encodes relationship" into a measured gate |
 | `form-language` | Phase 6, via the depth foundation | Derives what a control's SHAPE should be from its lineage reference, not just its color — per-component-class (control/input/surface/display/separator) silhouette+depth derivation |
 | `variant-foundry` | Phase 6, for identity components | Generates genuinely distinct candidates instead of one safe default dressed up three ways — K-candidate generation, floor-filtered, judged by a role separated from the generator |

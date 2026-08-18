@@ -37,7 +37,7 @@ run. Each is documented in full in its own `SKILL.md`; the table below is only t
 
 | Sub-skill | Called from | Why it's not just part of this file |
 |---|---|---|
-| `docs-engine` | `kiln docs` (verb above) | A full content model + gate set for a docs site is its own large surface — same reason `references/docs-shell.md` exists as a separate file. |
+| `docs-engine` | `kiln docs` (verb above) | A full content model + gate set for a docs site is its own large surface — same reason `references/docs-shell.md` exists as a separate file. Binding runs both ways: once docs-engine is present, `kiln docs` builds no page templates of its own and defers to docs-engine's content model — see `references/docs-shell.md`'s ownership-boundary note. |
 | `spacing-engine` | `phases/6-expand.md`, via `references/foundations/tokens.md`'s spacing section | Turns "spacing encodes relationship" from a stated principle into a measured gate (real `getBoundingClientRect`/`getComputedStyle` checks) — a scale alone doesn't say which relationship gets which step. |
 | `form-language` | `phases/6-expand.md`, via `references/foundations/depth.md` | Derives a per-component-CLASS (control/input/surface/display/separator) silhouette+depth answer from the lineage reference — the system-wide border/elevation/space choice in `depth.md` doesn't by itself decide what a control's actual shape is. |
 | `variant-foundry` | `phases/6-expand.md`, for identity components specifically | The generic K-candidate-generation + floor-filter + judge-separated-from-generator loop that makes "≥3 real options, not one safe default" actually executable rather than just a stated rule. |

@@ -33,9 +33,10 @@ Deletions need explicit confirmation. Not implied by an earlier general approval
 "clean this up" — a deletion gets its own yes.
 
 Before adopting kiln into a repository that already has a system, read what exists before writing
-anything. `AGENT-ORDER.md`'s Task 1 covers this in detail: infer the lineage and vector from the
-actual tokens and components rather than assuming, and never rotate a lineage that a real system is
-already committed to.
+anything. Open `AGENT-ORDER.md` now (skill root, alongside `SKILL.md`) and follow its Task 1's
+five numbered steps directly, in the order given — do not act on a paraphrase of it, this
+paragraph included: infer the lineage and vector from the actual tokens and components rather than
+assuming, write the stamp, and never rotate a lineage that a real system is already committed to.
 
 Before citing an existing component, an existing token, or an existing exception as precedent for a
 new decision, open the source and read it. A citation is a claim about what that file contains,
@@ -63,3 +64,21 @@ guide).
 Write the scan's result to `.kiln/cache.json` and reuse it on later runs in the same project unless
 the user asks for a re-scan or the underlying files are newer than the cache. State on reuse that the
 cached scan is being used, in one line, rather than silently trusting a scan that might be stale.
+
+Shape (every field always present; use `null` for a genuine absence, never omit the key):
+
+```json
+{
+  "scanned_at": "2026-08-18T00:00:00Z",
+  "existing_kiln_dir": true,
+  "log_json_path": ".kiln/log.json",
+  "token_file_path": "src/styles/tokens.css",
+  "token_file_mtime": "2026-08-10T00:00:00Z",
+  "brand_or_a11y_constraint": null
+}
+```
+
+`scanned_at` is what "the underlying files are newer than the cache" checks against — compare each
+source's own mtime (`token_file_mtime` here) to `scanned_at`, not to wall-clock time. Two sessions
+on the same project both write and read this exact shape, so the second session's "reuse" has a
+real object to validate rather than an assumed one.

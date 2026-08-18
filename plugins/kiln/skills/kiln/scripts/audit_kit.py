@@ -2,7 +2,7 @@
 """audit-kit — checks the skill can be trusted before it's packed. Script, not prose (per the
 Dial Uplift / audit-kit order, 2026-08-12). Exit 0 = clean, exit 1 = one or more real violations.
 
-Four checks, each independently gate-proofed (see audit_kit.selftest.py — every violation class
+Five checks, each independently gate-proofed (see audit_kit.selftest.py — every violation class
 this script claims to catch has a planted-violation test proving it actually goes red):
 
   1. path-check   — every backtick-quoted path in every *.md file under this skill resolves to a
@@ -16,6 +16,8 @@ this script claims to catch has a planted-violation test proving it actually goe
                      from a real "load X" instruction somewhere in the phase/verb graph; nothing
                      sits unreferenced the way the technique files once did before this check
                      existed.
+  5. superseded    — every SUPERSEDED file names a winner that actually exists, and BACKLOG.md
+                     is never duplicated across the host repo.
 
 Run from the skill root:
   python3 scripts/audit_kit.py
@@ -26,6 +28,26 @@ import sys
 from pathlib import Path
 
 SKILL_ROOT = Path(__file__).resolve().parent.parent
+
+
+def find_kit_repo_root(root):
+    """Walk up from the skill root to the actual repo root, by marker rather than a fixed depth —
+    this skill ships at different depths in different hosts (`.claude/skills/kiln/` in a project
+    that adopted it directly, `plugins/kiln/skills/kiln/` in this marketplace's own packaging), and
+    a hardcoded parent-count silently resolves to the wrong directory the moment the depth changes.
+
+    `.git` takes priority over `.claude-plugin`: a plugin ships its OWN `.claude-plugin/plugin.json`
+    one level up from the skill (`plugins/kiln/.claude-plugin/`), which is not the repo root either
+    — checking for any `.claude-plugin` dir at all would stop there instead of walking further up
+    to the marketplace's own `.claude-plugin/marketplace.json` at the true repo root.
+    """
+    for candidate in (root, *root.parents):
+        if (candidate / ".git").exists():
+            return candidate
+    for candidate in (root, *root.parents):
+        if (candidate / ".claude-plugin" / "marketplace.json").exists():
+            return candidate
+    return root.parent.parent.parent  # no marker found — fall back to the historical assumption
 
 
 def find_md_files(root):
@@ -79,7 +101,7 @@ def check_paths(root):
     # own authoring docs — DISTRIBUTION.md, BLUEPRINT.md, etc.), which DO exist and should resolve
     # against the real repo root below, not be waved away.
     host_project_read_targets = re.compile(r"^docs/DOCS-IA\.md$")
-    kit_repo_root = root.parent.parent.parent  # .claude/skills/kiln -> repo root
+    kit_repo_root = find_kit_repo_root(root)
     # Bare filenames that are unambiguously host-project artifacts even without a directory
     # prefix — `log.json`/`cache.json` are .kiln/'s own two files and no other file in this skill
     # or a fresh host project shares either name, so a bare mention always means those.
@@ -321,14 +343,17 @@ def check_dead_files(root):
 
 
 def check_superseded(root):
-    """Every SUPERSEDED file must name a winner that actually exists; BACKLOG must be singular."""
+    """Every SUPERSEDED file must name a winner that actually exists; BACKLOG must not be duplicated."""
     errors = []
-    kit_root = root.parent.parent.parent  # .claude/skills/kiln -> repo root
+    kit_root = find_kit_repo_root(root)
 
+    # Not every host repo keeps a BACKLOG.md (this marketplace's own repo doesn't) — that's a
+    # legitimate zero, not a violation. More than one is the real problem this check exists to
+    # catch: a stray duplicate left behind by a copy/move.
     backlog_files = list(kit_root.rglob("BACKLOG.md"))
     backlog_files = [b for b in backlog_files if "node_modules" not in b.parts]
-    if len(backlog_files) != 1:
-        errors.append(f"expected exactly 1 BACKLOG.md in the repo, found {len(backlog_files)}: {[str(b) for b in backlog_files]}")
+    if len(backlog_files) > 1:
+        errors.append(f"expected at most 1 BACKLOG.md in the repo, found {len(backlog_files)}: {[str(b) for b in backlog_files]}")
 
     superseded_dirs = [kit_root / ".claude" / "agents" / "superseded", kit_root / ".claude" / "skills" / "superseded"]
     winner_pattern = re.compile(r"merged into `([^`]+)`", re.IGNORECASE)

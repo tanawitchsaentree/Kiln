@@ -88,11 +88,12 @@ href.
 
 ## Gates
 
-Load `references/gates.md` for G-D1 through G-D8 (density/truth) and G-T1 through G-T5 (examples:
-composition floor, same-source, inventory honesty, thumbnail freshness, page health) — exact
-definitions and how to Gate-Proof each one (plant a violation, confirm it goes red, revert — a
-gate that has never been red does not exist, per this repo's own standing Gate Proof Rule).
-`scripts/audit.mjs` computes G-D1/G-D2/G-D6 today; G-D3/G-D4/G-D5/G-D7/G-D8 and all of G-T1-G-T5
+Load `references/gates.md` for G-D1 through G-D11 (density/truth/layout/code/rhythm/tables) and
+G-T1 through G-T5 (examples: composition floor, same-source, inventory honesty, thumbnail
+freshness, page health) — exact definitions and how to Gate-Proof each one (plant a violation,
+confirm it goes red, revert — a gate that has never been red does not exist, per this repo's own
+standing Gate Proof Rule). `scripts/audit.mjs` computes G-D1/G-D2/G-D6 today; G-D3/G-D4/G-D5/G-D7
+through G-D11 and all of G-T1-G-T5
 need a build+crawl step (documented in `gates.md`, not yet scripted for every case — name gaps
 rather than claiming automated coverage that doesn't exist).
 

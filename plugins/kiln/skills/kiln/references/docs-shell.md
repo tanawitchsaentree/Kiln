@@ -2,12 +2,15 @@
 
 Loaded when building the documentation surface, and by `verbs/docs.md` at runtime.
 
-**Chrome ownership settled by the Docs Final Pass order (standing decision 1): kiln does not own
-chrome.** Frame, responsive collapse, theme-toggle placement, search shortcut, nav-tree behaviour,
-and the three-region layout that used to be specified here are the docs framework's job —
-Fumadocs, inside `apps/docs`, per that order's standing decision 2. This file no longer specifies
-any of that. What follows is what kiln still owns: page types beyond the default content page, and
-the token contract the chrome consumes.
+**Chrome ownership: kiln does not own chrome.** Frame, responsive collapse, theme-toggle
+placement, search shortcut, nav-tree behaviour, and the three-region layout that used to be
+specified here are the docs framework's job — whichever framework the project already has
+(Fumadocs, Nextra, Astro, Docusaurus, VitePress), per `docs-engine/SKILL.md`'s own ownership
+boundary: chrome framework choice is explicitly out of scope for both kiln and docs-engine, and
+neither mandates one. This repo's own reference implementation happens to use Fumadocs inside
+`apps/docs` — that is a worked example, not a requirement to satisfy for every host project. This
+file no longer specifies any chrome behaviour. What follows is what kiln still owns: page types
+beyond the default content page, and the token contract the chrome consumes.
 
 **The component page template and density floors, gates, and cross-framework generation are owned
 by the `docs-engine` skill** (bundled alongside this one in the same plugin — see its own

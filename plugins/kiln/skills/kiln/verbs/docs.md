@@ -1,10 +1,10 @@
 # Verb — docs
 
 `kiln docs`. The documentation content model: page types beyond the default, and the token
-contract the chrome consumes. No chrome-building stages remain — the Docs Final Pass order's
-standing decision 1 assigns frame, responsive collapse, theme-toggle placement, search shortcut,
-and nav-tree behaviour to the docs framework (Fumadocs, per that order's standing decision 2), not
-to this verb. Stop after each stage below to confirm before the next.
+contract the chrome consumes. No chrome-building stages remain — frame, responsive collapse,
+theme-toggle placement, search shortcut, and nav-tree behaviour belong to whichever docs framework
+the project already has, per `references/docs-shell.md`'s chrome-ownership section and
+`docs-engine/SKILL.md`'s matching ownership boundary — not to this verb. Stop after each stage below to confirm before the next.
 
 **This verb's own 3 stages build the minimum content model. For a full Bootstrap/MUI-grade docs
 site** — dense per-component pages with a measured density floor, a template-catalog of full-page

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Gate Proof for check_contrast.py — closes the gate-proof gap audit_kit.py finds for Precision
-G3 (contrast, computed not eyeballed). Mirrors the exact case from the 2026-08-10 eval report
-(a real 2.38:1 fail vs. a real 8.86:1 pass against the gate's 4.5:1 line), now as a standing test
-instead of a one-time report in a scratch directory.
+G3 (contrast, computed not eyeballed). Real Dial token pairs, not synthetic hex values: a 13.16:1
+pass (#f2efeb text on #282623 surface) and a 1.31:1 fail (#d6d2cc hairline border on #f2efeb
+surface, both well below the 4.5:1 line), now as a standing test instead of a one-time report in a
+scratch directory.
 
 Run: python3 scripts/check_contrast.selftest.py
 """

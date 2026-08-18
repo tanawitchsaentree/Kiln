@@ -19,7 +19,8 @@ cheaper than the disappointment.
 
 ## Package
 
-One component per session, indefinitely, each an installable package built against the stamp from
+One component per session — a 10-component kit means 10 separate conversations with this skill,
+each an installable package built against the stamp from
 `verbs/component.md`. Consistency comes from the stamp, the token set, and the extension protocol —
 not from one long context holding every component in memory, because that context degrades before
 forty components are done and the fortieth drifts from the first without anyone noticing in the

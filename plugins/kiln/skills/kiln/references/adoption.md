@@ -3,6 +3,12 @@
 A design system fails from disuse far more often than from bad design. This file is what keeps it
 alive after launch. Load at Package or Program scale.
 
+**This file drafts policy; it does not run it.** Every CI rule, support-channel policy, and
+migration guide below is something this skill can write for a project to adopt — not a standing
+commitment this skill operates going forward. It can draft a support-channel policy; it cannot
+staff the channel. See `references/scale.md`'s Program section for the same limit stated against
+the governance layer as a whole.
+
 ## Enforcement in CI
 
 Rules that a human reviewer will not catch consistently, so a machine should.

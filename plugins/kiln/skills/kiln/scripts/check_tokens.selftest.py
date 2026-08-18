@@ -35,10 +35,37 @@ BAD_CSS_RAW_VALUE = """:root {
 }
 """
 
+# DTCG JSON — leaf-level $description, no group inheritance in play.
+GOOD_JSON_LEAF = """{
+  "color": {
+    "brand": { "$value": "#9c3200", "$description": "D-006 accent, orange ramp" }
+  }
+}
+"""
 
-def run(css_content):
-    with tempfile.NamedTemporaryFile(mode="w", suffix=".css", delete=False) as f:
-        f.write(css_content)
+# DTCG JSON — no leaf-level $description, but the group above it carries one that should be
+# read as inherited (check_json's own walk() logic, the thing a CSS-only fixture can't exercise).
+GOOD_JSON_INHERITED = """{
+  "color": {
+    "$description": "D-006 accent ramp",
+    "brand": { "$value": "#9c3200" }
+  }
+}
+"""
+
+# DTCG JSON — no leaf description, no group description, no file-level $description: nothing to
+# inherit from, so this leaf must be reported missing.
+BAD_JSON_NO_SOURCE_NOTE = """{
+  "color": {
+    "brand": { "$value": "#9c3200" }
+  }
+}
+"""
+
+
+def run(content, suffix=".css"):
+    with tempfile.NamedTemporaryFile(mode="w", suffix=suffix, delete=False) as f:
+        f.write(content)
         path = f.name
     try:
         result = subprocess.run(
@@ -47,6 +74,10 @@ def run(css_content):
         return result.returncode, result.stdout + result.stderr
     finally:
         Path(path).unlink()
+
+
+def run_json(content):
+    return run(content, suffix=".json")
 
 
 def main():
@@ -73,6 +104,33 @@ def main():
         failures.append(f"raw-value file failed (exit {code}) but not on raw-value check — output: {output[:200]}")
     else:
         print("✓ raw value outside the token block correctly fails")
+
+    # JSON path (check_json) — a real gap until now: every case above only ever exercised
+    # check_css. DTCG JSON has no CSS equivalent of "raw value outside the token block" (every
+    # value in a DTCG file lives inside a $value by construction), so there is no fourth case
+    # mirroring BAD_CSS_RAW_VALUE — the JSON coverage is leaf-description, group-inherited-
+    # description, and missing-description, which is check_json's own real branch structure.
+    code, output = run_json(GOOD_JSON_LEAF)
+    if code != 0:
+        failures.append(f"JSON with a leaf $description exited {code}, expected 0 — output: {output[:300]}")
+    else:
+        print("✓ JSON token with its own leaf $description correctly passes")
+
+    code, output = run_json(GOOD_JSON_INHERITED)
+    if code != 0:
+        failures.append(f"JSON with only a group $description exited {code}, expected 0 — output: {output[:300]}")
+    elif "inherited from a group" not in output.lower():
+        failures.append(f"JSON group-inheritance case passed but didn't report as inherited — output: {output[:300]}")
+    else:
+        print("✓ JSON token inheriting its group's $description correctly passes and is reported as inherited")
+
+    code, output = run_json(BAD_JSON_NO_SOURCE_NOTE)
+    if code == 0:
+        failures.append("JSON token with no leaf or group $description exited 0 — missing-note check did not fire for JSON")
+    elif "no source note" not in output.lower():
+        failures.append(f"JSON missing-note file failed (exit {code}) but not on source-note check — output: {output[:200]}")
+    else:
+        print("✓ JSON token with no description anywhere in its chain correctly fails")
 
     print()
     if failures:
