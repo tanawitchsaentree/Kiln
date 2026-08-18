@@ -1,6 +1,6 @@
 {
   "name": "kiln",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Design-system orchestrator. Builds systems that carry a declared lineage and intensity vector instead of collapsing to web defaults, audits/extends existing systems against measured gates, and generates a docs site content model. Bundles four sub-skills kiln calls into as it works: docs-engine (Bootstrap/MUI-grade docs site generation), spacing-engine (measured spacing gates), form-language (per-component-class form/silhouette derivation from a lineage reference), and variant-foundry (K-candidate generation with a floor-filter + judge-separated-from-generator loop).",
   "author": { "name": "tanawitchsaentree" },
   "homepage": "https://github.com/tanawitchsaentree/Kiln",
