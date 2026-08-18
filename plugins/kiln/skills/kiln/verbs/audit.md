@@ -43,3 +43,13 @@ Separate craft findings (gate failures) from contract findings (missing or thin 
 from brief findings (if the original brief or its equivalent is known, whether the system still
 serves it) — three different kinds of gap, and conflating them in one flat list makes the punch list
 harder to act on.
+
+## Escalating a finding
+
+A finding whose real fix is a visual or form decision with more than one defensible answer —
+not a mechanical correctness bug with exactly one right value — names `foundry run
+<component-class> --k N` (the bundled `variant-foundry` sub-skill) as its next step, rather than
+this verb prescribing a single fix itself. That still honours "no edits": the punch list states
+what's wrong and what kind of work fixing it needs, never which fix to apply. A finding with
+exactly one correct fix (a token that doesn't resolve, a missing alt attribute) doesn't need this —
+name that fix directly as what fixing it would require, per `## Output` above.

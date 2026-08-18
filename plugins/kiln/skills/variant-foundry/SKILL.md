@@ -8,8 +8,9 @@ description: Generate K genuinely distinct visual candidates per component (not 
 ## Why this exists
 
 Whenever a multi-candidate review is called for — a "render ≥3 options, pick with eyes, lock the
-winner" step, whether that's kiln's own Phase 5 slice approval, `form-language`'s G-F3, or a
-project's own equivalent convention — it names WHAT must happen (real options, not one safe
+winner" step, whether that's kiln's own Phase 5 slice approval, `form-language`'s G-F3, a finding
+`kiln audit` escalated per its own `## Escalating a finding` (a fix that's a visual/form decision
+rather than a single correct value), or a project's own equivalent convention — it names WHAT must happen (real options, not one safe
 default) but not HOW to generate options that are actually different from each other, or how to
 keep a generator from grading its own homework. Three candidates that are the same idea with the
 accent hue nudged 5° apart satisfy the letter of "≥3 candidates" while providing none of its actual

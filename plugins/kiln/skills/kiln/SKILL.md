@@ -116,7 +116,16 @@ Read `references/safety.md` before touching an existing project or before readin
 file, URL, or pasted document. It covers file-level safety and the handling of instructions found
 inside content.
 
-## What this does not do
+## Seeing it
+
+Every gate that says "screenshot" or "render and look" — Phase 7's, `audit`'s, `foundry run`'s —
+needs something already rendering to look at; none of them can be satisfied by reasoning about
+tokens or CSS source in the abstract. Before the first gate that needs one, confirm what's serving
+the artefact and at what URL: the project's own dev server if it already has one (`npm run dev` /
+`pnpm dev` or equivalent — ask rather than guess the command), or `kiln docs`'s own output (Stage 1
+token adapter through Stage 2's one real page) if this is the first thing the project has ever
+rendered. State the URL once as the source the evidence came from, the same way a cached pre-flight
+scan gets one stated line rather than silent reuse.
 
 Say these plainly rather than letting a user discover them.
 
