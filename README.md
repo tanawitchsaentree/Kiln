@@ -30,61 +30,43 @@ tool bundled in the same marketplace.
 
 ## Install
 
+One command installs everything in this marketplace — kiln and design-system-forge both:
+
 ```bash
 npx github:tanawitchsaentree/Kiln
 ```
 
-To update later:
+Same command, later, to update both to the latest commit:
 
 ```bash
 npx github:tanawitchsaentree/Kiln update
 ```
 
-Both run the same three steps under the hood (it's safe to run either one any time), but the
-second one is the command to reach for once kiln is already installed and you just want the latest
-commit.
+Then **restart Claude Code — fully quit and reopen, not just a new session or a `/reload`.** This
+is a real Claude Code requirement, not something this script can do for you: `claude plugin
+update`'s own success message says "Restart to apply changes," and a plugin merely reported as
+"already installed" does not mean it's the latest version. That's it — two steps, every time,
+install or update.
 
-If you'd rather do it by hand, or from inside Claude Code:
+**Only want one of the two plugins?** The marketplace step is shared; install just the one you want
+from inside Claude Code:
 
 ```
 /plugin marketplace add tanawitchsaentree/Kiln
 /plugin install kiln@kiln-marketplace
+/plugin install design-system-forge@kiln-marketplace
 ```
 
-To update by hand later: `/plugin marketplace update kiln-marketplace`, then
-`/plugin update kiln@kiln-marketplace` — not `/plugin install` again, which reports "already
-installed" and stops without checking for a newer version.
-
-Or from the CLI:
-
-```bash
-claude plugin marketplace add tanawitchsaentree/Kiln
-claude plugin install kiln@kiln-marketplace
-```
-
-To update by hand later from the CLI: `claude plugin marketplace update kiln-marketplace`, then
-`claude plugin update kiln@kiln-marketplace`.
-
-**Restart Claude Code after any install or update** — fully quit and reopen, not just a new
-session. Verified directly: `claude plugin update` itself reports "Restart to apply changes," and
-a plugin that's merely "already installed" per `claude plugin install` does not mean it's the
-latest version.
-
-**To install design-system-forge instead of (or alongside) kiln**, once the marketplace is added
-(the `npx`/`/plugin marketplace add`/`claude plugin marketplace add` step above is shared across
-both plugins — do it once):
-
-```
-claude plugin install design-system-forge@kiln-marketplace
-```
-
-or `/plugin install design-system-forge@kiln-marketplace` from inside Claude Code. Same update
-command pattern applies: `claude plugin update design-system-forge@kiln-marketplace`.
+or the CLI equivalent (`claude plugin marketplace add tanawitchsaentree/Kiln`, then `claude plugin
+install <name>@kiln-marketplace`). Update one at a time the same way: `claude plugin update
+<name>@kiln-marketplace` — not `install` again, which reports "already installed" and stops
+without checking for a newer version.
 
 ## Use
 
 Once installed, just describe what you're building — a design system, a docs site, an audit of an
-existing one — and kiln activates per its own SKILL.md description. Or invoke a verb directly:
+existing one — and the right one of the two plugins activates per its own SKILL.md description; you
+don't have to pick between them yourself. Or invoke a verb directly:
 
 ```
 kiln study <image or URL>
@@ -94,7 +76,8 @@ kiln component <name>
 kiln docs
 ```
 
-See `plugins/kiln/skills/kiln/SKILL.md` for the full verb table and phase sequence.
+See `plugins/kiln/skills/kiln/SKILL.md` and
+`plugins/design-system-forge/skills/design-system-forge/SKILL.md` for each plugin's full verb table.
 
 ## Structure
 
