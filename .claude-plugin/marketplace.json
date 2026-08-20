@@ -7,6 +7,11 @@
       "name": "kiln",
       "source": "./plugins/kiln",
       "description": "Design-system orchestrator: lineage + intensity vector, audit/extend, docs-site content model, spacing gates, form-language derivation, and a K-candidate variant foundry."
+    },
+    {
+      "name": "design-system-forge",
+      "source": "./plugins/design-system-forge",
+      "description": "Seed-to-system-to-showcase design system builder: build/audit/study/redesign/audit-kit verbs, a sourced anti-generic standard with a 13-item AI-Slop Ledger, and a full motion system so nothing ships static."
     }
   ]
 }

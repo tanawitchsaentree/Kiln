@@ -1,0 +1,9 @@
+{
+  "name": "design-system-forge",
+  "version": "1.1.0",
+  "description": "Turns a single image, screenshot, mood board, or one small sentence into a complete, production-grade design system — tokens, components, all states, light/dark, plus an art-directed documentation shell. Five verbs: build, audit, study, redesign, audit-kit. Includes a creativity dial (safe to experimental), a sourced anti-generic standard (checked against Anthropic's and Google Material Design 3's live artifacts, with an honest note on where a third source had nothing citable), a thirteen-item AI-Slop Ledger, and a motion system (timing hierarchy, easing vocabulary, purpose tags, build recipes) so nothing ships static.",
+  "author": { "name": "tanawitchsaentree" },
+  "homepage": "https://github.com/tanawitchsaentree/Kiln",
+  "license": "MIT",
+  "keywords": ["design-system", "design-tokens", "components", "accessibility", "motion", "audit"]
+}

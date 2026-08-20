@@ -20,6 +20,14 @@ rather than making them separate things to remember to run:
 | `form-language` | Phase 6, via the depth foundation | Derives what a control's SHAPE should be from its lineage reference, not just its color — per-component-class (control/input/surface/display/separator) silhouette+depth derivation |
 | `variant-foundry` | Phase 6, for identity components | Generates genuinely distinct candidates instead of one safe default dressed up three ways — K-candidate generation, floor-filtered, judged by a role separated from the generator |
 
+This marketplace also carries **design-system-forge** — a separate, self-contained design-system
+builder (seed → tokens/components/states/dark-mode → an art-directed docs shell), with its own
+five verbs (`build`/`audit`/`study`/`redesign`/`audit-kit`), a sourced anti-generic standard checked
+against Anthropic's and Google Material Design 3's live artifacts, and a full motion system so
+nothing ships static. See `plugins/design-system-forge/skills/design-system-forge/SKILL.md` and its
+own `CHANGELOG.md` for detail — it doesn't share kiln's lineage/vector pipeline, it's a different
+tool bundled in the same marketplace.
+
 ## Install
 
 ```bash
@@ -62,6 +70,17 @@ session. Verified directly: `claude plugin update` itself reports "Restart to ap
 a plugin that's merely "already installed" per `claude plugin install` does not mean it's the
 latest version.
 
+**To install design-system-forge instead of (or alongside) kiln**, once the marketplace is added
+(the `npx`/`/plugin marketplace add`/`claude plugin marketplace add` step above is shared across
+both plugins — do it once):
+
+```
+claude plugin install design-system-forge@kiln-marketplace
+```
+
+or `/plugin install design-system-forge@kiln-marketplace` from inside Claude Code. Same update
+command pattern applies: `claude plugin update design-system-forge@kiln-marketplace`.
+
 ## Use
 
 Once installed, just describe what you're building — a design system, a docs site, an audit of an
@@ -89,6 +108,11 @@ plugins/kiln/
     spacing-engine/
     form-language/
     variant-foundry/
+plugins/design-system-forge/
+  .claude-plugin/plugin.json      — plugin manifest
+  skills/design-system-forge/     — build/audit/study/redesign/audit-kit, anti-generic standard,
+                                     motion system
+  CHANGELOG.md
 ```
 
 ## Gate Proof discipline
