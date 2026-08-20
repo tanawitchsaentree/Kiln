@@ -23,10 +23,12 @@ rather than making them separate things to remember to run:
 This marketplace also carries **design-system-forge** — a separate, self-contained design-system
 builder (seed → tokens/components/states/dark-mode → an art-directed docs shell), with its own
 five verbs (`build`/`audit`/`study`/`redesign`/`audit-kit`), a sourced anti-generic standard checked
-against Anthropic's and Google Material Design 3's live artifacts, and a full motion system so
-nothing ships static. See `plugins/design-system-forge/skills/design-system-forge/SKILL.md` and its
-own `CHANGELOG.md` for detail — it doesn't share kiln's lineage/vector pipeline, it's a different
-tool bundled in the same marketplace.
+against Anthropic's and Google Material Design 3's live artifacts, a motion system so nothing ships
+static, and an auto-audit hook that runs its checker on every edit in a project it manages, not just
+when someone remembers to ask for one. See
+`plugins/design-system-forge/skills/design-system-forge/SKILL.md` and its own `CHANGELOG.md` for
+detail — it doesn't share kiln's lineage/vector pipeline, it's a different tool bundled in the same
+marketplace.
 
 ## Install
 

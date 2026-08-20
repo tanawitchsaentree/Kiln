@@ -17,8 +17,9 @@ requires X" for anything below; cite the specific mechanism instead.
 
 ## The one non-negotiable
 
-**Every interactive element that has a `:hover`, `:focus-visible`, `:active`, or `[aria-*]` state
-rule must also have a transition or animation property.** A component with state rules and zero
+`dsf-motion-static-state`. **Every interactive element that has a `:hover`, `:focus-visible`,
+`:active`, or `[aria-*]` state rule must also have a transition or animation property.** A
+component with state rules and zero
 motion property is not "restrained," it's unfinished — the state exists in the CSS but nothing
 tells the user it fired. `assets/audit.py`'s check 8 (below) makes this a script-checkable fact,
 not a reviewer's impression.
@@ -137,15 +138,18 @@ at all.
 
 ## Patterns that always fail
 
-| Pattern | Why | Instead |
-|---|---|---|
-| State rule (`:hover`, `:focus-visible`, `[aria-*]`) with no transition/animation property at all | The state exists in the CSS and nowhere else — nothing tells the user it fired | Every state rule ships with a transition; see the one non-negotiable above |
-| `transition: all 300ms ease` | `all` transitions properties nobody asked for (including ones that shouldn't animate, like `display`) and masks which property actually matters | Name the exact properties: `transition: transform var(--motion-base) var(--ease-neutral), opacity var(--motion-base) var(--ease-neutral)` |
-| Looping/pulsing attention-getters that never stop | Becomes wallpaper within seconds, then becomes an accessibility complaint (vestibular triggers, seizure risk at the wrong frequency) | One-shot on a real trigger; if attention is genuinely needed after first load, a static visual weight change, not motion |
-| Auto-rotating carousels | Removes the user's control over pacing, and motion continues even when they've looked away | User-driven navigation with visible affordance |
-| Spinners where the content shape is known ahead of time | A blank spinner tells you nothing about what's coming; a skeleton matching the real layout tells you immediately | Skeleton in the real component's dimensions, per `component-specs.md` |
-| Magnetic hover, parallax, or cursor-reactive effects rendered identically on touch | These are `pointer: fine` conventions; on touch they either do nothing (dead JS) or misfire on scroll | Gate behind `matchMedia('(pointer: fine)')`; touch gets the plain interactive state, not a broken imitation |
-| A drag-to-dismiss or fling interaction using a fixed-duration CSS transition instead of real physics | A fixed duration can't respond to how fast the user actually dragged — it either overshoots a slow drag or lags a fast one | Use a real spring/physics simulation (velocity-aware, interruptible) for anything the user can interrupt mid-motion; reserve the CSS spring curve for discrete, non-interruptible state changes |
+Each row carries an ID for the same reason the AI-Slop Ledger's rows do — `dsf-motion-*`, citable
+from an audit finding without restating the whole pattern.
+
+| ID | Pattern | Why | Instead |
+|---|---|---|---|
+| `dsf-motion-static-state` | State rule (`:hover`, `:focus-visible`, `[aria-*]`) with no transition/animation property at all | The state exists in the CSS and nowhere else — nothing tells the user it fired | Every state rule ships with a transition; see the one non-negotiable above |
+| `dsf-motion-transition-all` | `transition: all 300ms ease` | `all` transitions properties nobody asked for (including ones that shouldn't animate, like `display`) and masks which property actually matters | Name the exact properties: `transition: transform var(--motion-base) var(--ease-neutral), opacity var(--motion-base) var(--ease-neutral)` |
+| `dsf-motion-infinite-pulse` | Looping/pulsing attention-getters that never stop | Becomes wallpaper within seconds, then becomes an accessibility complaint (vestibular triggers, seizure risk at the wrong frequency) | One-shot on a real trigger; if attention is genuinely needed after first load, a static visual weight change, not motion |
+| `dsf-motion-auto-carousel` | Auto-rotating carousels | Removes the user's control over pacing, and motion continues even when they've looked away | User-driven navigation with visible affordance |
+| `dsf-motion-spinner-not-skeleton` | Spinners where the content shape is known ahead of time | A blank spinner tells you nothing about what's coming; a skeleton matching the real layout tells you immediately | Skeleton in the real component's dimensions, per `component-specs.md` |
+| `dsf-motion-gate-pointer-fine` | Magnetic hover, parallax, or cursor-reactive effects rendered identically on touch | These are `pointer: fine` conventions; on touch they either do nothing (dead JS) or misfire on scroll | Gate behind `matchMedia('(pointer: fine)')`; touch gets the plain interactive state, not a broken imitation |
+| `dsf-motion-real-spring-interruptible` | A drag-to-dismiss or fling interaction using a fixed-duration CSS transition instead of real physics | A fixed duration can't respond to how fast the user actually dragged — it either overshoots a slow drag or lags a fast one | Use a real spring/physics simulation (velocity-aware, interruptible) for anything the user can interrupt mid-motion; reserve the CSS spring curve for discrete, non-interruptible state changes |
 
 ## Recipes for the named Level 3–4 vocabulary
 

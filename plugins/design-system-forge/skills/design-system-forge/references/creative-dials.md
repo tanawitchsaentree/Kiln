@@ -4,6 +4,33 @@ The dial controls **expression**, never **completeness**. Every level ships the 
 
 Read the level you're on. Do not blend levels — a Level 2 system with one Level 4 component reads as a mistake, not as range.
 
+## Visitor mode — a second axis, not a substitute for the dial
+
+The dial answers "how loud." It does not answer "loud in service of what," and a Level 2 dashboard
+and a Level 2 landing page that both stop at "one dominant hue plus one sharp accent" can still be
+wrong in opposite directions — the dashboard for having any decoration at all in a tool run all day,
+the landing page for being too restrained to earn a click. Decide both, every time; neither implies
+the other. Four modes, and every surface is exactly one:
+
+| Mode | For | Job | What changes |
+|---|---|---|---|
+| **Persuade** | Landing pages, marketing, pricing, launch pages | Earn attention and a specific action | The dial's full loudness for the level applies; `creative-frontend`'s signature-moment and pacing rules (System 4's "climax at 40-60% of the page") are load-bearing here, not optional |
+| **Operate** | Apps, dashboards, internal tools, admin | Task completion, often for hours at a stretch, often daily | Motion budget caps at `feedback`/`orientation` purpose tags **regardless of dial level** — a Level 4 Operate tool still ships zero `delight`-tagged ambient motion. Same logic `shell-blueprint.md` already applies to docs chrome, generalized to any Operate surface: the interface should recede so the work stays legible |
+| **Read** | Documentation, articles, long-form content | Comprehension, at length, without fatigue | Type scale, line length (65-78ch), and leading carry the hierarchy; decorative motion is minimal even at high dial levels; interactive chrome recedes the same way Operate's does |
+| **Experience** | Portfolios, galleries, art direction, games | The artifact or interaction is the point, not a means to a task | The dial's vocabulary is a floor, not a ceiling — even a Level 1 Experience surface (a restrained, accessibility-led portfolio, say) still needs the one signature moment a Level 1 Operate tool would never get |
+
+**The composition rule:** Visitor mode adjusts the *motion and decoration budget* the dial level
+would otherwise set — Operate and Read compress it toward the quiet end regardless of level,
+Experience holds it open, Persuade takes the level at face value. Everything else the dial governs
+(type pairing, colour distribution, shape, depth) is unaffected by mode; a Level 3 Operate tool can
+still have a saturated accent and a real type pairing, it just doesn't get the orchestrated
+page-load reveal a Level 3 Persuade surface would.
+
+State both the level and the mode in the locked brief (`Level: 2 (Refined), Operate`), and ask for
+mode alongside the level in System 0 — a brief that names "a dashboard" or "a landing page" usually
+answers this without a separate question, but an ambiguous one ("a tool for our sales team to make
+pitches" — Operate internally, Persuade externally) needs it asked.
+
 ---
 
 ## Level 1 — Safe

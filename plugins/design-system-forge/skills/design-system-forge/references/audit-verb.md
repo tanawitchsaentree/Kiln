@@ -76,39 +76,41 @@ not a second copy of the standard.
 because [specific, checkable evidence] against [the cited decision/ledger row]`. A grade with no
 evidence sentence does not get reported above F, no exceptions.
 
-1. **Color system.** Semantic token depth (primitive → semantic → component), a real tonal ramp
+1. **Color system** (`dsf-dim-color`). Semantic token depth (primitive → semantic → component), a real tonal ramp
    per hue, contrast computed in both themes. Fold in: does component CSS read a Layer 1 primitive
    directly (check 4 catches raw hex, not `var(--gray-900)` in a button, and check 7 only covers
    inline `<style>` — the gap between them is component CSS reading a themed primitive, grep it),
    and is every theme assertable at depth (light declared on `:root` alone means a
    `[data-theme="light"]` subtree inside a dark page silently inherits dark, and every
    per-component theme preview is broken without anyone noticing).
-2. **Typography.** A real second face beyond the workhorse text face, a named scale ratio, and a
+2. **Typography** (`dsf-dim-type`). A real second face beyond the workhorse text face, a named scale ratio, and a
    line-height that changes per scale step rather than one leading value reused everywhere.
-3. **Spacing / density.** Whitespace proportional to the content's real information density, not a
+3. **Spacing / density** (`dsf-dim-spacing`). Whitespace proportional to the content's real information density, not a
    flat "generous" applied everywhere. Fold in: off-scale values (`padding: 13px`, a fifth grey, a
    third radius — count distinct values per property against the scale's length) and variants that
    restate a property instead of rebinding a token (a variant setting `padding` or `font-size`
    directly means the contract leaked, and the next variant leaks further).
-4. **Elevation / depth logic.** Does a shadow or tonal shift correspond to a real stacking or
+4. **Elevation / depth logic** (`dsf-dim-elevation`). Does a shadow or tonal shift correspond to a real stacking or
    interaction meaning, or is it decoration with nothing behind it (Ledger #4)?
-5. **Motion.** Nothing static (Ledger #13 — every `:hover`/`:focus-visible`/`:active` rule has a
+5. **Motion** (`dsf-dim-motion`). Nothing static (Ledger #13 — every `:hover`/`:focus-visible`/`:active` rule has a
    real transition or animation behind it, per check 8 and `motion-system.md`'s one non-negotiable).
    Every transition traces to a token, carries a purpose tag (`feedback`/`orientation`/`delight`)
    with the matching `prefers-reduced-motion` behavior, and never uses `linear` on a one-shot
-   transition (Ledger #12).
-6. **Component state coverage.** Grep every interactive component for `:focus-visible`,
+   transition (Ledger #12). Infer the visitor mode from what the system actually is (`creative-
+   dials.md`'s "Visitor mode" section) and check the motion budget against it — `delight`-tagged
+   ambient motion in an Operate surface is a finding regardless of how well-crafted it is.
+6. **Component state coverage** (`dsf-dim-states`). Grep every interactive component for `:focus-visible`,
    `:disabled`, `[aria-invalid]`, `:hover`, `:active` against `component-specs.md`'s full
    nine-state matrix. Missing `focus-visible` is the most serious defect in any design system — it
    locks keyboard users out entirely — and it is also the most common.
-7. **Accessibility.** WCAG AA as the floor everywhere, AAA at genuinely critical points. Fold in:
+7. **Accessibility** (`dsf-dim-a11y`). WCAG AA as the floor everywhere, AAA at genuinely critical points. Fold in:
    colour as the only signal (status, error, required, selected each need a second signal) and
    silent contrast exemptions (someone dropped a floor to make a colour work and left no note —
    look for suspiciously specific values).
-8. **Distinctiveness.** The logo-removal test, scored by counting real hits on the thirteen-item
+8. **Distinctiveness** (`dsf-dim-distinct`). The logo-removal test, scored by counting real hits on the thirteen-item
    Ledger — zero hits and a stated point of view is pass territory, one hit is a named reason, not
    a vibe.
-9. **Documentation / governance.** Can another team extend this correctly without asking the
+9. **Documentation / governance** (`dsf-dim-docs`). Can another team extend this correctly without asking the
    original author? Fold in: docs that restate values by hand (a swatch with a hardcoded hex, or a
    contrast ratio typed into prose, is already drifting — check whether the docs read the shipped
    variables).

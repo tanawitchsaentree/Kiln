@@ -55,7 +55,7 @@ A "safe" system and an "experimental" system have the same token layers, the sam
 
 ### System 0 — Set the dial and the scope (ask, don't assume)
 
-Two answers needed before extracting anything. If the user hasn't given them, ask — this is the one moment where asking saves an entire wasted build.
+Three answers needed before extracting anything. If the user hasn't given them, ask — this is the one moment where asking saves an entire wasted build.
 
 **1. Creativity level (1–4).** Read `references/creative-dials.md` for the full policy per level.
 
@@ -68,7 +68,13 @@ Two answers needed before extracting anything. If the user hasn't given them, as
 
 No signal? **Default to Level 2** and say so in one line. Never silently pick 4 because it's more fun, and never silently pick 1 because it's safer.
 
-**2. Target stack.** Changes the output format, not the design:
+**2. Visitor mode** — Persuade, Operate, Read, or Experience. A second axis, not a restatement of
+the level; read `references/creative-dials.md`'s "Visitor mode" section — it sets the motion/
+decoration budget independently of how loud the level says everything else can be. Usually implicit
+in the brief ("a dashboard" → Operate, "a landing page" → Persuade); ask only when genuinely
+ambiguous (an internal tool a salesperson also demos externally, say).
+
+**3. Target stack.** Changes the output format, not the design:
 - **Zero-build** (HTML + CSS variables + vanilla JS) — fastest, works anywhere, best for handoff
 - **React + Tailwind** — tokens as CSS vars consumed via Tailwind theme extension
 - **React + CSS Modules / vanilla-extract** — tokens as typed exports
@@ -101,11 +107,23 @@ Density:   spacious (8px base, 1.6 body leading)
 Shape:     6px radius, 1px hairline strokes
 Depth:     one soft shadow layer + 2% grain
 Level:     2 (Refined)
+Mode:      Operate
 Stack:     zero-build
 Never:     no purple gradients, no glassmorphism
 ```
 
 Show it, then keep building — don't stop and wait unless the user asked to review it.
+
+**Comp-first, if image generation is available in this session.** For a high-stakes hero or
+identity component at Level 3-4, generating a visual comp before writing code catches a bad
+direction before it's built twice. This is conditional, not a standing capability of this skill —
+check whether the current session actually has an image-generation tool available before offering
+it; do not claim this path exists if it doesn't. When it does: generate one comp per candidate
+direction, get the user to pick, then treat the chosen comp as **a spatial contract, not a mood
+board** — build against its actual layout and proportion, and at System 6 verification, screenshot
+the build and compare it against the comp directly rather than only checking it against the brief.
+Code-first (the default, no comp) is not a lesser path — the ambition moves into the written
+brief and the shell's own quality bar instead of a pre-built image, per System 4.
 
 ### System 2 — Build the token architecture
 
