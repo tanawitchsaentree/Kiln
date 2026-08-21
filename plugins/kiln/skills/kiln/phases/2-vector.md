@@ -47,6 +47,11 @@ and motion have to go quiet enough to cover it whether or not that was the plan.
 
 ## What to carry forward
 
+Call `python3 scripts/kiln_state.py advance --data '{"vector": [C,T,G,S,M,D], "loud_axis": "...",
+"loud_axis_payment": "..."}'` — this is the transition that decides, from `has_reference` recorded
+at Phase 0, whether the state machine sends you to Phase 3 or straight to Phase 4; you don't choose
+that here, the harness does, from data you already gave it.
+
 The validated vector, the named loud axis and its payment, and — only if the loud axis is 7 or
 above — which technique file(s) it will need. Do not load the technique file yet; just note which
 one applies. `phases/6-expand.md` loads it before building the expanded component.

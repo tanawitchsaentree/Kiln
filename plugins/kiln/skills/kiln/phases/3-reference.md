@@ -30,6 +30,10 @@ run in the same project reuses it without re-extracting.
 
 ## What to carry forward
 
+Call `python3 scripts/kiln_state.py advance --data '{"reference_table": {...}}'` — the completed
+table goes in whole, as its own nested object; the harness only checks the key is present, not the
+table's own completeness (that judgement is yours, per below).
+
 The completed ten-field table (or as many fields as the reference actually answers), and one
 sentence on any point where it pulled the Phase 2 vector or diverged from the Phase 1 lineage. Not
 the reference image or document itself — the extracted table is what later phases need.

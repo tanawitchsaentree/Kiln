@@ -27,6 +27,14 @@ Show the slice and stop for a response before expanding. This is a real checkpoi
 formality — the point of building the riskiest part first is that a problem found here is cheap to
 fix and a problem found after Phase 6's expansion is not.
 
+**This is enforced, not just requested.** `scripts/kiln_state.py` rejects `advance --data
+'{..., "approved": true}'` unless `approved` is actually `true` in the call — and rejects the call
+entirely if it's missing. Do not call `advance` with `"approved": true` until the user has actually
+responded to the shown slice; sending it early to unblock yourself is exactly the failure mode this
+checkpoint exists to prevent, and it defeats the harness the same way skipping the read would have.
+If the user's response asks for changes rather than approving, make the changes and show again —
+call `advance` only once a real "yes, continue" exists.
+
 ## The reset
 
 Once the slice is approved, clear context rather than letting it compact. Carry forward exactly:
@@ -36,5 +44,10 @@ and the plan's rejected drafts — none of that is needed to expand a slice that
 approved, and carrying it forward only adds context the next phase has to read past.
 
 ## What to carry forward
+
+Once approval is real, call `python3 scripts/kiln_state.py advance --data '{"stamp": {...},
+"token_block": "...", "acceptance_criteria": [...], "approved": true}'` — `stamp` nests lineage,
+vector, loud axis, and its payment; this is the one call in the whole sequence the harness will
+refuse without a genuine yes, per "Stop" above.
 
 Exactly the list above, stated explicitly at the reset. Nothing else survives into Phase 6.

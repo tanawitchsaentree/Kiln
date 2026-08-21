@@ -38,6 +38,9 @@ keeps the choice honest; picking it in the moment tends to drift toward whatever
 
 ## What to carry forward
 
+Call `python3 scripts/kiln_state.py advance --data '{"plan": "...", "out_of_scope": "...",
+"acceptance_criteria": ["...", "..."], "riskiest_slice": "..."}'` before Phase 5 starts.
+
 The revised plan, the out-of-scope list, the acceptance criteria, and the named riskiest slice.
 Discard the intake discussion and the rejected draft plan — this is the first of the two hard
 context resets `SKILL.md` names, and it happens after Phase 5's slice is approved, not here, but

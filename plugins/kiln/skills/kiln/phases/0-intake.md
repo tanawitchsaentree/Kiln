@@ -4,6 +4,10 @@ Up to three adaptive questions, plus the delivery scale. Never a colour, never a
 Phase 1 and Phase 2's decisions, made from a lineage and a vector, not from a preference stated cold
 before either exists.
 
+Before asking anything, run `python3 scripts/kiln_state.py init --verb build --scale <scale>` once
+the scale is decided (below) — this starts the real state machine `scripts/kiln_state.py`
+enforces; skip this for `study`/`audit`/`extend`/`component`/`docs`, which don't use it.
+
 ## The three questions
 
 Adaptive, not scripted. Ask only what the brief hasn't already answered, and stop at three even if
@@ -36,3 +40,7 @@ Program scale asking to happen under a different name — name the governance la
 The brief as understood after the three questions, the stated scale, and whether a reference exists
 (if so, Phase 3 handles it — don't extract from it here). Nothing else. Phase 1 does not need to
 know Phase 0's discarded question candidates.
+
+Call `python3 scripts/kiln_state.py advance --data '{"brief": "...", "scale": "...",
+"has_reference": true|false}'` before moving to Phase 1 — `has_reference` is what decides whether
+the state machine routes through Phase 3 or skips it, so get this one right.

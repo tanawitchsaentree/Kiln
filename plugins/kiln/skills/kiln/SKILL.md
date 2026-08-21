@@ -58,6 +58,18 @@ Read the phase file when you reach that phase, and not before. Each phase file n
 and what to hand forward. Do not read ahead: knowing Phase 6 while doing Phase 1 pulls the work
 toward the finished shape and away from the decision in front of you.
 
+**The sequence is enforced, not just described.** Run `python3 scripts/kiln_state.py init --verb
+build --scale <Spec|Package|Program>` once, at Phase 0, before anything else — this is a real
+build, not `study`/`audit`/`extend`/`component`/`docs`, which don't use this state machine. At the
+end of every phase, call `python3 scripts/kiln_state.py advance --data '<json>'` with the fields
+that phase file's own "What to carry forward" section names — the script rejects the call outright
+if a required field is missing, or if Phase 5's stop-for-approval checkpoint hasn't genuinely been
+answered. This is what makes a context reset safe: reload `.kiln/state.json` instead of trusting
+memory to have carried the right things forward, because the file, not the recollection, is what
+downstream phases actually depend on now. Each phase file states the exact field names to pass;
+`scripts/kiln_state.py`'s own `REQUIRED_FIELDS` table is the single source of truth if the two
+ever disagree — trust the code the script actually runs, not the prose describing it.
+
 | # | Phase | File |
 |---|---|---|
 | 0 | Intake | `phases/0-intake.md` |
@@ -81,6 +93,13 @@ rejected plan.
 
 **Before Phase 7.** Carry forward the built artefact, the vector, and the acceptance criteria.
 Gates score what exists, not how it came to exist.
+
+**Both resets are safe precisely because `.kiln/state.json` already has these fields on disk** —
+the reset discards conversation history, not the state file, so run `python3 scripts/kiln_state.py
+status` right after a reset and read its `carry_forward` block instead of reconstructing the list
+from what the model remembers saying. A reset that happened before `advance` was called for the
+phase being left is a reset that lost real data; call `advance` first, reset second, never the
+other order.
 
 ## Cache
 

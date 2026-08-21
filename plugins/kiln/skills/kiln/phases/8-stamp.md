@@ -47,3 +47,9 @@ bent to fit.
 This is the last phase. Nothing carries forward from here except the stamp and the log, which now
 live in the project rather than in context — a future session (a fresh build, an extension, an
 audit) reads them from disk rather than needing this conversation's memory to still exist.
+
+No `advance` call here — phase 8 is terminal, `scripts/kiln_state.py` has nothing to move to.
+`.kiln/state.json` now holds a complete, real history of every phase this run actually passed
+through and what each one carried forward — a genuine audit trail, not a summary reconstructed
+from memory after the fact. Worth pointing the user at it if they ask how the build actually went,
+separately from the report above.

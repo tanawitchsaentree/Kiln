@@ -53,5 +53,10 @@ that caught it; the gate exists to be satisfied, not glanced at.
 
 ## What to carry forward
 
+Call `python3 scripts/kiln_state.py advance --data '{"gate_results": {...}, "acceptance_criteria_results": {...}}'`
+before Phase 8 — nest the not-run gates and their stated reasons inside `gate_results` rather than
+dropping them, since "not run" is a real value this harness (like everything else in this skill)
+treats as legitimate, not as missing data.
+
 The gate results (per-gate, with evidence), the acceptance-criteria results, and anything marked not
 run with a stated reason. Phase 8 needs this to write an honest stamp and an honest report back.

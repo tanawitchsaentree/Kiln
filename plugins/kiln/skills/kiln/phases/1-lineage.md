@@ -43,6 +43,9 @@ Phase 8 isn't reconstructing the reasoning from memory.
 
 ## What to carry forward
 
+Call `python3 scripts/kiln_state.py advance --data '{"lineage_name": "...", "home_vector": [C,T,G,S,M,D],
+"signature_move": "...", "fit_statement": "..."}'` — the four fields below, by their exact names.
+
 The declared lineage's name, its home vector, its signature move, and the one-line fit statement.
 Not the full lineage file's text — Phase 2 needs the home vector as a starting position, not the
 whole document re-read.

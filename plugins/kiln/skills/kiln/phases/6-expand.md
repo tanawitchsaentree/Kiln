@@ -3,6 +3,10 @@
 Foundations, then the nine contract parts, routed by scale. This is where the approved slice grows
 into the full system.
 
+Run `python3 scripts/kiln_state.py guard --min-phase 6` before building anything here. If it
+blocks, Phase 5's approval was never genuinely recorded — go back and get a real one, don't call
+`advance` with `approved: true` just to make the guard pass.
+
 ## Foundations first
 
 Read `references/foundations/INDEX.md`. Load only the foundations the brief actually needs — tokens,
@@ -65,6 +69,9 @@ how it's scored afterward (that's `references/technique/craft.md` at Phase 7, a 
 a different job). At most two technique files load, matching the at-most-two-loud-axes rule.
 
 ## What to carry forward to the next reset
+
+Call `python3 scripts/kiln_state.py advance --data '{"built_artefact": "...", "vector": [C,T,G,S,M,D],
+"acceptance_criteria": [...]}'` before resetting.
 
 The built artefact (tokens, foundations in use, the expanded component or components), the vector,
 and the acceptance criteria from Phase 4. This is the second hard reset `SKILL.md` names, happening

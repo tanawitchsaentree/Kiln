@@ -82,3 +82,12 @@ Shape (every field always present; use `null` for a genuine absence, never omit 
 source's own mtime (`token_file_mtime` here) to `scanned_at`, not to wall-clock time. Two sessions
 on the same project both write and read this exact shape, so the second session's "reuse" has a
 real object to validate rather than an assumed one.
+
+Three files live under `.kiln/`, and they are not interchangeable: `cache.json` (above) is
+this-project memory that survives across every run, cross-session, so a fresh build doesn't
+re-scan; `log.json` (`phases/8-stamp.md`) is the lineage/vector history that survives across every
+*build*, cross-session, so a fresh build doesn't rotate into the same lineage twice; `state.json`
+(`scripts/kiln_state.py`) is this *run's own* phase-by-phase record, reset at the start of every new
+build via `init`. Confusing them — reusing `state.json` across builds, or treating `cache.json` as
+if it tracked which phase you're on — is the specific mistake the three-file split exists to
+prevent.
