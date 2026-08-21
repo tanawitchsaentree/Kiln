@@ -1,5 +1,15 @@
 # design-system-forge — changelog
 
+## 1.2.1 — The hook's own proof, not just a manual smoke test
+
+1.2.0 shipped `hooks/post-edit-audit.sh` proven by hand in that session (silent no-op with no
+marker file, real output with one) and never turned into a standing test, the exact gap this
+skill's own Gate Proof rule exists to close elsewhere. Added `hooks/post-edit-audit.selftest.py`:
+three real cases via subprocess (no marker file, a clean fixture, and a real planted STATIC
+violation using `var()` rather than a raw hex so it trips exactly one check), with
+`CLAUDE_PLUGIN_ROOT` set to the real plugin root the way Claude Code actually sets it, not left
+unset the way an easy first draft of this test did. No behavior change to the hook itself.
+
 ## 1.2.0 — Closing the gap against Impeccable (Paul Bakaus's design-guidance tool)
 
 A direct comparison against [pbakaus/impeccable](https://github.com/pbakaus/impeccable) — a

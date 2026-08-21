@@ -1,5 +1,31 @@
 # kiln — changelog
 
+## 1.3.0 — The harness can now actually stop you, not just record what happened
+
+1.2.0's harness could tell you Phase 5 was skipped after the fact, by reading `.kiln/state.json`.
+It could not stop the file from being written in the first place — `guard` is a check something
+else has to remember to call. This closes that gap with a real blocking mechanism, verified
+against Claude Code's own hook exit-code and JSON decision semantics before shipping (not guessed):
+
+- **`hooks/hooks.json` + `hooks/pre-write-guard.sh`** — a `PreToolUse` hook that runs before every
+  Edit/Write. Inside a project `.kiln/state.json` is tracking, writing a token/style/component file
+  (`.css`, `.scss`, `.ts`, `.tsx`, `.js`, `.jsx`, `.json`) while the state machine is still before
+  Phase 5 gets denied outright, via the documented `permissionDecision: "deny"` JSON response, with
+  a reason Claude actually sees and can act on. `.kiln/`'s own files are always exempt, so the
+  harness can never gate itself into a deadlock, and a corrupt or unreadable `state.json` fails
+  open (allows) rather than blocking on a guess.
+- **`hooks/pre-write-guard.selftest.py`** — seven real cases via subprocess, feeding the hook real
+  JSON on stdin the way Claude Code actually does: no-state-file silence, phase-0 denial, the
+  `.kiln/` exemption, non-gated extensions passing through, the gate reopening at phase 5, staying
+  open at phase 6, and the corrupt-state fail-open case. Also retroactively closed the same gap in
+  design-system-forge's own hook (`post-edit-audit.selftest.py` didn't exist before this pass
+  either — proven only by hand in the session that shipped it, now a standing test).
+
+**Honestly scoped:** this only governs the default `build` flow, same as the harness itself. It
+also can't distinguish "Phase 5 legitimately writing its own thin slice" from "someone jumped
+straight to Phase 5 without doing the earlier work honestly" — the gate is phase-number-based, not
+content-aware, and phase 5 onward is deliberately ungated for exactly that reason.
+
 ## 1.2.0 — A real execution harness, not just prose shaped like one
 
 Prompted by a direct question: does kiln actually work as graph engineering (node/edge/state/

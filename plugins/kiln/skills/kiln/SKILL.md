@@ -70,6 +70,16 @@ downstream phases actually depend on now. Each phase file states the exact field
 `scripts/kiln_state.py`'s own `REQUIRED_FIELDS` table is the single source of truth if the two
 ever disagree — trust the code the script actually runs, not the prose describing it.
 
+**This plugin also ships a blocking hook, not just a checkable state.**
+`plugins/kiln/hooks/pre-write-guard.sh` (one level up from this skill folder, at the plugin root —
+`hooks/` is a plugin-level concern, not a skill-level one) runs before every Edit/Write in a project
+`.kiln/state.json` is actively tracking, and refuses to let a token, style, or component file get
+written while the state machine is still before Phase 5 — the mechanical version of this file's own
+opening claim that a lineage and vector get decided before a single token gets written. It exempts
+`.kiln/`'s own files and stays silent in any project that was never tracked in the first place.
+`plugins/kiln/hooks/pre-write-guard.selftest.py` proves it opens and closes at the right phases and
+fails open on a corrupt state file, rather than trusting a one-time manual check.
+
 | # | Phase | File |
 |---|---|---|
 | 0 | Intake | `phases/0-intake.md` |
