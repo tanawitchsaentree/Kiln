@@ -1,14 +1,13 @@
 # kiln
 
-Design systems built from a real point of view, not another AI-generated default.
+kiln makes every design system it builds declare a real lineage, a named tradition borrowed from
+outside web design, before a single token gets written.
 
 Most AI-generated design systems land on the same handful of choices. A warm off-white field. A
 neutral grotesque typeface. An 8px, 1.25 spacing scale. One saturated accent. It doesn't matter what
-they were actually asked to build. kiln exists to break that pattern. Every system it builds starts
-from a declared lineage, a named tradition borrowed from outside web design, plus a six-axis
-intensity vector, both decided before a single token gets written. Every claim it makes about the
-result (contrast, spacing, form, density) is backed by a measured gate. Run the script. Read the
-number.
+they were actually asked to build. kiln's lineage requirement, plus a six-axis intensity vector
+decided at the same time, is what breaks that pattern. Every claim it makes about the result
+(contrast, spacing, form, density) is backed by a measured gate. Run the script. Read the number.
 
 kiln is the orchestrator. Lineage becomes a vector, which becomes tokens, then components, then
 docs, then gates. It calls into four bundled sub-skills at the points where a generic pass isn't
