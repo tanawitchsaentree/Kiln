@@ -1,6 +1,6 @@
 ---
 name: spacing-engine
-description: Turns the spacing-control doctrine (spacing encodes relationship, one scale, monotonic proximity) into a MEASUREMENT — computed styles + real boundingBox checks in a real browser, not a checklist read by eye. Use whenever building or auditing any layout in a docs-engine-built site (component pages, foundation pages, full-page examples, Storybook frames): checking clearance around dividers/panel edges, verifying a spacing value resolves to a real scale token, checking that between-group gaps exceed within-group gaps, or verifying heading/rhythm consistency. Also use when a system's own spacing parameters (base unit, density-mode map, clearance token) need deriving from its locked tokens rather than invented fresh. Reach for this instead of eyeballing whether something "looks cramped."
+description: Turns the spacing-control doctrine (spacing encodes relationship, one scale, monotonic proximity) into a MEASUREMENT — computed styles + real boundingBox checks in a real browser, not a checklist read by eye. Use whenever building or auditing any layout in a docs-engine-built site (component pages, foundation pages, full-page examples, Storybook frames): checking clearance around dividers/panel edges, verifying a spacing value resolves to a real scale token, checking that between-group gaps exceed within-group gaps, verifying heading/rhythm consistency, or checking that a connector/tracking element (a progress line, an underline) is measured against the real position of what it visually connects rather than a fixed offset. Also use when a system's own spacing parameters (base unit, density-mode map, clearance token) need deriving from its locked tokens rather than invented fresh. Reach for this instead of eyeballing whether something "looks cramped."
 metadata:
   version: "1.0.0"
 ---
@@ -46,7 +46,7 @@ template for the next system rather than a one-off).
 
 ## Gates
 
-Load `references/gates.md` for G-S1 (clearance) through G-S5 (rhythm) — exact definitions,
+Load `references/gates.md` for G-S1 (clearance) through G-S6 (positional dependency) — exact definitions,
 what `scripts/spacing-check.mjs` (bundled with this skill — run via
 `node scripts/spacing-check.mjs --url <url> [--scale-var-prefix --ds-space-] [--json]`, needs
 `playwright` resolvable from wherever it's invoked) measures for each, and the Gate Proof each

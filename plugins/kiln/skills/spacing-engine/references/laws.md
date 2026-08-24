@@ -57,6 +57,19 @@ all-caps letter-spacing compensation, optical alignment of large numerals). The 
 be carried as a real, inspectable annotation (e.g. `data-optical="icon-bbox-differs"`) — an
 unannotated off-grid value is not an optical exception, it's a stray, and L1 applies.
 
+## L8 — Positional dependency
+
+An element whose whole job is to visually connect or track other elements (a progress line
+through a row of step markers, an underline sized to a variable-width label, a connector
+between two nodes in a diagram) is measured against those elements' REAL rendered geometry,
+never against a fixed token offset chosen to look right for one specific set of contents.
+A line pinned to `top: 24px` because that happened to line up with a 48px circle at the
+time it was built silently goes wrong the moment the circle's size, padding, or content
+changes — the line is not "connected," it's coincidentally overlapping. This is a distinct
+failure from L3 (clearance): L3 asks whether something sits too close to a boundary; L8
+asks whether something claiming a relationship to another element is actually measured
+against that element's real position rather than a constant that happened to match it once.
+
 ## L2 has two valid separation mechanisms — gap-based and divider-based
 
 Found live while Gate-Proofing G-S3 against this repo's own landing-page panel (a continuous

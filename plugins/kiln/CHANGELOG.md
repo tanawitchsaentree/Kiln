@@ -1,5 +1,63 @@
 # kiln — changelog
 
+## 1.4.0 — G13's "a script cannot do this" claim was false, and it was hiding the wrong gate number too
+
+Triggered by a real user audit against a real build (a Dial-lineage marketing site, 2026-08-24):
+five findings that survived a full Phase 7 gate pass — two nested-border collisions (icon box
+inside a bordered card; three concentric rings plus the shield's own border and glow, all in one
+small area), one three-way icon-container ratio mismatch across three components (2.2 / 2.25 / 2.4
+for what reads as one repeated pattern), a progress line pinned to a fixed offset instead of the
+step circles' real rendered centers, and a pricing CTA not locked to the same height token as its
+hero siblings. The user's own root-cause note named the proximate cause correctly: `spacing-engine`
+was never invoked at gate time. Checking why turned up two compounding bugs in the skill itself, not
+just a missed step:
+
+- **`references/technique/craft.md` claimed "Gate G13... is the one gate a script cannot do."**
+  False. `spacing-engine` exists specifically to disprove that for spacing/clearance defects (see
+  that skill's own README, the stats-row defect), and nested-radius math, border-weight derivation,
+  ratio-locking, and positional dependency are exactly as measurable. That claim is what kept
+  `spacing-engine` parked at Phase 6 (token derivation only) and never re-run against what actually
+  got rendered.
+- **The same file also claimed its checklist's evidence attaches to "Gate G2 in both [precision and
+  coherence] gate sets."** Also false, and worse than the first bug: G2 means a completely
+  different thing per set (precision: optical correction; coherence: signature move present and
+  load-bearing; restraint: the refusal holds without exception) — only precision's G2 actually
+  matches this file's contents. A build routed to the coherence or restraint set (which a
+  loud/expressive lineage like this one is, by Phase 7's own routing rule) had nowhere for this
+  checklist to report at all. G13 is the one gate number every set actually shares; the checklist
+  now reports there, always.
+
+Fixed, not just documented:
+
+- **G13 in all three gate files (`gates-precision.md`, `gates-coherence.md`, `gates-restraint.md`)
+  now requires a scripted pass before the human render-and-look pass**: `spacing-engine`'s `spacing
+  audit` (G-S1 through the new G-S6) plus the new `scripts/check_ratio_lock.py`, both against the
+  actual rendered build. `phases/7-gates.md` states this as a required step, every build, regardless
+  of scale or which gate set applies — not an optional Phase-6-only derivation step.
+- **New law `spacing-engine`'s L8 / gate G-S6 — positional dependency**: an element whose job is to
+  track another element's real position (a connector line through markers, an underline sized to a
+  label) is measured against that element's actual rendered geometry, never a fixed offset tuned to
+  one specific render. Spec and Gate-Proof protocol written; **not yet Gate-Proofed against a live
+  build** — stated honestly as advisory per that skill's own Gate-Proof discipline, not claimed as
+  proven.
+- **New script `scripts/check_ratio_lock.py` + `check_ratio_lock.selftest.py`** — Gate-Proofed now,
+  with the real Dial numbers as the failing fixture (44:20 / 36:16 / 48:20, exit 1, names both
+  mismatched ratios and what they should be) and a real passing case (two instances agreeing on
+  2.2, exit 0). The selftest's first draft caught a real crash in the script itself (a single-
+  instance call divided by a `None` locked-ratio) before this shipped — kept as a live regression
+  test, not fixed quietly and forgotten.
+- **`references/technique/craft.md`** gained the two missing checklist items these findings
+  actually needed (`One frame per boundary`, `Locked ratio, not a per-instance guess`) alongside the
+  corrected G13/G2 routing.
+
+**Honestly scoped:** the border-nesting and ratio-lock findings are now checkable
+(`check_ratio_lock.py`, Gate-Proofed). The connector-alignment law (G-S6) has a spec and a Gate-Proof
+protocol but no live-build run yet — the next build that has a tracking connector element is where
+that actually gets proven, not asserted here. Nested-border *detection* (as opposed to ratio-
+locking) still has no script — `craft.md`'s new "one frame per boundary" item is a checklist rule
+checked by eye at G13's human pass, same as before this fix, until someone writes the DOM-structural
+scan for it.
+
 ## 1.3.0 — The harness can now actually stop you, not just record what happened
 
 1.2.0's harness could tell you Phase 5 was skipped after the fact, by reading `.kiln/state.json`.

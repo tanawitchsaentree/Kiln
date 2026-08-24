@@ -199,8 +199,12 @@ why G1 and G2 above (the named, held refusal) matter more for this set than for 
 
 ### G13 — Look at it
 
-Same requirement as both other sets. Render or screenshot and look. Ask specifically: does this
-look like a decision, or does it look like nothing happened?
+Same requirement as both other sets, scripted pass first — `spacing-engine`'s `spacing audit` (G-S1
+through G-S6) plus `scripts/check_ratio_lock.py` against the rendered build — then the human read.
+Ask specifically: does this look like a decision, or does it look like nothing happened? A quiet
+system's measurable defects are just as real as a loud one's; "restrained" is not a reason to skip
+the scripted pass, it's a reason the human pass has less to distract it from noticing them if it's
+skipped.
 
 ### G14 — Acceptance criteria, separately
 

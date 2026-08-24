@@ -35,8 +35,21 @@ usable and honest result, while an unbacked yes stops anyone from ever checking 
 ## Run the technique file's gate-time craft check too
 
 `references/technique/craft.md` loads here regardless of which gate set applies — it covers the
-finishing details (nested radius, optical centring, border weight derivation) that Gate G2 in both
-sets checks for.
+finishing details (nested radius, optical centring, border weight derivation, ratio-locking,
+positional dependency). Its evidence attaches to G13 in every set, not G2 — G2 means a different
+thing per set and only aligns with this file's contents in the precision set.
+
+## Run the scripted pass before G13, every build
+
+Before G13 is scored in any set: run `spacing-engine`'s `spacing audit <url>` against the actual
+rendered build (G-S1 through G-S6), and run `scripts/check_ratio_lock.py` against every repeated
+container:mark pattern the build has (icon-in-badge, number-in-circle, and equivalent — anywhere the
+same visual pattern recurs more than once with an independently-chosen size). This is not the same
+step as Phase 6's spacing-engine invocation, which derives the token ladder before anything is
+built — this one measures what actually got rendered against that ladder, after the fact, and it is
+required regardless of scale (Spec/Package/Program) or which of the three gate sets applies. A
+build with no repeated container:mark pattern and nothing spacing-engine's own trigger conditions
+apply to records this step as not run, with that stated explicitly — never skipped silently.
 
 ## Run the acceptance criteria as their own pass
 

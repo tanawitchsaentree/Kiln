@@ -97,9 +97,26 @@ measurement.
 
 ## G13 — Look at it
 
-Render or screenshot the actual artefact and look at it, rather than reasoning about the tokens in
-the abstract. This is the one gate a script cannot do. Evidence: the screenshot itself, with one
-sentence on whether it reads as intended.
+Two passes, both required, in this order.
+
+**Scripted pass first.** Run `spacing-engine`'s `spacing audit` (G-S1 through G-S6) against the
+actual rendered build, and `scripts/check_ratio_lock.py` against every repeated container:mark
+pattern (icon-in-badge, number-in-circle, and equivalent) in it. This is `references/technique/
+craft.md`'s checklist reporting here — nested radius, border weight, ratio-locking, and positional
+dependency are measurable, and a screenshot read alone has already shipped exactly this class of
+defect once (five real findings against a real build, 2026-08-24: two nested-border collisions, a
+three-way ratio mismatch across icon containers, a connector line not tracking its markers' real
+centers, a CTA button not locked to the same height token as its siblings). Evidence: each script's
+exit code and, on failure, the exact element and measured value.
+
+**Human pass second**, on the artefact rendered or screenshotted after the scripted pass is clean,
+for what genuinely has no measurable definition — does this read as intended, not merely as
+technically correct. Evidence: the screenshot itself, with one sentence on whether it reads as
+intended.
+
+A clean human read does not stand in for the scripted pass; a clean scripted pass does not stand in
+for the human read. Both are required, and the scripted pass runs first because a defect it would
+catch is one less thing for the human pass to have to notice by eye.
 
 ## G14 — Acceptance criteria, separately
 

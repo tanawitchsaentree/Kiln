@@ -1,4 +1,4 @@
-# Gates — G-S1 through G-S5
+# Gates — G-S1 through G-S6
 
 Every gate here measures a real rendered page (`getComputedStyle`/`getBoundingClientRect`
 in a real browser via Playwright) — never inferred from CSS source text. This is the direct
@@ -66,6 +66,29 @@ assert all gaps are equal (±0px, or ±2px only if each carries a `data-optical`
 **Gate-Proof:** change the gap on one item in a real repeated list/grid (e.g. one card-grid
 item gets an inline `margin-inline-end` no sibling has); confirm the checker flags that
 exact item and the measured variance; revert.
+
+## G-S6 — Positional dependency (L8)
+
+**Check:** for an element whose stated job is to visually track another element (a
+connector line through a set of markers, an underline sized to a label, a leader line to a
+diagram node), the measured real position/size of the elements it claims to track, compared
+against its own measured position → any mismatch beyond a documented optical tolerance is
+red.
+**Computed by:** `getBoundingClientRect()` on the dependent element and on every element it
+claims to track; for a line through N markers, compute each marker's real vertical (or
+horizontal) center and assert the line's own rendered center falls within tolerance of all
+of them, not just the one it happened to be tuned against.
+**Gate-Proof:** on a real page, resize or re-pad one of the tracked elements (e.g. give one
+step marker in a three-marker row a different icon size than the other two) without moving
+the connector line; confirm the checker flags the exact marker whose real center now misses
+the line's measured position, by how many px; revert; re-measure to confirm alignment.
+
+**Not yet Gate-Proofed against a live build** — this gate was added from a real defect
+(`how-it-works.tsx`'s progress line pinned to a fixed `top-6` instead of the step circles'
+real rendered centers, found 2026-08-24) but has not yet been run through the plant/confirm-
+red/revert/confirm-green cycle above against an actual page. Per this file's own Gate-Proof
+discipline: advisory only until that run happens and the before/after values are recorded
+here.
 
 ## Gate-Proof discipline
 

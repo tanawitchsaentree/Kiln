@@ -1,9 +1,16 @@
 # Technique — craft, cross-axis finishing
 
-Loaded at Phase 7 regardless of which axis is loud, or even whether any axis is loud. These are the
-details Gate G2 checks for in `references/gates-precision.md` and `references/gates-coherence.md`,
-and they separate a system that reads as engineered from one that reads as assembled, independent of
-how bold the vector is.
+Loaded at Phase 7 regardless of which axis is loud, or even whether any axis is loud. These details
+separate a system that reads as engineered from one that reads as assembled, independent of how bold
+the vector is.
+
+**Their evidence attaches to G13 in every set (precision, coherence, restraint), not G2.** G2 means
+a different thing in each gate set — precision's G2 is "Optical correction," which happens to match
+this file's contents, but coherence's G2 is "Signature move present and load-bearing" and
+restraint's G2 is "The refusal holds without exception." A build routed to the coherence or
+restraint set that only checked its own G2 for this file's items would be checking nothing — the
+file has no home there under that number. G13 is the one gate number every set actually shares, so
+that is where this file's checklist reports, always, regardless of which set is loaded.
 
 ## Nested radius, computed
 
@@ -39,9 +46,40 @@ once and applied everywhere, per `references/foundations/iconography.md`'s icon-
 generalised to every drawn mark in the system, not only icons. A system that varies these per
 instance looks collected rather than commissioned, regardless of how bold or quiet its vector is.
 
-## The rendered check, not the token check
+## One frame per boundary, not one frame per element
 
-Every craft item above can pass a token-level review and still be visibly wrong once rendered —
-nested radius maths is easy to get right in a spreadsheet and easy to get wrong the moment a real
-padding value is substituted in. Gate G13 in both gate files exists specifically because craft
-details are the ones a script cannot catch and a look at the actual render can.
+An element that already reads as a bounded unit because its own edge carries a border does not also
+wrap a child that independently marks the same boundary with its own border — icon box inside
+bordered card, ring inside bordered ring inside bordered diagram, are the recurring shape of this.
+Two borders occupying the same small region read as frame-inside-frame, not as one clear device,
+even when each border is individually correct. Before nesting a second border inside a bordered
+container, name the distinct boundary it marks that the outer border doesn't already mark — no
+distinct boundary named, no second border.
+
+## Locked ratio, not a per-instance guess
+
+A container built to hold a smaller mark at a fixed proportion (an icon inside a badge, a step
+number inside a circle) locks that proportion as one ratio and reuses it everywhere the pattern
+recurs. Three components independently choosing 2.2:1, 2.25:1, and 2.4:1 for what is visually "the
+same" icon-in-container pattern is three per-instance guesses, not one decision, even though every
+individual instance can look fine in isolation — the drift only shows up sitting next to each other.
+Check with `scripts/check_ratio_lock.py`, fed the measured outer:inner size of every instance of the
+pattern; it fails loud on the first ratio that doesn't match the others and names which instance and
+by how much.
+
+## The rendered check, not just the token check
+
+Every craft item above, including the two just added, can pass a token-level review and still be
+visibly wrong once rendered — nested radius maths is easy to get right in a spreadsheet and easy to
+get wrong the moment a real padding value is substituted in. That used to be this file's argument
+for why Gate G13 has to be a human render-and-look step with nothing scripted underneath it. That
+argument was only half right, and the half that was wrong is exactly the class of defect that ships
+past it: nested-radius math, border-weight derivation, ratio-locking, and positional dependency
+(`spacing-engine`'s L8/G-S6) are all `getComputedStyle`/`getBoundingClientRect` measurements a script
+can and should make — `spacing-engine` exists specifically because a defect that "looks correct" in
+CSS source can still measure wrong once rendered, which is the same failure this file describes for
+craft items, not a different one. G13 in every set now requires that scripted pass — see
+`phases/7-gates.md` — with the human look reserved for what genuinely has no measurable definition
+(does this read as a decision, does the signature move still land). Do not let a clean G13 read
+substitute for running the scripts; do not let running the scripts substitute for actually looking,
+either — a system can measure clean and still look assembled.

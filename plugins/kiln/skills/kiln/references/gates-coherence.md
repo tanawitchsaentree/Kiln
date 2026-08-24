@@ -93,10 +93,13 @@ spending six axes of budget to avoid the default is worth flagging loudly, not q
 
 ## G13 — Look at it
 
-Same as the precision set's G13. Render or screenshot the artefact and look at it. A loud system is
-more likely to have this step skipped in favour of trusting the token math, and that is exactly
-backwards — the token math is what got it this far, and the look is what confirms it actually
-arrived.
+Same as the precision set's G13, scripted pass first — `spacing-engine`'s `spacing audit` (G-S1
+through G-S6) plus `scripts/check_ratio_lock.py` against the rendered build, then the human read —
+and worth naming specifically here: a loud system is more likely to have BOTH steps skipped in
+favour of trusting the token math, since a striking result reads as confirmation on its own. That is
+exactly backwards twice over — the token math is what got it this far, the scripted pass is what
+confirms the render actually matches it, and the human look is what confirms the result still reads
+as intended once both of those are clean.
 
 ## G14 — Acceptance criteria, separately
 
