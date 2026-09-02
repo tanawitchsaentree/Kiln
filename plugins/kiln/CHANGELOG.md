@@ -1,5 +1,26 @@
 # kiln — changelog
 
+## 1.5.0 — Phase 5's checkpoint now shows on the page itself, not just in chat
+
+Triggered by a real run (a school-landing brief, 2026-09-02): Phase 5 built its thin slice (2 of 8
+named sections, per the brief's own riskiest-slice call) and asked the required approval question
+clearly in chat — but the same message invited opening the rendered page directly
+("Open it in a browser if you want to see it live"), and the page itself carried no signal that it
+was a deliberate 2-of-8 checkpoint rather than broken or abandoned work. Read cold, a short page with
+no visible content past section 2 and no on-page explanation is indistinguishable from a build that
+failed partway through.
+
+- **`phases/5-slice.md`** — for any slice that renders as a real page a person can open in a
+  browser, a visible on-page banner is now required before showing the slice: what's built, what's
+  still pending by name, stated as a checkpoint. Not a replacement for the chat question — a second
+  copy of the same fact, placed where someone who skips the text still sees it.
+- **`phases/6-expand.md`** — removing that banner is now the first act of Phase 6, before any other
+  building starts, so it never survives into the shipped system.
+
+Not code-enforced (unlike the Phase 5 approval gate itself, which `kiln_state.py` blocks
+mechanically) — this is a process instruction, the same category as the rest of Phase 5's prose.
+Honestly scoped as that, not overstated as a harness guarantee.
+
 ## 1.4.0 — G13's "a script cannot do this" claim was false, and it was hiding the wrong gate number too
 
 Triggered by a real user audit against a real build (a Dial-lineage marketing site, 2026-08-24):

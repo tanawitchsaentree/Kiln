@@ -7,6 +7,11 @@ Run `python3 scripts/kiln_state.py guard --min-phase 6` before building anything
 blocks, Phase 5's approval was never genuinely recorded — go back and get a real one, don't call
 `advance` with `approved: true` just to make the guard pass.
 
+If Phase 5 rendered a real page and added the checkpoint banner per `phases/5-slice.md`'s "The
+checkpoint has to survive someone skipping the chat message," remove that banner now, first, before
+building anything else — it was scaffolding for exactly one question, that question is answered, and
+it must not still be there by the time this system ships.
+
 ## Foundations first
 
 Read `references/foundations/INDEX.md`. Load only the foundations the brief actually needs — tokens,

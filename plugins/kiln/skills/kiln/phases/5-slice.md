@@ -27,6 +27,23 @@ Show the slice and stop for a response before expanding. This is a real checkpoi
 formality — the point of building the riskiest part first is that a problem found here is cheap to
 fix and a problem found after Phase 6's expansion is not.
 
+## The checkpoint has to survive someone skipping the chat message
+
+A real user hit this exactly (2026-09-02, a school-landing brief with 8 named sections): the chat
+message asked approval clearly and named the six sections still pending, but the user opened the
+rendered page directly — the message itself invites this — and saw only the two-section slice with
+no signal on the page that it was a checkpoint. A short page with no build failure and no visible
+"this is intentional" cue reads as broken or abandoned work, not as a mechanism working correctly.
+
+For any slice that renders as a real page a person can open in a browser (Next.js/React/plain HTML,
+not a component-only or non-visual build): inject a visible banner at the very top of the rendered
+page itself before showing it — "**Checkpoint — N of M sections built (this slice only).** The rest
+(name them) build after you approve this one." — not just in the chat response. The chat message and
+the on-page banner say the same thing; the banner is what reaches someone who opens the URL without
+reading the text that came with it. Style it plainly (it is scaffolding, not part of the delivered
+system — an unstyled fixed bar is enough) and mark it clearly temporary; `phases/6-expand.md`
+removes it as its first act once approval is real, so it never ships in the finished system.
+
 **This is enforced, not just requested.** `scripts/kiln_state.py` rejects `advance --data
 '{..., "approved": true}'` unless `approved` is actually `true` in the call — and rejects the call
 entirely if it's missing. Do not call `advance` with `"approved": true` until the user has actually
