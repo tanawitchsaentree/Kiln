@@ -134,3 +134,18 @@ Before calling docs done, also **look**: screenshot one component page and the o
 768 and 1280px and review them by eye. A metric is not a substitute for opening the page.
 
 | G-S5 instant page | after choosing a chapter, with motion ON, every element in the viewport is at full opacity on the first painted frame. No staggered fade/rise on page content (measured on Pane: a 640ms + 70ms-stagger "reveal" left content at opacity 0 for ~1s after every switch, reported as "glass frames appear, then the content loads") |
+
+## Prose gate (every page type)
+
+Density and shell gates say nothing about how the words read. On Pane the first full book scored
+48/100 on the Button chapter (human-tone sniff) with 346 pause dashes, 33 "X, not Y" scaffolds and
+166 "Label:" lines across 34 pages, all written by the agent and all invisible to the other gates.
+
+| Gate | Pass condition |
+|---|---|
+| G-P1 tone | the rendered prose of every page (headings, paragraphs, list items, table descriptions, generated JSDoc; inline code replaced by a placeholder) passes human-tone `lint.py` with zero hard violations. Append-only records (the decision log) are the only exclusion and must be named |
+| G-P2 workflow | `tone_rules` loaded before drafting; existing prose sniffed and its score reported before rewriting; `compare_text` run after, and the delta reported rather than claimed |
+
+Rewrite from the idea when a line fails. Swapping a dash for a period and keeping the rhythm leaves
+fragments like "Disabled. Native attribute, with the reason in text", which pass the lint and still
+read as machine output. Read the result aloud before calling it done.
