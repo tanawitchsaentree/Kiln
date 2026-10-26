@@ -132,3 +132,5 @@ surfaces a stable hook (`data-<system>-card`) and keep G-S4.
 
 Before calling docs done, also **look**: screenshot one component page and the overview at 375,
 768 and 1280px and review them by eye. A metric is not a substitute for opening the page.
+
+| G-S5 instant page | after choosing a chapter, with motion ON, every element in the viewport is at full opacity on the first painted frame. No staggered fade/rise on page content (measured on Pane: a 640ms + 70ms-stagger "reveal" left content at opacity 0 for ~1s after every switch, reported as "glass frames appear, then the content loads") |
