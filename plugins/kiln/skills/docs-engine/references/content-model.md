@@ -149,3 +149,13 @@ Density and shell gates say nothing about how the words read. On Pane the first 
 Rewrite from the idea when a line fails. Swapping a dash for a period and keeping the rhythm leaves
 fragments like "Disabled. Native attribute, with the reason in text", which pass the lint and still
 read as machine output. Read the result aloud before calling it done.
+
+## Interactive and copy gates (from the user's standards, `docs/USER-STANDARDS.md`)
+
+| Gate | Pass condition |
+|---|---|
+| G-F1 playground | every foundation page has ≥1 interactive control (range, select, toggle) whose change visibly alters a live preview on that page, and the preview offers copy-ready output (CSS or JSX) for the current setting |
+| G-C1 copy | every rendered code block has a visible copy button without expanding anything, and clicking it puts that block's exact text on the clipboard |
+| G-C2 tokens | every token row in any table can be copied as `var(--…)` in one click |
+| G-T1 themes | a theme control (system / light / dark) exists, switching it changes surface and text tokens, and the contrast evidence reports both themes |
+| G-B1 backdrops | every component page has a "bright and dark backdrops" section rendering the component on a bright and a dark scene in both themes, with prose saying what changes |
