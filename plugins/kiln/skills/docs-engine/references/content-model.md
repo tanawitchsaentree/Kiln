@@ -159,3 +159,16 @@ read as machine output. Read the result aloud before calling it done.
 | G-C2 tokens | every token row in any table can be copied as `var(--…)` in one click |
 | G-T1 themes | a theme control (system / light / dark) exists, switching it changes surface and text tokens, and the contrast evidence reports both themes |
 | G-B1 backdrops | every component page has a "bright and dark backdrops" section rendering the component on a bright and a dark scene in both themes, with prose saying what changes |
+| G-L1 lifecycle | every component page shows a status (Alpha / Beta / Stable) linked to a page of written criteria, its own change history parsed from the package changelog (a component with no entry fails), a Limitations list, and an accessibility section split into *what you get*, *what you still have to do* and *how it is tested* |
+| G-M1 matrix | a reference page lists every component against behaviour/keyboard, contrast per theme, reduced transparency, forced colours and screen reader, each cell read from the verify output; untested cells say "Not tested", never blank or pass |
+
+## Benchmarks behind G-L1 / G-M1 (researched 2026-10-26, 10 systems)
+
+Carbon's accessibility status page (component × test grid), Primer's three-part accessibility tab
+(built-in / implementation requirements / how to test), Atlassian + Primer lifecycle labels with
+criteria, HIG + GOV.UK dated per-page change logs, Polaris + MUI "Limitations". Not yet gated, in
+order of value: live sandbox per example (StackBlitz/CodeSandbox, needs a published package),
+props playground generated from the props table, increased-contrast token mode (HIG), content
+design foundation pages (Atlassian), Figma library with variable parity, versioned docs +
+migration guides (MUI/Carbon, before 1.0), feedback/research/roadmap sections (GOV.UK).
+
