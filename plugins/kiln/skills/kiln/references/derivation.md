@@ -41,7 +41,7 @@ own) skip this, with `identity_reason`.
 ## 5. Then the code, with reasons on the axis they act on
 
 CSS and TSX can now be written (`tooling/kiln/derivation-guard.mjs` blocks them before). Every part,
-state and motion in `why.json` names `p` and `axis`, and that principle must actually say something
+state and motion in `<Name>.why.json` names `p` and `axis`, and that principle must actually say something
 about that axis. A pattern the habit gate flags (G-X1: accent stripe, icon-disc alert…) is allowed
 only if `allowed_patterns` names it with a reason from the derivation.
 

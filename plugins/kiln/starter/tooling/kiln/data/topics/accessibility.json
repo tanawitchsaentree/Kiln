@@ -1,0 +1,77 @@
+{
+ "page": "foundation: accessibility",
+ "collectedAt": "2026-10-27",
+ "how": "h2/h3 headings of each system's page, fetched 2026-10-27 (Carbon and Atlassian as HTML, Apple HIG as its JSON document); one topic per idea, merged across systems",
+ "sources": {
+  "carbon": "https://carbondesignsystem.com/guidelines/accessibility/overview/",
+  "atlassian": "https://atlassian.design/foundations/accessibility",
+  "apple": "https://developer.apple.com/design/human-interface-guidelines/accessibility"
+ },
+ "topics": [
+  {
+   "id": "vision",
+   "topic": "Blind, low-vision and colour-blind readers",
+   "from": [
+    "carbon",
+    "atlassian",
+    "apple"
+   ]
+  },
+  {
+   "id": "hearing",
+   "topic": "Deaf and hard-of-hearing readers",
+   "from": [
+    "carbon",
+    "atlassian",
+    "apple"
+   ]
+  },
+  {
+   "id": "mobility",
+   "topic": "Limited mobility and physical disabilities",
+   "from": [
+    "carbon",
+    "atlassian",
+    "apple"
+   ]
+  },
+  {
+   "id": "cognitive",
+   "topic": "Cognitive disabilities",
+   "from": [
+    "carbon",
+    "atlassian",
+    "apple"
+   ]
+  },
+  {
+   "id": "speech",
+   "topic": "Speech",
+   "from": [
+    "apple"
+   ]
+  },
+  {
+   "id": "standards",
+   "topic": "The standards it meets (WCAG)",
+   "from": [
+    "carbon"
+   ]
+  },
+  {
+   "id": "principles",
+   "topic": "Accessibility principles",
+   "from": [
+    "atlassian"
+   ]
+  },
+  {
+   "id": "tools",
+   "topic": "Tools and testing",
+   "from": [
+    "carbon",
+    "atlassian"
+   ]
+  }
+ ]
+}

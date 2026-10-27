@@ -1,0 +1,56 @@
+{
+ "page": "foundation: dimensions",
+ "collectedAt": "2026-10-27",
+ "how": "h2/h3 headings of each system's page, fetched 2026-10-27 (Carbon and Atlassian as HTML, Apple HIG as its JSON document); one topic per idea, merged across systems",
+ "sources": {
+  "apple": "https://developer.apple.com/design/human-interface-guidelines/layout",
+  "carbon": "https://carbondesignsystem.com/elements/2x-grid/usage/",
+  "atlassian": "https://atlassian.design/foundations/spacing"
+ },
+ "topics": [
+  {
+   "id": "hierarchy",
+   "topic": "Visual hierarchy through size",
+   "from": [
+    "apple",
+    "carbon"
+   ]
+  },
+  {
+   "id": "size-classes",
+   "topic": "Adapting to screen size (size classes, breakpoints)",
+   "from": [
+    "apple"
+   ]
+  },
+  {
+   "id": "safe-areas",
+   "topic": "Guides and safe areas",
+   "from": [
+    "apple"
+   ]
+  },
+  {
+   "id": "density",
+   "topic": "Density and denser layouts",
+   "from": [
+    "carbon"
+   ]
+  },
+  {
+   "id": "controls",
+   "topic": "Control sizes and touch targets",
+   "from": [
+    "apple",
+    "atlassian"
+   ]
+  },
+  {
+   "id": "stacking",
+   "topic": "Stacking order of layers",
+   "from": [
+    "carbon"
+   ]
+  }
+ ]
+}

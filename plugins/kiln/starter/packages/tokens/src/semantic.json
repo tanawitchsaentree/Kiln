@@ -1,0 +1,653 @@
+{
+  "surface": {
+    "$type": "color",
+    "solid": {
+      "$value": "{color.graphite.solid}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.paper.50}"
+        }
+      }
+    },
+    "quiet": {
+      "$value": "{color.white-a.08}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.white-a.45}"
+        }
+      }
+    },
+    "light": {
+      "$value": "{color.white}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.ink.900}"
+        }
+      }
+    },
+    "placeholder-hi": {
+      "$value": "{color.graphite.850}",
+      "$description": "decorative image placeholder"
+    },
+    "placeholder-lo": {
+      "$value": "{color.graphite.900}"
+    },
+    "page": {
+      "$value": "{color.graphite.950}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.paper.0}"
+        }
+      }
+    },
+    "raised": {
+      "$value": "{color.graphite.900}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.paper.50}"
+        }
+      }
+    },
+    "sunken": {
+      "$value": "{color.graphite.850}",
+      "$description": "opaque well on surface.page (code, inputs)",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.paper.100}"
+        }
+      }
+    },
+    "knob": {
+      "$value": "{color.white}",
+      "$description": "white handle that reads on both themes (slider thumb, switch knob); the ring and shadow separate it from light surfaces"
+    },
+    "scrim": {
+      "$value": "{color.ink-a.78}",
+      "$description": "dims the page behind a drawer or dialog",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.ink-a.30}"
+        }
+      }
+    }
+  },
+  "text": {
+    "$type": "color",
+    "primary": {
+      "$value": "{color.white}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.ink.900}"
+        }
+      }
+    },
+    "secondary": {
+      "$value": "{color.white-a.92}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.ink-a.78}"
+        }
+      }
+    },
+    "on-light": {
+      "$value": "{color.ink.900}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.white}"
+        }
+      }
+    },
+    "on-accent": {
+      "$value": "{color.white}"
+    }
+  },
+  "action": {
+    "$type": "color",
+    "accent": {
+      "$value": "{color.blue.600}"
+    },
+    "accent-hover": {
+      "$value": "{color.blue.700}"
+    }
+  },
+  "line": {
+    "$type": "color",
+    "ring": {
+      "$value": "{color.white-a.30}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.ink-a.25}"
+        }
+      }
+    },
+    "divider": {
+      "$value": "{color.white-a.16}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.ink-a.14}"
+        }
+      }
+    }
+  },
+  "focus": {
+    "$type": "color",
+    "ring": {
+      "$value": "{color.white}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.ink.900}"
+        }
+      }
+    },
+    "halo": {
+      "$value": "{color.ink-a.78}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.white-a.90}"
+        }
+      }
+    }
+  },
+  "elevation": {
+    "$type": "shadow",
+    "float": {
+      "$value": "{shadow.float}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{shadow.float-light}"
+        }
+      }
+    },
+    "lift": {
+      "$value": "{shadow.lift}"
+    }
+  },
+  "width": {
+    "$type": "dimension",
+    "hairline": {
+      "$value": "{size.hairline}"
+    },
+    "ring": {
+      "$value": "{size.ring}"
+    },
+    "halo": {
+      "$value": "{size.halo}"
+    },
+    "avatar-ring": {
+      "$value": "{size.avatar-ring}"
+    },
+    "bar": {
+      "$value": "{size.bar}"
+    }
+  },
+  "gap": {
+    "$type": "dimension",
+    "xs": {
+      "$value": "{space.1}"
+    },
+    "sm": {
+      "$value": "{space.1-5}"
+    },
+    "md": {
+      "$value": "{space.2}"
+    },
+    "lg": {
+      "$value": "{space.3}"
+    },
+    "xl": {
+      "$value": "{space.3-5}"
+    },
+    "2xl": {
+      "$value": "{space.4}"
+    },
+    "inset": {
+      "$value": "{space.5-5}"
+    },
+    "section": {
+      "$value": "{space.8}"
+    },
+    "page": {
+      "$value": "{space.12}"
+    },
+    "3xl": {
+      "$value": "{space.6}"
+    },
+    "none": {
+      "$value": "{space.0}"
+    }
+  },
+  "control": {
+    "$type": "dimension",
+    "sm": {
+      "$value": "{size.control-sm}"
+    },
+    "md": {
+      "$value": "{size.control-md}"
+    },
+    "lg": {
+      "$value": "{size.control-lg}"
+    },
+    "icon-sm": {
+      "$value": "{size.icon-sm}"
+    },
+    "icon-md": {
+      "$value": "{size.icon-md}"
+    },
+    "avatar-sm": {
+      "$value": "{size.avatar-sm}"
+    },
+    "avatar-md": {
+      "$value": "{size.avatar-md}"
+    },
+    "avatar-lg": {
+      "$value": "{size.avatar-lg}"
+    },
+    "badge": {
+      "$value": "{size.badge}"
+    },
+    "dot": {
+      "$value": "{size.dot}"
+    },
+    "thumb": {
+      "$value": "{size.thumb}"
+    },
+    "track": {
+      "$value": "{size.track}"
+    },
+    "menu-min": {
+      "$value": "{size.menu-min}"
+    },
+    "check": {
+      "$value": "{size.check}"
+    },
+    "switch": {
+      "$value": "{size.switch}"
+    },
+    "mark": {
+      "$value": "{size.mark}"
+    }
+  },
+  "corner": {
+    "$type": "dimension",
+    "panel": {
+      "$value": "{radius.xl}"
+    },
+    "inner": {
+      "$value": "{radius.lg}"
+    },
+    "media": {
+      "$value": "{radius.md}"
+    },
+    "round": {
+      "$value": "{radius.pill}"
+    },
+    "mark": {
+      "$value": "{radius.sm}"
+    },
+    "check": {
+      "$value": "{radius.check}"
+    }
+  },
+  "type": {
+    "family": {
+      "$type": "fontFamily",
+      "$value": "{font.family.sans}"
+    },
+    "micro": {
+      "$type": "dimension",
+      "$value": "{font.size.100}"
+    },
+    "caption": {
+      "$type": "dimension",
+      "$value": "{font.size.200}"
+    },
+    "label": {
+      "$type": "dimension",
+      "$value": "{font.size.300}"
+    },
+    "body": {
+      "$type": "dimension",
+      "$value": "{font.size.400}"
+    },
+    "emphasis": {
+      "$type": "dimension",
+      "$value": "{font.size.500}"
+    },
+    "title": {
+      "$type": "dimension",
+      "$value": "{font.size.600}"
+    },
+    "headline": {
+      "$type": "dimension",
+      "$value": "{font.size.700}"
+    },
+    "display": {
+      "$type": "dimension",
+      "$value": "{font.size.800}"
+    },
+    "weight-regular": {
+      "$type": "fontWeight",
+      "$value": "{font.weight.regular}"
+    },
+    "weight-medium": {
+      "$type": "fontWeight",
+      "$value": "{font.weight.medium}"
+    },
+    "weight-semibold": {
+      "$type": "fontWeight",
+      "$value": "{font.weight.semibold}"
+    },
+    "leading-tight": {
+      "$type": "number",
+      "$value": "{font.leading.tight}"
+    },
+    "leading-body": {
+      "$type": "number",
+      "$value": "{font.leading.body}"
+    },
+    "tracking-caps": {
+      "$type": "dimension",
+      "$value": "{font.tracking.caps}"
+    },
+    "tracking-display": {
+      "$type": "dimension",
+      "$value": "{font.tracking.display}"
+    },
+    "measure": {
+      "$type": "dimension",
+      "$value": "{size.measure}"
+    },
+    "reading": {
+      "$type": "dimension",
+      "$value": "{font.size.450}",
+      "$description": "paragraphs people read for more than a line or two"
+    },
+    "leading-reading": {
+      "$type": "number",
+      "$value": "{font.leading.long}"
+    },
+    "mono": {
+      "$type": "fontFamily",
+      "$value": "{font.family.mono}",
+      "$description": "code, token names and measured values"
+    }
+  },
+  "motion": {
+    "hover": {
+      "$type": "duration",
+      "$value": "{duration.gentle}"
+    },
+    "press": {
+      "$type": "duration",
+      "$value": "{duration.quick}"
+    },
+    "enter": {
+      "$type": "duration",
+      "$value": "{duration.slow}"
+    },
+    "scene": {
+      "$type": "duration",
+      "$value": "{duration.slow}"
+    },
+    "stagger": {
+      "$type": "duration",
+      "$value": "{duration.stagger}"
+    },
+    "easing": {
+      "$type": "cubicBezier",
+      "$value": "{easing.soft}"
+    },
+    "easing-inout": {
+      "$type": "cubicBezier",
+      "$value": "{easing.inout}"
+    },
+    "rise": {
+      "$type": "dimension",
+      "$value": "{distance.rise}"
+    },
+    "lift": {
+      "$type": "dimension",
+      "$value": "{distance.lift}"
+    },
+    "press-scale": {
+      "$type": "number",
+      "$value": "{scale.press}"
+    }
+  },
+  "status": {
+    "$type": "color",
+    "positive": {
+      "$value": "{color.green.600}"
+    },
+    "on-positive": {
+      "$value": "{color.white}"
+    },
+    "warning": {
+      "$value": "{color.amber.400}"
+    },
+    "on-warning": {
+      "$value": "{color.ink.900}"
+    },
+    "critical": {
+      "$value": "{color.red.600}"
+    },
+    "on-critical": {
+      "$value": "{color.white}"
+    },
+    "info": {
+      "$value": "{color.blue.600}"
+    },
+    "on-info": {
+      "$value": "{color.white}"
+    },
+    "info-mark": {
+      "$value": "{color.blue.400}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.blue.600}"
+        }
+      }
+    },
+    "positive-mark": {
+      "$value": "{color.green.400}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.green.600}"
+        }
+      }
+    },
+    "warning-mark": {
+      "$value": "{color.amber.400}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.amber.700}"
+        }
+      }
+    },
+    "critical-mark": {
+      "$value": "{color.red.400}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.red.600}"
+        }
+      }
+    }
+  },
+  "layout": {
+    "columns": {
+      "$type": "number",
+      "$value": "{columns.4}",
+      "$extensions": {
+        "kiln.breakpoint": {
+          "md": "{columns.8}",
+          "lg": "{columns.12}"
+        }
+      }
+    },
+    "gutter": {
+      "$type": "dimension",
+      "$value": "{space.4}",
+      "$extensions": {
+        "kiln.breakpoint": {
+          "md": "{space.6}",
+          "lg": "{space.8}"
+        }
+      }
+    },
+    "margin": {
+      "$type": "dimension",
+      "$value": "{space.4}",
+      "$extensions": {
+        "kiln.breakpoint": {
+          "md": "{space.8}",
+          "lg": "{space.12}"
+        }
+      }
+    },
+    "container-sm": {
+      "$type": "dimension",
+      "$value": "{container.sm}"
+    },
+    "container-md": {
+      "$type": "dimension",
+      "$value": "{container.md}"
+    },
+    "container-lg": {
+      "$type": "dimension",
+      "$value": "{container.lg}"
+    },
+    "container-xl": {
+      "$type": "dimension",
+      "$value": "{container.xl}"
+    },
+    "container-2xl": {
+      "$type": "dimension",
+      "$value": "{container.2xl}"
+    },
+    "touch": {
+      "$type": "dimension",
+      "$value": "{size.touch}"
+    },
+    "sidebar": {
+      "$type": "dimension",
+      "$value": "{size.sidebar}"
+    }
+  },
+  "layer": {
+    "$type": "number",
+    "base": {
+      "$value": "{z.base}"
+    },
+    "raised": {
+      "$value": "{z.raised}"
+    },
+    "sticky": {
+      "$value": "{z.sticky}"
+    },
+    "overlay": {
+      "$value": "{z.overlay}"
+    },
+    "toast": {
+      "$value": "{z.toast}"
+    }
+  },
+  "viewport": {
+    "$type": "dimension",
+    "sm": {
+      "$value": "{breakpoint.sm}"
+    },
+    "md": {
+      "$value": "{breakpoint.md}"
+    },
+    "lg": {
+      "$value": "{breakpoint.lg}"
+    },
+    "xl": {
+      "$value": "{breakpoint.xl}"
+    },
+    "2xl": {
+      "$value": "{breakpoint.2xl}"
+    }
+  },
+  "field": {
+    "$type": "color",
+    "base": {
+      "$value": "{color.graphite.950}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.paper.50}"
+        }
+      }
+    },
+    "glow": {
+      "$value": "{color.blue-a.22}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.blue-a.10}"
+        }
+      }
+    },
+    "glow-soft": {
+      "$value": "{color.white-a.06}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.white-a.70}"
+        }
+      }
+    },
+    "line": {
+      "$value": "{color.white-a.05}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.ink-a.06}"
+        }
+      }
+    },
+    "line-major": {
+      "$value": "{color.white-a.08}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.ink-a.08}"
+        }
+      }
+    },
+    "column": {
+      "$value": "{color.blue.400}",
+      "$description": "a solid column fill, so diagram columns stand 3:1 off the field in both themes (G-NT1)",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.blue.600}"
+        }
+      }
+    },
+    "margin": {
+      "$value": "{color.white-a.70}",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.ink-a.78}"
+        }
+      }
+    },
+    "on-column": {
+      "$value": "{color.ink.900}",
+      "$description": "text and numbers drawn on a field column, 4.5:1 in both themes",
+      "$extensions": {
+        "kiln.theme": {
+          "light": "{color.white}"
+        }
+      }
+    }
+  },
+  "opacity": {
+    "$type": "number",
+    "disabled": {
+      "$value": "{alpha.half}"
+    }
+  },
+  "$extensions": {
+    "kiln.why": {
+      "p": "SEED",
+      "why": "seed value from the kiln starter so the build and docs work from day one; Phase 2 replaces it with this system's own decision and reason"
+    }
+  }
+}

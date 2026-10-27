@@ -30,6 +30,23 @@ on every edit, automatically. See
 detail. It doesn't share kiln's lineage and vector pipeline. It's a different tool, bundled in the
 same marketplace.
 
+## Start a design system
+
+kiln 2.0 ships a starter: a monorepo with a tokens package, a React package, the docs book, the
+engine and every gate, already wired. From inside Claude Code, ask for a new design system (skill
+`kiln:new-system` runs it for you), or from a clone of this repo:
+
+```bash
+node plugins/kiln/bin/create.mjs ../my-system --name my-system
+cd ../my-system && pnpm run docs:dev
+```
+
+The new repo builds and renders on day one. Claude then asks its intake questions once, shows you
+3–4 anchor variants to pick from, and works to the first milestone without asking again, logging
+every choice it made in `system/REVIEW.md` for you to review at the end. `pnpm run milestone` says
+when the milestone is really done. Consumers install one package: `npm i my-system-react` and
+`import 'my-system-react/all.css'`.
+
 ## Install
 
 This one command installs kiln and design-system-forge together:

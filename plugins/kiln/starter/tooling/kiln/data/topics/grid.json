@@ -1,0 +1,39 @@
+{
+  "page": "foundation: grid",
+  "collectedAt": "2026-10-27",
+  "how": "headings and table headers of each system's grid page, read from the page text the user supplied; one topic per idea, merged across systems",
+  "sources": {
+    "carbon": "https://carbondesignsystem.com/elements/2x-grid/overview/",
+    "atlassian": "https://atlassian.design/foundations/grid",
+    "dell": "https://www.delldesignsystem.com/foundations/grid"
+  },
+  "topics": [
+    { "id": "scope", "topic": "What the grid governs and what it does not (main content vs navigation, panels, overlays)", "from": ["atlassian", "carbon"] },
+    { "id": "unit", "topic": "The base unit the whole grid is built from (mini unit, 4px/8px baseline) and why", "from": ["carbon", "dell"] },
+    { "id": "anatomy", "topic": "Anatomy: columns, gutters, margins (and rows) as an annotated diagram", "from": ["atlassian", "dell", "carbon"] },
+    { "id": "breakpoints", "topic": "Breakpoint table: viewport range, columns, column size, gutter, margin, padding", "from": ["carbon", "atlassian", "dell"] },
+    { "id": "breakpoint-basis", "topic": "Breakpoints follow the viewport, not the content area; designing up from the smallest", "from": ["atlassian", "dell"] },
+    { "id": "column-width", "topic": "Column width is a percentage of the grid area; columns are equal", "from": ["dell", "carbon"] },
+    { "id": "spans", "topic": "Column spans and common splits (halves, thirds, quarters, 3/4 + 1/4, centred 8/10/12)", "from": ["atlassian", "dell"] },
+    { "id": "types", "topic": "Grid types: fluid, fixed and hybrid, and when to use each", "from": ["carbon", "atlassian"] },
+    { "id": "max-width", "topic": "Maximum widths (fixed-wide, fixed-narrow for reading) and how to choose", "from": ["atlassian"] },
+    { "id": "gutters", "topic": "Gutters: fixed per breakpoint, gutterless vs gutter grids, never put content in gutters", "from": ["carbon", "atlassian", "dell"] },
+    { "id": "margins", "topic": "Outer margins: fixed per breakpoint, never use columns as margins", "from": ["carbon", "dell"] },
+    { "id": "padding", "topic": "Padding inside boxes and aligning type to the padding edge", "from": ["carbon"] },
+    { "id": "what-aligns", "topic": "What aligns to the grid (containers) and what uses spacing tokens instead (buttons, icons, card insides)", "from": ["atlassian"] },
+    { "id": "nested", "topic": "Nested grids inside containers", "from": ["atlassian"] },
+    { "id": "behaviours", "topic": "Grid behaviours: scale the number of things vs the size of things; fluid columns, fixed boxes, hybrid boxes", "from": ["carbon"] },
+    { "id": "ui-behaviours", "topic": "Common UI regions and how each scales in width and height (header, toolbar, side panel, menu, table)", "from": ["carbon"] },
+    { "id": "regions", "topic": "Screen regions and grid influencers: header, side navigation, panels (flexible, fixed, floating)", "from": ["carbon", "dell"] },
+    { "id": "key-lines", "topic": "Key lines: vertical and horizontal alignment across objects", "from": ["carbon"] },
+    { "id": "density", "topic": "Density levels and how gutters and margins change with them", "from": ["dell"] },
+    { "id": "sizing-scale", "topic": "Sizing scale for fixed boxes and the fluid base unit", "from": ["carbon"] },
+    { "id": "aspect-ratios", "topic": "Aspect ratios for boxes", "from": ["carbon"] },
+    { "id": "vertical-rhythm", "topic": "Vertical rhythm and vertical spacing between sections", "from": ["carbon", "dell"] },
+    { "id": "components", "topic": "How components size within the grid (fixed, fluid, hybrid; minor scale inside)", "from": ["carbon"] },
+    { "id": "dodont", "topic": "Do and don't examples (overflow into gutters, columns as margins, wrong grid type for content)", "from": ["atlassian", "dell", "carbon"] },
+    { "id": "tools", "topic": "Applying the grid in design tools and code (layout guides, auto layout, CSS)", "from": ["atlassian", "dell"] },
+    { "id": "demos", "topic": "Live demos and code at each breakpoint", "from": ["dell"] },
+    { "id": "further-reading", "topic": "Further reading (research and articles)", "from": ["dell"] }
+  ]
+}

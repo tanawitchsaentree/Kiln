@@ -59,8 +59,9 @@ Every visible and invisible decision traces to a principle distilled from the co
 `tooling/kiln/rationale.mjs` fails a build where a token, a CSS part, a state or a motion has no reason or
 only a taste reason. Phase 2 cannot be left without `concept_file` and `principles`. Every component after the anchor is
 **derived** before it is coded (`references/derivation.md`): the default it avoids, a lineage
-reference, steps quoting the principles, three rendered variants, the user's pick. A hook blocks its
-CSS/TSX until then, and gate G-X1 flags habitual patterns the derivation does not justify.
+reference, steps quoting the principles, three rendered variants, the pick (the user's, or the agent's
+with a reason and a `system/REVIEW.md` row when `autonomy.picks` is `"agent"`). A hook blocks its
+CSS/TSX until then, Bash writes included, and gate G-X1 flags habitual patterns the derivation does not justify.
 
 ## Phase sequence
 
@@ -102,6 +103,14 @@ fails open on a corrupt state file, rather than trusting a one-time manual check
 | 7 | Gates | `phases/7-gates.md` |
 | 8 | Stamp | `phases/8-stamp.md` |
 
+## Milestones and autonomy
+
+A system repo (kiln's starter) works in milestones defined as checks in `references/milestones.md`
+and decided by `tooling/kiln/milestone.mjs`, never by the agent's own account. The user answers the
+intake batch and the anchor pick, then reviews the milestone as a whole (`system/REVIEW.md` plus
+the book). Between those, the agent does not stop to ask. `system/NEXT.md` is rewritten at the end
+of every session so another person, or a fresh context, starts from facts.
+
 ## Context resets
 
 Clear rather than let history compact. A compacted history reads as authority the model
@@ -142,6 +151,9 @@ Load only when the condition fires. Each is named in the phase file that needs i
 | Building component packages | `references/package.md` |
 | Building the documentation surface | `references/docs-shell.md` |
 | Program scale governance | `references/program.md` |
+| Writing the concept and its principles (end of Phase 2) | `references/concept.md` |
+| Any component after the anchor | `references/derivation.md` |
+| Working in a kiln system repo (starter), or closing a milestone | `references/milestones.md` |
 
 ## Constraints
 

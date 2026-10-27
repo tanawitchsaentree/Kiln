@@ -1,5 +1,31 @@
 # kiln — changelog
 
+## 2.0.0 — a system repo you can start from, and the Pane retro built into it
+
+Pane (glass on a curtain-wall frame) was the first system kiln built to a real milestone. The user
+hit 68 problems on the way; `docs/PANE-RETRO-ANALYSIS.md` in the kit lists them all. This release
+moves the fixes into what the next system starts from, so nobody hits them again.
+
+- **Starter + `bin/create.mjs`** — `node bin/create.mjs <dir> --name <name>` makes a working
+  monorepo (tokens, React, the docs book, engine, data, hooks) that builds and renders on day one
+  with SEED tokens and TODO placeholders, both kept visible by gates until replaced.
+- **Agents and workflow skills in the plugin** — interpreter, foundation, token-architect,
+  component-engineer, qa-a11y, taste, publisher; `ds-conventions`, `lock-decision`,
+  `new-component`, `new-system`, `production-run`.
+- **Questions up front** — intake asks once, in one batch; the anchor pick is the only later
+  question; agent picks are logged in `system/REVIEW.md` for one milestone review
+  (`autonomy.picks: "agent"`, accepted by rationale and the derivation guard).
+- **Milestones as code** — `references/milestones.md` and `tooling/kiln/milestone.mjs` (M1:
+  infrastructure + wave 1, docs controls included).
+- **Honest verify** — `tooling/kiln/verify.mjs` runs every step and every gate, records the run
+  with a source hash, refuses a run whose source changed under it, and replaces `--only` lists with
+  `docs.advisory` (shown, reasoned, refused at a milestone).
+- **New checks** — G-P0 every page renders, G-TODO1 no starter placeholder, G-NAV1 every page in
+  the nav, G-SM1 anchors clear the sticky header, G-TT1 44px hit areas, token-contract (every
+  `var(--ds-*)` declared), lint for raw opacity and scale, the derivation guard on Bash writes.
+- **Engine-owned conformance** — component behaviour checks live in `system/conformance/*.mjs`;
+  a component chapter with no checks fails.
+
 ## 1.5.0 — Phase 5's checkpoint now shows on the page itself, not just in chat
 
 Triggered by a real run (a school-landing brief, 2026-09-02): Phase 5 built its thin slice (2 of 8

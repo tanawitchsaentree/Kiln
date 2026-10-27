@@ -1,0 +1,38 @@
+{
+  "name": "kiln-ds-system",
+  "private": true,
+  "version": "0.0.0",
+  "description": "kiln-ds design system: tokens, React components and the docs book. Built with the kiln engine.",
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "build": "turbo run build",
+    "tokens:build": "pnpm --filter kiln-ds-tokens build",
+    "react:build": "pnpm --filter kiln-ds-react build",
+    "docs:dev": "pnpm --filter kiln-ds-docs dev",
+    "docs:build": "pnpm --filter kiln-ds-react build && pnpm --filter kiln-ds-docs build",
+    "docs:preview": "pnpm --filter kiln-ds-docs preview",
+    "lint": "node tooling/no-hardcode-lint.mjs",
+    "typecheck": "pnpm --filter kiln-ds-react typecheck && pnpm --filter kiln-ds-docs exec tsc --noEmit -p .",
+    "gate:selftest": "node tooling/hooks.selftest.mjs && node tooling/no-hardcode-lint.selftest.mjs && node tooling/contrast-check.selftest.mjs && node tooling/generate-barrel.selftest.mjs && node tooling/pack-verify.selftest.mjs && node tooling/kiln/rationale.selftest.mjs",
+    "verify": "node tooling/kiln/verify.mjs",
+    "verify:quick": "node tooling/kiln/verify.mjs --quick",
+    "milestone": "node tooling/kiln/milestone.mjs",
+    "conformance": "nice -n 19 node tooling/kiln/conformance.mjs",
+    "gates": "nice -n 19 node tooling/kiln/gates.mjs --report",
+    "tone": "nice -n 19 node tooling/kiln/tone-gate.mjs",
+    "spec": "nice -n 19 node tooling/kiln/spec-capture.mjs",
+    "smoke:import": "node tooling/smoke-import.mjs",
+    "release:pack": "node tooling/release-pack.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.0",
+    "@playwright/test": "^1.62.1",
+    "@types/react": "^19.0.0",
+    "esbuild": "^0.28.2",
+    "playwright": "^1.62.1",
+    "pngjs": "^7.0.0",
+    "react-docgen-typescript": "^2.4.0",
+    "turbo": "^2.0.0",
+    "typescript": "^5.6.0"
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "generatedAt": "2026-10-27T17:28:18.582Z",
+  "version": "0.0.0",
+  "components": {
+    "Container": {
+      "source": "packages/react/src/components/Container/Container.tsx",
+      "kinds": {},
+      "sizes": [
+        "sm",
+        "md",
+        "lg",
+        "xl",
+        "2xl"
+      ],
+      "exports": [
+        {
+          "displayName": "Container",
+          "props": [
+            {
+              "name": "size",
+              "type": "\"sm\" | \"md\" | \"lg\" | \"xl\" | \"2xl\"",
+              "required": false,
+              "default": "xl",
+              "description": "Maximum width. sm is 640px, md 768, lg 1024, xl 1200 (the default) and 2xl 1440.",
+              "enum": true,
+              "options": [
+                "sm",
+                "md",
+                "lg",
+                "xl",
+                "2xl"
+              ]
+            }
+          ]
+        }
+      ],
+      "variantDimensions": [
+        "size"
+      ],
+      "variantCount": 1,
+      "demoFloor": 4,
+      "bundle": {
+        "jsMin": 359,
+        "cssMin": 335,
+        "gzip": 403
+      }
+    },
+    "Grid": {
+      "source": "packages/react/src/components/Grid/Grid.tsx",
+      "kinds": {},
+      "sizes": [],
+      "exports": [
+        {
+          "displayName": "Grid",
+          "props": [
+            {
+              "name": "columns",
+              "type": "number",
+              "required": false,
+              "default": null,
+              "description": "Override the column count. By default it follows the layout tokens, which give 4, then 8 at md (768px), then 12 at lg (1024px).",
+              "enum": false,
+              "options": null
+            }
+          ]
+        },
+        {
+          "displayName": "GridItem",
+          "props": [
+            {
+              "name": "span",
+              "type": "GridSpan",
+              "required": false,
+              "default": "full",
+              "description": "Columns to span below md (and above, unless md/lg are set). 'full' = every column.",
+              "enum": false,
+              "options": null
+            },
+            {
+              "name": "md",
+              "type": "GridSpan",
+              "required": false,
+              "default": null,
+              "description": "Columns to span from the md breakpoint (768px).",
+              "enum": false,
+              "options": null
+            },
+            {
+              "name": "lg",
+              "type": "GridSpan",
+              "required": false,
+              "default": null,
+              "description": "Columns to span from the lg breakpoint (1024px).",
+              "enum": false,
+              "options": null
+            }
+          ]
+        }
+      ],
+      "variantDimensions": [],
+      "variantCount": 0,
+      "demoFloor": 3,
+      "bundle": {
+        "jsMin": 676,
+        "cssMin": 110,
+        "gzip": 482
+      }
+    },
+    "Stack": {
+      "source": "packages/react/src/components/Stack/Stack.tsx",
+      "kinds": {},
+      "sizes": [],
+      "exports": [
+        {
+          "displayName": "Stack",
+          "props": [
+            {
+              "name": "direction",
+              "type": "\"column\" | \"row\"",
+              "required": false,
+              "default": "column",
+              "description": "`column` (default) stacks vertically; `row` lays out inline and wraps.",
+              "enum": true,
+              "options": [
+                "column",
+                "row"
+              ]
+            },
+            {
+              "name": "gap",
+              "type": "\"xs\" | \"sm\" | \"md\" | \"lg\" | \"xl\"",
+              "required": false,
+              "default": "md",
+              "description": "Space between children. xs is 4px, sm 8, md 16 (the default), lg 24 and xl 32.",
+              "enum": true,
+              "options": [
+                "xs",
+                "sm",
+                "md",
+                "lg",
+                "xl"
+              ]
+            },
+            {
+              "name": "align",
+              "type": "\"start\" | \"center\" | \"end\" | \"stretch\"",
+              "required": false,
+              "default": "stretch",
+              "description": "Cross-axis alignment.",
+              "enum": true,
+              "options": [
+                "start",
+                "center",
+                "end",
+                "stretch"
+              ]
+            }
+          ]
+        }
+      ],
+      "variantDimensions": [
+        "direction",
+        "gap",
+        "align"
+      ],
+      "variantCount": 3,
+      "demoFloor": 6,
+      "bundle": {
+        "jsMin": 481,
+        "cssMin": 324,
+        "gzip": 488
+      }
+    }
+  }
+}

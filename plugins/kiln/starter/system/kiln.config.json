@@ -1,0 +1,87 @@
+{
+  "$comment": "Per-system settings the kiln engine and gates read. Created by kiln create; Phase 0 fills the names, Phase 2 flips tokens.allowSeed to false. Empty lists make gates FAIL on purpose (nothing proven), never pass.",
+  "name": "{{name}}",
+  "autonomy": {
+    "picks": "agent",
+    "$comment": "agent = after the intake and anchor pick, the agent makes every derivation pick itself and records it in system/REVIEW.md for the milestone review (user setting, 2026-10-27). user = ask for each pick."
+  },
+  "milestone": {
+    "current": "M1",
+    "$comment": "M1 = infrastructure + wave 1 at full depth; see the kiln skill references/milestones.md"
+  },
+  "tokens": {
+    "baseTheme": "dark",
+    "allowSeed": true,
+    "$comment": "baseTheme is the theme $value describes. allowSeed lets the starter's SEED tokens build until Phase 2 replaces them; the M1 gate fails while it is true."
+  },
+  "smokeImport": {
+    "expectedExports": [
+      "Container",
+      "Grid",
+      "GridItem",
+      "Stack"
+    ],
+    "minExports": 4,
+    "renderProbes": [
+      "Container",
+      "Stack"
+    ],
+    "legacyNames": []
+  },
+  "docs": {
+    "app": "apps/docs",
+    "dist": "apps/docs/dist",
+    "routes": "apps/docs/src/book/routes.json",
+    "meta": "apps/docs/src/book/meta.json",
+    "componentsDir": "packages/react/src/components",
+    "componentsPackage": "packages/react",
+    "changelog": "packages/react/CHANGELOG.md",
+    "themes": [
+      "dark",
+      "light"
+    ],
+    "scenes": [],
+    "contrast": {
+      "threshold": 4.5,
+      "exception": null,
+      "exceptionFloor": null,
+      "harness": null,
+      "gatingGroups": [],
+      "infoGroups": []
+    },
+    "tone": {
+      "exclude": [
+        "/reference/decisions",
+        "/reference/exceptions"
+      ],
+      "$exclude": "the decision log and exceptions register are records written in the team's working language through lock-decision, rendered as kept; every other page is book prose and is linted"
+    },
+    "catalog": "docs/CATALOG.md",
+    "benchmark": "tooling/kiln/data/carbon-depth.json",
+    "topicsDir": "tooling/kiln/data/topics",
+    "rationale": {
+      "pendingDerivation": [],
+      "$comment": "components built before a derivation round; the list may only shrink"
+    },
+    "benchmarkTopics": {
+      "/foundations/grid": "grid",
+      "/foundations/color": "color",
+      "/foundations/typography": "typography",
+      "/foundations/spacing": "spacing",
+      "/foundations/motion": "motion",
+      "/foundations/icons": "icons",
+      "/foundations/themes": "themes",
+      "/foundations/shape": "shape",
+      "/foundations/dimensions": "dimensions",
+      "/foundations/content": "content",
+      "/foundations/accessibility": "accessibility"
+    },
+    "touchTarget": 44,
+    "advisory": {
+      "G-TODO1": "the starter's TODO(phase) placeholders and SEED reasons; Phases 1–2 and the wave replace them, and the milestone check refuses M1 while this is red",
+      "G-N1": "system/controls.tsx is native until wave 1 builds this system's own Select and Slider; the docs need them, so they are in wave 1",
+      "G-BT1": "the foundation topics are this system's own prose (system/foundation-extras.tsx), written in Phase 2 once the tokens carry real decisions"
+    },
+    "$advisory": "Gates listed in advisory are run and shown as ! but do not fail verify. Each needs a reason. tooling/kiln/milestone.mjs fails while any advisory gate is red, so this list must be empty when a milestone closes."
+  }
+}

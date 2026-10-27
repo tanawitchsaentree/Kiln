@@ -1,0 +1,564 @@
+{
+  "color": {
+    "$type": "color",
+    "white": {
+      "$value": "#FFFFFF"
+    },
+    "white-a": {
+      "85": {
+        "$value": "#FFFFFFD9"
+      },
+      "55": {
+        "$value": "#FFFFFF8C"
+      },
+      "30": {
+        "$value": "#FFFFFF4D"
+      },
+      "28": {
+        "$value": "#FFFFFF47"
+      },
+      "16": {
+        "$value": "#FFFFFF29"
+      },
+      "14": {
+        "$value": "#FFFFFF24"
+      },
+      "06": {
+        "$value": "#FFFFFF0F"
+      },
+      "08": {
+        "$value": "#FFFFFF14"
+      },
+      "10": {
+        "$value": "#FFFFFF1A"
+      },
+      "03": {
+        "$value": "#FFFFFF08"
+      },
+      "92": {
+        "$value": "#FFFFFFEB"
+      },
+      "62": {
+        "$value": "#FFFFFF9E"
+      },
+      "90": {
+        "$value": "#FFFFFFE6"
+      },
+      "45": {
+        "$value": "#FFFFFF73"
+      },
+      "70": {
+        "$value": "#FFFFFFB3"
+      },
+      "05": {
+        "$value": "#FFFFFF0D"
+      },
+      "42": {
+        "$value": "#FFFFFF6B"
+      }
+    },
+    "graphite": {
+      "solid": {
+        "$value": "#2C2C34"
+      },
+      "950": {
+        "$value": "#141418"
+      },
+      "900": {
+        "$value": "#1C1C22"
+      },
+      "850": {
+        "$value": "#25252C",
+        "$description": "sunken well (code) on a solid dark page"
+      }
+    },
+    "ink": {
+      "900": {
+        "$value": "#111214"
+      }
+    },
+    "blue": {
+      "600": {
+        "$value": "#0071E3"
+      },
+      "700": {
+        "$value": "#0062C4"
+      },
+      "400": {
+        "$value": "#4DA3FF"
+      }
+    },
+    "green": {
+      "600": {
+        "$value": "#13803C",
+        "$description": "white text 5.02:1"
+      },
+      "400": {
+        "$value": "#3FCB77"
+      }
+    },
+    "amber": {
+      "400": {
+        "$value": "#F5B000",
+        "$description": "ink text 9.90:1"
+      },
+      "700": {
+        "$value": "#9A6400"
+      }
+    },
+    "red": {
+      "600": {
+        "$value": "#C42B1C",
+        "$description": "white text 5.66:1"
+      },
+      "400": {
+        "$value": "#FF6B5E"
+      }
+    },
+    "ink-a": {
+      "78": {
+        "$value": "#111214C7"
+      },
+      "25": {
+        "$value": "#11121440"
+      },
+      "14": {
+        "$value": "#11121424"
+      },
+      "08": {
+        "$value": "#11121414"
+      },
+      "06": {
+        "$value": "#1112140F"
+      },
+      "30": {
+        "$value": "#1112144D"
+      }
+    },
+    "paper": {
+      "50": {
+        "$value": "#F2F2F5",
+        "$description": "opaque fallback surface in the light theme"
+      },
+      "0": {
+        "$value": "#FFFFFF",
+        "$description": "page background for solid screens, light theme"
+      },
+      "100": {
+        "$value": "#E9E9EE",
+        "$description": "sunken well (code) on a solid light page"
+      }
+    },
+    "blue-a": {
+      "10": {
+        "$value": "#0071E31A"
+      },
+      "22": {
+        "$value": "#0071E338"
+      },
+      "80": {
+        "$value": "#0071E3CC"
+      }
+    }
+  },
+  "space": {
+    "$type": "dimension",
+    "$description": "4px-base spacing scale; key × 4 = px (e.g. space.6 = 24px)",
+    "0": {
+      "$value": "0px"
+    },
+    "px": {
+      "$value": "1px"
+    },
+    "0-5": {
+      "$value": "2px"
+    },
+    "1": {
+      "$value": "4px"
+    },
+    "1-5": {
+      "$value": "6px"
+    },
+    "2": {
+      "$value": "8px"
+    },
+    "2-5": {
+      "$value": "10px"
+    },
+    "3": {
+      "$value": "12px"
+    },
+    "3-5": {
+      "$value": "14px"
+    },
+    "4": {
+      "$value": "16px"
+    },
+    "5": {
+      "$value": "20px"
+    },
+    "5-5": {
+      "$value": "22px"
+    },
+    "6": {
+      "$value": "24px"
+    },
+    "7": {
+      "$value": "28px"
+    },
+    "8": {
+      "$value": "32px"
+    },
+    "10": {
+      "$value": "40px"
+    },
+    "12": {
+      "$value": "48px"
+    },
+    "14": {
+      "$value": "56px"
+    },
+    "16": {
+      "$value": "64px"
+    },
+    "20": {
+      "$value": "80px"
+    },
+    "24": {
+      "$value": "96px"
+    },
+    "32": {
+      "$value": "128px"
+    }
+  },
+  "size": {
+    "$type": "dimension",
+    "hairline": {
+      "$value": "1px"
+    },
+    "ring": {
+      "$value": "2px"
+    },
+    "halo": {
+      "$value": "5px"
+    },
+    "avatar-ring": {
+      "$value": "4px"
+    },
+    "avatar-sm": {
+      "$value": "30px"
+    },
+    "avatar-md": {
+      "$value": "44px"
+    },
+    "avatar-lg": {
+      "$value": "84px"
+    },
+    "control-sm": {
+      "$value": "32px"
+    },
+    "control-md": {
+      "$value": "36px"
+    },
+    "control-lg": {
+      "$value": "44px"
+    },
+    "icon-sm": {
+      "$value": "16px"
+    },
+    "icon-md": {
+      "$value": "18px"
+    },
+    "measure": {
+      "$value": "32em",
+      "$description": "about 70 characters per line in proportional type (the ch unit is the width of \"0\", wider than the average letter, so 64ch ran to 85+ characters)"
+    },
+    "touch": {
+      "$value": "44px",
+      "$description": "minimum touch target (WCAG 2.5.8 asks 24px; Apple HIG 44pt)"
+    },
+    "sidebar": {
+      "$value": "280px"
+    },
+    "badge": {
+      "$value": "22px"
+    },
+    "dot": {
+      "$value": "6px"
+    },
+    "bar": {
+      "$value": "4px"
+    },
+    "thumb": {
+      "$value": "20px",
+      "$description": "slider thumb"
+    },
+    "track": {
+      "$value": "6px",
+      "$description": "slider track thickness"
+    },
+    "menu-min": {
+      "$value": "180px",
+      "$description": "narrowest a dropdown list may be"
+    },
+    "check": {
+      "$value": "24px"
+    },
+    "switch": {
+      "$value": "52px"
+    },
+    "mark": {
+      "$value": "10px"
+    }
+  },
+  "radius": {
+    "$type": "dimension",
+    "md": {
+      "$value": "18px"
+    },
+    "lg": {
+      "$value": "24px"
+    },
+    "xl": {
+      "$value": "40px"
+    },
+    "pill": {
+      "$value": "999px"
+    },
+    "sm": {
+      "$value": "4px"
+    },
+    "check": {
+      "$value": "7px"
+    }
+  },
+  "font": {
+    "family": {
+      "$type": "fontFamily",
+      "sans": {
+        "$value": "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+      },
+      "mono": {
+        "$value": "ui-monospace, 'SF Mono', Menlo, Consolas, monospace"
+      }
+    },
+    "size": {
+      "$type": "dimension",
+      "100": {
+        "$value": "11px"
+      },
+      "200": {
+        "$value": "13px"
+      },
+      "300": {
+        "$value": "14px"
+      },
+      "400": {
+        "$value": "15px"
+      },
+      "500": {
+        "$value": "17px"
+      },
+      "600": {
+        "$value": "21px"
+      },
+      "700": {
+        "$value": "28px"
+      },
+      "800": {
+        "$value": "44px"
+      },
+      "450": {
+        "$value": "16px",
+        "$description": "long-form reading size (docs prose, articles); Carbon body-long and Material body-large are 16px"
+      }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "regular": {
+        "$value": 400
+      },
+      "medium": {
+        "$value": 550
+      },
+      "semibold": {
+        "$value": 650
+      }
+    },
+    "leading": {
+      "$type": "number",
+      "tight": {
+        "$value": 1.15
+      },
+      "body": {
+        "$value": 1.42
+      },
+      "long": {
+        "$value": 1.6,
+        "$description": "line height for long-form reading at 16px"
+      }
+    },
+    "tracking": {
+      "$type": "dimension",
+      "caps": {
+        "$value": "0.08em"
+      },
+      "display": {
+        "$value": "-0.02em"
+      }
+    }
+  },
+  "shadow": {
+    "$type": "shadow",
+    "float": {
+      "$value": "0 30px 60px -20px #00000059"
+    },
+    "lift": {
+      "$value": "0 8px 20px -8px #00000066"
+    },
+    "halo": {
+      "$value": "0 0 14px #00000073, 0 1px 2px #00000059"
+    },
+    "float-light": {
+      "$value": "0 30px 60px -24px #00000033"
+    },
+    "halo-light": {
+      "$value": "0 0 12px #FFFFFF99, 0 1px 1px #FFFFFF80"
+    },
+    "well": {
+      "$value": "inset 0 1px 2px #0000004D"
+    },
+    "well-light": {
+      "$value": "inset 0 1px 2px #00000024"
+    }
+  },
+  "duration": {
+    "$type": "duration",
+    "quick": {
+      "$value": "200ms"
+    },
+    "gentle": {
+      "$value": "420ms"
+    },
+    "slow": {
+      "$value": "640ms"
+    },
+    "stagger": {
+      "$value": "70ms"
+    }
+  },
+  "easing": {
+    "$type": "cubicBezier",
+    "soft": {
+      "$value": [
+        0.22,
+        1,
+        0.36,
+        1
+      ],
+      "$description": "long, soft settle. no snap, no overshoot"
+    },
+    "inout": {
+      "$value": [
+        0.45,
+        0,
+        0.2,
+        1
+      ]
+    }
+  },
+  "distance": {
+    "$type": "dimension",
+    "rise": {
+      "$value": "16px"
+    },
+    "lift": {
+      "$value": "2px"
+    }
+  },
+  "scale": {
+    "$type": "number",
+    "press": {
+      "$value": 0.97
+    }
+  },
+  "breakpoint": {
+    "$type": "dimension",
+    "$description": "min-width breakpoints",
+    "sm": {
+      "$value": "640px"
+    },
+    "md": {
+      "$value": "768px"
+    },
+    "lg": {
+      "$value": "1024px"
+    },
+    "xl": {
+      "$value": "1280px"
+    },
+    "2xl": {
+      "$value": "1536px"
+    }
+  },
+  "container": {
+    "$type": "dimension",
+    "sm": {
+      "$value": "640px"
+    },
+    "md": {
+      "$value": "768px"
+    },
+    "lg": {
+      "$value": "1024px"
+    },
+    "xl": {
+      "$value": "1200px"
+    },
+    "2xl": {
+      "$value": "1440px"
+    }
+  },
+  "columns": {
+    "$type": "number",
+    "4": {
+      "$value": 4
+    },
+    "8": {
+      "$value": 8
+    },
+    "12": {
+      "$value": 12
+    }
+  },
+  "z": {
+    "$type": "number",
+    "base": {
+      "$value": 0
+    },
+    "raised": {
+      "$value": 10
+    },
+    "sticky": {
+      "$value": 100
+    },
+    "overlay": {
+      "$value": 1000
+    },
+    "toast": {
+      "$value": 1100
+    }
+  },
+  "alpha": {
+    "$type": "number",
+    "half": {
+      "$value": 0.5
+    }
+  },
+  "$extensions": {
+    "kiln.why": {
+      "p": "SEED",
+      "why": "seed value from the kiln starter so the build and docs work from day one; Phase 2 replaces it with this system's own decision and reason"
+    }
+  }
+}

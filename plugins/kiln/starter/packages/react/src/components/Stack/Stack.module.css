@@ -1,0 +1,12 @@
+.root { display: flex; }
+.column { flex-direction: column; }
+.row { flex-direction: row; flex-wrap: wrap; }
+.g-xs { gap: var(--ds-stack-gap-xs); }
+.g-sm { gap: var(--ds-stack-gap-sm); }
+.g-md { gap: var(--ds-stack-gap-md); }
+.g-lg { gap: var(--ds-stack-gap-lg); }
+.g-xl { gap: var(--ds-stack-gap-xl); }
+.a-start { align-items: flex-start; }
+.a-center { align-items: center; }
+.a-end { align-items: flex-end; }
+.a-stretch { align-items: stretch; }

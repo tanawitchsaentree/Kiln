@@ -94,7 +94,7 @@ def check_paths(root):
     # .kiln/*.json and apps/docs are files this skill WRITES INTO the host project it's installed
     # into — they never exist inside the skill folder itself, and a fresh install has no .kiln/
     # yet, so these are excluded rather than resolved (there is nothing to find, by definition).
-    host_project_write_targets = re.compile(r"^\.kiln/|^apps/docs$|^apps/docs/|^system/|^packages/")
+    host_project_write_targets = re.compile(r"^\.kiln/|^apps/docs$|^apps/docs/|^system/|^packages/|^tooling/kiln/|^apps/lab/")
     # docs/DOCS-IA.md is the one host-project READ target this skill's docs verb consumes (the
     # host project's own IA spec) — also nothing to find inside the skill folder, excluded the
     # same way. This is distinct from docs/*.md files that live in THIS repo's own root (the kit's

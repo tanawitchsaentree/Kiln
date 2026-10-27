@@ -1,0 +1,218 @@
+{
+  "$comment": "The book's table of contents, read by the docs app and by tooling (evidence and conformance visit every page). Each new component adds its page under Components the moment it passes QA.",
+  "parts": [
+    {
+      "title": "Introduction",
+      "pages": [
+        {
+          "path": "/",
+          "title": "Overview"
+        },
+        {
+          "path": "/principles",
+          "title": "Principles"
+        }
+      ]
+    },
+    {
+      "title": "Getting started",
+      "pages": [
+        {
+          "path": "/getting-started",
+          "title": "Getting started"
+        },
+        {
+          "path": "/getting-started/designing",
+          "title": "Designing"
+        },
+        {
+          "path": "/getting-started/developing",
+          "title": "Developing"
+        },
+        {
+          "path": "/getting-started/contributing",
+          "title": "Contributing"
+        },
+        {
+          "path": "/getting-started/migrating",
+          "title": "Migrating"
+        }
+      ]
+    },
+    {
+      "title": "Foundations",
+      "pages": [
+        {
+          "path": "/foundations/color",
+          "title": "Colour"
+        },
+        {
+          "path": "/foundations/themes",
+          "title": "Themes & backdrops"
+        },
+        {
+          "path": "/foundations/typography",
+          "title": "Typography"
+        },
+        {
+          "path": "/foundations/spacing",
+          "title": "Spacing"
+        },
+        {
+          "path": "/foundations/grid",
+          "title": "Grid & layout"
+        },
+        {
+          "path": "/foundations/dimensions",
+          "title": "Dimensions"
+        },
+        {
+          "path": "/foundations/shape",
+          "title": "Shape & elevation"
+        },
+        {
+          "path": "/foundations/motion",
+          "title": "Motion"
+        },
+        {
+          "path": "/foundations/icons",
+          "title": "Iconography"
+        },
+        {
+          "path": "/foundations/content",
+          "title": "Content"
+        },
+        {
+          "path": "/foundations/accessibility",
+          "title": "Accessibility"
+        }
+      ]
+    },
+    {
+      "title": "Components",
+      "pages": [
+        {
+          "path": "/components/container",
+          "title": "Container",
+          "tabs": [
+            "usage",
+            "style",
+            "code",
+            "accessibility"
+          ]
+        },
+        {
+          "path": "/components/grid",
+          "title": "Grid",
+          "tabs": [
+            "usage",
+            "style",
+            "code",
+            "accessibility"
+          ]
+        },
+        {
+          "path": "/components/stack",
+          "title": "Stack",
+          "tabs": [
+            "usage",
+            "style",
+            "code",
+            "accessibility"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Patterns",
+      "pages": [
+        {
+          "path": "/patterns/common-actions",
+          "title": "Common actions"
+        },
+        {
+          "path": "/patterns/dialogs",
+          "title": "Dialogs"
+        },
+        {
+          "path": "/patterns/disabled-states",
+          "title": "Disabled states"
+        },
+        {
+          "path": "/patterns/empty-states",
+          "title": "Empty states"
+        },
+        {
+          "path": "/patterns/filtering",
+          "title": "Filtering"
+        },
+        {
+          "path": "/patterns/forms",
+          "title": "Forms"
+        },
+        {
+          "path": "/patterns/loading",
+          "title": "Loading"
+        },
+        {
+          "path": "/patterns/notifications",
+          "title": "Notifications"
+        },
+        {
+          "path": "/patterns/overflow-content",
+          "title": "Overflow content"
+        },
+        {
+          "path": "/patterns/read-only-states",
+          "title": "Read-only states"
+        },
+        {
+          "path": "/patterns/search",
+          "title": "Search"
+        },
+        {
+          "path": "/patterns/status-indicators",
+          "title": "Status indicators"
+        }
+      ]
+    },
+    {
+      "title": "Accessibility",
+      "pages": [
+        {
+          "path": "/accessibility",
+          "title": "How this system is verified"
+        }
+      ]
+    },
+    {
+      "title": "Reference",
+      "pages": [
+        {
+          "path": "/reference/tokens",
+          "title": "Tokens"
+        },
+        {
+          "path": "/reference/changelog",
+          "title": "Change history"
+        },
+        {
+          "path": "/reference/status",
+          "title": "Status & accessibility matrix"
+        },
+        {
+          "path": "/reference/decisions",
+          "title": "Decisions"
+        },
+        {
+          "path": "/reference/exceptions",
+          "title": "Exceptions"
+        },
+        {
+          "path": "/reference/credits",
+          "title": "Credits"
+        }
+      ]
+    }
+  ]
+}

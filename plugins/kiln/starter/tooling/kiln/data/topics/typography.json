@@ -1,0 +1,96 @@
+{
+ "page": "foundation: typography",
+ "collectedAt": "2026-10-27",
+ "how": "h2/h3 headings of each system's page, fetched 2026-10-27 (Carbon and Atlassian as HTML, Apple HIG as its JSON document); one topic per idea, merged across systems",
+ "sources": {
+  "carbon": "https://carbondesignsystem.com/elements/typography/overview/",
+  "atlassian": "https://atlassian.design/foundations/typography",
+  "apple": "https://developer.apple.com/design/human-interface-guidelines/typography"
+ },
+ "topics": [
+  {
+   "id": "principles",
+   "topic": "Typographic principles: readability, harmony, hierarchy",
+   "from": [
+    "atlassian",
+    "apple"
+   ]
+  },
+  {
+   "id": "typeface",
+   "topic": "The typeface and its font stacks (sans, serif, mono)",
+   "from": [
+    "carbon",
+    "atlassian",
+    "apple"
+   ]
+  },
+  {
+   "id": "custom-fonts",
+   "topic": "Brand or custom fonts and when to use them",
+   "from": [
+    "atlassian",
+    "apple"
+   ]
+  },
+  {
+   "id": "scale",
+   "topic": "The type scale",
+   "from": [
+    "carbon",
+    "apple"
+   ]
+  },
+  {
+   "id": "weights",
+   "topic": "Weights and italic",
+   "from": [
+    "carbon"
+   ]
+  },
+  {
+   "id": "styles",
+   "topic": "Text styles and tokens by role (heading, body, metric, code)",
+   "from": [
+    "carbon",
+    "atlassian"
+   ]
+  },
+  {
+   "id": "user-size",
+   "topic": "Respecting the reader’s text size (Dynamic Type, rem units)",
+   "from": [
+    "atlassian",
+    "apple"
+   ]
+  },
+  {
+   "id": "tracking",
+   "topic": "Tracking (letter spacing) values",
+   "from": [
+    "apple"
+   ]
+  },
+  {
+   "id": "color",
+   "topic": "Type colour",
+   "from": [
+    "carbon"
+   ]
+  },
+  {
+   "id": "legibility",
+   "topic": "Ensuring legibility",
+   "from": [
+    "apple"
+   ]
+  },
+  {
+   "id": "platforms",
+   "topic": "Platform considerations for type",
+   "from": [
+    "apple"
+   ]
+  }
+ ]
+}

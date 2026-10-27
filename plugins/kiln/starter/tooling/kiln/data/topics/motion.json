@@ -1,0 +1,80 @@
+{
+ "page": "foundation: motion",
+ "collectedAt": "2026-10-27",
+ "how": "h2/h3 headings of each system's page, fetched 2026-10-27 (Carbon and Atlassian as HTML, Apple HIG as its JSON document); one topic per idea, merged across systems",
+ "sources": {
+  "carbon": "https://carbondesignsystem.com/elements/motion/overview/",
+  "atlassian": "https://atlassian.design/foundations/motion",
+  "apple": "https://developer.apple.com/design/human-interface-guidelines/motion"
+ },
+ "topics": [
+  {
+   "id": "principles",
+   "topic": "Motion principles and style (productive and expressive)",
+   "from": [
+    "carbon",
+    "atlassian"
+   ]
+  },
+  {
+   "id": "duration",
+   "topic": "Duration and its tokens",
+   "from": [
+    "carbon",
+    "atlassian"
+   ]
+  },
+  {
+   "id": "easing",
+   "topic": "Easing curves (standard, entrance, exit)",
+   "from": [
+    "carbon",
+    "atlassian"
+   ]
+  },
+  {
+   "id": "properties",
+   "topic": "Which properties move",
+   "from": [
+    "atlassian"
+   ]
+  },
+  {
+   "id": "feedback",
+   "topic": "Motion as feedback for what the reader did",
+   "from": [
+    "apple"
+   ]
+  },
+  {
+   "id": "choreography",
+   "topic": "Choreography across the broader experience",
+   "from": [
+    "atlassian",
+    "carbon"
+   ]
+  },
+  {
+   "id": "accessibility",
+   "topic": "Accessibility and reduced motion",
+   "from": [
+    "atlassian",
+    "apple"
+   ]
+  },
+  {
+   "id": "evaluation",
+   "topic": "A checklist for evaluating motion",
+   "from": [
+    "carbon"
+   ]
+  },
+  {
+   "id": "platforms",
+   "topic": "Platform considerations (visionOS)",
+   "from": [
+    "apple"
+   ]
+  }
+ ]
+}

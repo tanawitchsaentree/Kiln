@@ -1,0 +1,32 @@
+{
+  "name": "kiln-ds-tokens",
+  "version": "0.0.0",
+  "private": false,
+  "type": "module",
+  "description": "kiln-ds design tokens: CSS custom properties, JSON, ESM (+types) and SCSS, built from DTCG in three tiers.",
+  "exports": {
+    "./css": {
+      "types": "./css.d.ts",
+      "default": "./build/css/tokens.css"
+    },
+    "./json": "./build/json/tokens.json",
+    "./js": {
+      "types": "./build/js/tokens.d.ts",
+      "default": "./build/js/tokens.mjs"
+    },
+    "./scss": "./build/scss/_tokens.scss",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "build",
+    "README.md",
+    "css.d.ts"
+  ],
+  "scripts": {
+    "build": "node build.mjs",
+    "prepack": "node build.mjs"
+  },
+  "sideEffects": [
+    "*.css"
+  ]
+}

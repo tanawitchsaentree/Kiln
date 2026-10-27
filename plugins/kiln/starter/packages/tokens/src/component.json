@@ -1,0 +1,88 @@
+{
+  "focus-ring": {
+    "color": {
+      "$type": "color",
+      "$value": "{focus.ring}"
+    },
+    "halo": {
+      "$type": "color",
+      "$value": "{focus.halo}"
+    },
+    "width": {
+      "$type": "dimension",
+      "$value": "{width.ring}"
+    },
+    "halo-width": {
+      "$type": "dimension",
+      "$value": "{width.halo}"
+    }
+  },
+  "grid": {
+    "columns": {
+      "$type": "number",
+      "$value": "{layout.columns}"
+    },
+    "gutter": {
+      "$type": "dimension",
+      "$value": "{layout.gutter}"
+    },
+    "margin": {
+      "$type": "dimension",
+      "$value": "{layout.margin}"
+    }
+  },
+  "container": {
+    "margin": {
+      "$type": "dimension",
+      "$value": "{layout.margin}"
+    },
+    "max-sm": {
+      "$type": "dimension",
+      "$value": "{layout.container-sm}"
+    },
+    "max-md": {
+      "$type": "dimension",
+      "$value": "{layout.container-md}"
+    },
+    "max-lg": {
+      "$type": "dimension",
+      "$value": "{layout.container-lg}"
+    },
+    "max-xl": {
+      "$type": "dimension",
+      "$value": "{layout.container-xl}"
+    },
+    "max-2xl": {
+      "$type": "dimension",
+      "$value": "{layout.container-2xl}"
+    }
+  },
+  "stack": {
+    "gap-xs": {
+      "$type": "dimension",
+      "$value": "{gap.xs}"
+    },
+    "gap-sm": {
+      "$type": "dimension",
+      "$value": "{gap.md}"
+    },
+    "gap-md": {
+      "$type": "dimension",
+      "$value": "{gap.2xl}"
+    },
+    "gap-lg": {
+      "$type": "dimension",
+      "$value": "{gap.3xl}"
+    },
+    "gap-xl": {
+      "$type": "dimension",
+      "$value": "{gap.section}"
+    }
+  },
+  "$extensions": {
+    "kiln.why": {
+      "p": "SEED",
+      "why": "seed value from the kiln starter so the build and docs work from day one; Phase 2 replaces it with this system's own decision and reason"
+    }
+  }
+}

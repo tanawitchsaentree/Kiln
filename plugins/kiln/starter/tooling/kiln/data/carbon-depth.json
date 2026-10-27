@@ -1,0 +1,166 @@
+{
+  "source": "carbondesignsystem.com usage tabs",
+  "measuredAt": "2026-10-27",
+  "components": {
+    "Accordion": {
+      "carbon": "accordion",
+      "words": 1007,
+      "sections": 18
+    },
+    "Breadcrumb": {
+      "carbon": "breadcrumb",
+      "words": 817,
+      "sections": 19
+    },
+    "Button": {
+      "carbon": "button",
+      "words": 5260,
+      "sections": 36
+    },
+    "Checkbox": {
+      "carbon": "checkbox",
+      "words": 1378,
+      "sections": 23
+    },
+    "CodeSnippet": {
+      "carbon": "code-snippet",
+      "words": 881,
+      "sections": 22
+    },
+    "SegmentedControl": {
+      "carbon": "content-switcher",
+      "words": 1478,
+      "sections": 26
+    },
+    "DataGrid": {
+      "carbon": "data-table",
+      "words": 2507,
+      "sections": 34
+    },
+    "DatePicker": {
+      "carbon": "date-picker",
+      "words": 2820,
+      "sections": 30
+    },
+    "Select": {
+      "carbon": "dropdown",
+      "words": 3259,
+      "sections": 44
+    },
+    "FileUpload": {
+      "carbon": "file-uploader",
+      "words": 1197,
+      "sections": 24
+    },
+    "Link": {
+      "carbon": "link",
+      "words": 1348,
+      "sections": 29
+    },
+    "List": {
+      "carbon": "list",
+      "words": 827,
+      "sections": 17
+    },
+    "Spinner": {
+      "carbon": "loading",
+      "words": 890,
+      "sections": 16
+    },
+    "Menu": {
+      "carbon": "menu",
+      "words": 1895,
+      "sections": 24
+    },
+    "Dialog": {
+      "carbon": "modal",
+      "words": 2654,
+      "sections": 34
+    },
+    "Banner": {
+      "carbon": "notification",
+      "words": 2507,
+      "sections": 34
+    },
+    "NumberInput": {
+      "carbon": "number-input",
+      "words": 1430,
+      "sections": 20
+    },
+    "Pagination": {
+      "carbon": "pagination",
+      "words": 1654,
+      "sections": 30
+    },
+    "Popover": {
+      "carbon": "popover",
+      "words": 1521,
+      "sections": 35
+    },
+    "Progress": {
+      "carbon": "progress-bar",
+      "words": 1874,
+      "sections": 26
+    },
+    "Stepper": {
+      "carbon": "progress-indicator",
+      "words": 1115,
+      "sections": 18
+    },
+    "Radio": {
+      "carbon": "radio-button",
+      "words": 1333,
+      "sections": 24
+    },
+    "SearchInput": {
+      "carbon": "search",
+      "words": 827,
+      "sections": 17
+    },
+    "Slider": {
+      "carbon": "slider",
+      "words": 1592,
+      "sections": 22
+    },
+    "DescriptionList": {
+      "carbon": "structured-list",
+      "words": 925,
+      "sections": 24
+    },
+    "Tabs": {
+      "carbon": "tabs",
+      "words": 3081,
+      "sections": 33
+    },
+    "Tag": {
+      "carbon": "tag",
+      "words": 1910,
+      "sections": 27
+    },
+    "Input": {
+      "carbon": "text-input",
+      "words": 2580,
+      "sections": 31
+    },
+    "Card": {
+      "carbon": "tile",
+      "words": 2181,
+      "sections": 44
+    },
+    "Switch": {
+      "carbon": "toggle",
+      "words": 1076,
+      "sections": 22
+    },
+    "Tooltip": {
+      "carbon": "tooltip",
+      "words": 1266,
+      "sections": 21
+    },
+    "TreeView": {
+      "carbon": "tree-view",
+      "words": 1472,
+      "sections": 23
+    }
+  }
+}

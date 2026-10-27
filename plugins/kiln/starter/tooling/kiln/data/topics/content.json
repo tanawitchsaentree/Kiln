@@ -1,0 +1,87 @@
+{
+ "page": "foundation: content",
+ "collectedAt": "2026-10-27",
+ "how": "h2/h3 headings of each system's page, fetched 2026-10-27 (Carbon and Atlassian as HTML, Apple HIG as its JSON document); one topic per idea, merged across systems",
+ "sources": {
+  "carbon": "https://carbondesignsystem.com/guidelines/content/overview/",
+  "apple": "https://developer.apple.com/design/human-interface-guidelines/writing",
+  "carbon-writing": "https://carbondesignsystem.com/guidelines/content/writing-style/"
+ },
+ "topics": [
+  {
+   "id": "audience",
+   "topic": "Knowing the audience and its vocabulary",
+   "from": [
+    "apple"
+   ]
+  },
+  {
+   "id": "voice",
+   "topic": "Voice",
+   "from": [
+    "apple",
+    "carbon"
+   ]
+  },
+  {
+   "id": "tone",
+   "topic": "Tone that changes with the situation",
+   "from": [
+    "apple"
+   ]
+  },
+  {
+   "id": "clarity",
+   "topic": "Clear, concise words",
+   "from": [
+    "apple",
+    "carbon-writing"
+   ]
+  },
+  {
+   "id": "inclusive",
+   "topic": "Plain and inclusive language",
+   "from": [
+    "apple",
+    "carbon"
+   ]
+  },
+  {
+   "id": "labels",
+   "topic": "Action labels and navigation labels",
+   "from": [
+    "apple",
+    "carbon"
+   ]
+  },
+  {
+   "id": "capitalisation",
+   "topic": "Capitalisation rules",
+   "from": [
+    "apple",
+    "carbon-writing"
+   ]
+  },
+  {
+   "id": "consistency",
+   "topic": "Consistency of terms",
+   "from": [
+    "apple"
+   ]
+  },
+  {
+   "id": "multistep",
+   "topic": "Guidance through steps",
+   "from": [
+    "apple"
+   ]
+  },
+  {
+   "id": "accessibility",
+   "topic": "Writing for accessibility",
+   "from": [
+    "carbon"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,104 @@
+{
+ "page": "foundation: color",
+ "collectedAt": "2026-10-27",
+ "how": "h2/h3 headings of each system's page, fetched 2026-10-27 (Carbon and Atlassian as HTML, Apple HIG as its JSON document); one topic per idea, merged across systems",
+ "sources": {
+  "carbon": "https://carbondesignsystem.com/elements/color/overview/",
+  "atlassian": "https://atlassian.design/foundations/color",
+  "apple": "https://developer.apple.com/design/human-interface-guidelines/color"
+ },
+ "topics": [
+  {
+   "id": "anatomy",
+   "topic": "Colour anatomy: the palette families (saturated, neutral, alpha) and how they relate",
+   "from": [
+    "carbon",
+    "atlassian"
+   ]
+  },
+  {
+   "id": "layering",
+   "topic": "The layering model: which surface sits on which, and how colour steps with it",
+   "from": [
+    "carbon"
+   ]
+  },
+  {
+   "id": "roles",
+   "topic": "Colour roles and emphasis levels, including inverse colour on bold fills",
+   "from": [
+    "atlassian"
+   ]
+  },
+  {
+   "id": "tokens",
+   "topic": "Colour tokens: naming, core versus component tokens, applying colour through tokens",
+   "from": [
+    "carbon",
+    "atlassian"
+   ]
+  },
+  {
+   "id": "states",
+   "topic": "Interaction states in colour: hover, active, selected, focus, disabled",
+   "from": [
+    "carbon",
+    "atlassian"
+   ]
+  },
+  {
+   "id": "themes",
+   "topic": "Colour in light and dark themes and the global background colours",
+   "from": [
+    "carbon",
+    "atlassian",
+    "apple"
+   ]
+  },
+  {
+   "id": "high-contrast",
+   "topic": "High contrast moments and increased-contrast modes",
+   "from": [
+    "carbon",
+    "apple"
+   ]
+  },
+  {
+   "id": "accessibility",
+   "topic": "Contrast ratios and never using colour alone to carry meaning",
+   "from": [
+    "carbon",
+    "atlassian",
+    "apple"
+   ]
+  },
+  {
+   "id": "specs",
+   "topic": "Specifications: the actual values of every system colour",
+   "from": [
+    "apple"
+   ]
+  },
+  {
+   "id": "on-materials",
+   "topic": "Colour on translucent materials (Liquid Glass colour)",
+   "from": [
+    "apple"
+   ]
+  },
+  {
+   "id": "management",
+   "topic": "Colour management: colour spaces such as sRGB and Display P3",
+   "from": [
+    "apple"
+   ]
+  },
+  {
+   "id": "platforms",
+   "topic": "Platform considerations for colour",
+   "from": [
+    "apple"
+   ]
+  }
+ ]
+}

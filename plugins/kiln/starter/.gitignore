@@ -1,0 +1,15 @@
+node_modules/
+packages/*/build/
+packages/*/dist/
+apps/docs/dist/
+release/
+.turbo/
+*.log
+*.tsbuildinfo
+.DS_Store
+# written by verify and read by the book; regenerated on every run
+apps/docs/public/evidence.json
+apps/docs/public/gates.json
+apps/docs/public/conformance.json
+apps/docs/public/specs.json
+system/reports/

@@ -1,0 +1,76 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Layout Lab</title>
+<style>
+:root{--c:#3d3d3a;--m:#8a8a85;--b:#d9d8d3;--s:#f4f3f0;--w:#fff}
+*{box-sizing:border-box;margin:0}
+body{font:14px/1.6 system-ui,sans-serif;color:var(--c);background:var(--s);padding:0}
+header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 18px;background:var(--w);border-bottom:1px solid var(--b);position:sticky;top:0}
+header b{font-weight:600}
+.pill{border:1px solid var(--b);background:var(--w);border-radius:99px;padding:5px 14px;font-size:13px;cursor:pointer}
+.pill.on{background:var(--c);color:var(--w);border-color:var(--c)}
+.grp{display:flex;gap:6px;align-items:center}
+.lbl{font-size:12px;color:var(--m);margin-right:2px}
+main{display:flex;justify-content:center;padding:34px 16px}
+#stage{transition:width .25s;padding:26px;border-radius:8px}
+.scene{font-family:var(--f)}
+.card{background:var(--card);color:var(--ink);border:var(--bord);border-radius:var(--rad);box-shadow:var(--shR);padding:20px;margin-bottom:16px}
+.inset{background:var(--card);border:var(--bord);border-radius:calc(var(--rad) - 5px);box-shadow:var(--shI);padding:11px 14px}
+.btn{border:none;border-radius:calc(var(--rad) - 3px);padding:12px 18px;font-size:14px;font-weight:600;cursor:pointer;min-height:44px}
+.btn.pri{background:var(--acc);color:var(--onA);box-shadow:var(--shR)}
+.btn.sec{background:var(--card);color:var(--ink);border:var(--bord);box-shadow:var(--shR)}
+.sub{color:var(--subc);font-size:12px}
+input.f{width:100%;border:var(--bord);background:var(--card);box-shadow:var(--shI);border-radius:calc(var(--rad) - 5px);padding:12px 14px;font:inherit;color:var(--ink);min-height:44px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:13px 0;border-bottom:1px solid var(--subc)}
+#spec{max-width:900px;margin:0 auto;padding:0 18px 26px;font:12px/1.6 ui-monospace,monospace;color:var(--m)}
+footer{padding:10px 18px;font-size:12px;color:var(--m);border-top:1px solid var(--b);background:var(--w)}
+</style></head><body>
+<header><b>Layout lab</b><span class="lbl" id="round">รอบ: —</span>
+<span class="grp" id="cands"><span class="lbl">candidate</span></span>
+<span class="grp" id="scenes"><span class="lbl">ฉาก</span></span>
+<span class="grp"><span class="lbl">frame</span>
+<button class="pill" data-w="390">mobile</button>
+<button class="pill" data-w="744">tablet</button>
+<button class="pill" data-w="1100">desktop</button></span>
+</header>
+<main><div id="stage"><div class="scene" id="scene"></div></div></main>
+<div id="spec"></div>
+<footer>วิธีใช้: agent เพิ่ม candidate ใน candidates.js → เปิดหน้านี้ เทียบ → screenshot ตัวที่ชนะแนบเข้า /lock-decision · baseline (locked) มีไว้เทียบ regression</footer>
+<script src="candidates.js"></script>
+<script>
+const SC={
+"payment (form+card)":`<div class="card"><div class="sub" style="margin-bottom:10px">audio 1 · balance</div>
+<div class="inset" style="margin-bottom:14px"><div style="font-size:28px;font-weight:600">$ 600</div><div class="sub">track 01 · 62%</div></div>
+<input class="f" placeholder="ใส่จำนวนเงิน" style="margin-bottom:14px">
+<div style="display:flex;gap:10px"><button class="btn pri" style="flex:1">Send</button><button class="btn sec" style="flex:1">Cancel</button></div></div>`,
+"list (data)":`<div class="card"><div style="font-weight:600;margin-bottom:6px">Recent</div>
+<div class="row"><span>Coffee shop</span><b>-$4.50</b></div>
+<div class="row"><span>Salary</span><b>+$2,400</b></div>
+<div class="row" style="border:none"><span>Transfer</span><b>-$120</b></div>
+<button class="btn sec" style="width:100%;margin-top:12px">View all</button></div>`,
+"hero (marketing)":`<div class="card" style="text-align:center;padding:34px 22px">
+<div style="font-size:26px;font-weight:700;margin-bottom:8px">Good morning!</div>
+<p class="sub" style="margin-bottom:20px">less, but better — ทุก element ยืนได้ด้วยสี ไม่พึ่งเงา</p>
+<button class="btn pri" style="width:70%">Play</button></div>`};
+let cand=null,scene=Object.keys(SC)[0],w=390;
+const stage=document.getElementById('stage');
+function apply(){const t=window.LAB_CANDIDATES[cand];
+stage.style.width=Math.min(w,innerWidth-40)+'px';stage.style.background=t.paper;
+stage.style.setProperty('--card',t.card);stage.style.setProperty('--ink',t.ink);
+stage.style.setProperty('--subc',t.sub);stage.style.setProperty('--acc',t.accent);
+stage.style.setProperty('--onA',t.onAccent);stage.style.setProperty('--rad',t.radius);
+stage.style.setProperty('--bord',t.border);stage.style.setProperty('--shR',t.shadowRaised);
+stage.style.setProperty('--shI',t.shadowInset);stage.style.setProperty('--f',t.font);
+document.getElementById('scene').innerHTML=SC[scene];
+document.getElementById('spec').textContent=cand+' — '+t.spec+(t.locked?'  ★ baseline':'');
+document.querySelectorAll('#cands .pill').forEach(p=>p.classList.toggle('on',p.textContent===cand));
+document.querySelectorAll('#scenes .pill').forEach(p=>p.classList.toggle('on',p.textContent===scene));
+document.querySelectorAll('[data-w]').forEach(p=>p.classList.toggle('on',+p.dataset.w===w));}
+const cbox=document.getElementById('cands');
+for(const k in window.LAB_CANDIDATES){const b=document.createElement('button');b.className='pill';b.textContent=k;b.onclick=()=>{cand=k;apply()};cbox.appendChild(b);cand=cand||k;}
+const sbox=document.getElementById('scenes');
+for(const k in SC){const b=document.createElement('button');b.className='pill';b.textContent=k;b.onclick=()=>{scene=k;apply()};sbox.appendChild(b);}
+document.querySelectorAll('[data-w]').forEach(p=>p.onclick=()=>{w=+p.dataset.w;apply()});
+document.getElementById('round').textContent='รอบ: '+(new URLSearchParams(location.search).get('round')||'ทดลองอิสระ');
+apply();
+</script></body></html>

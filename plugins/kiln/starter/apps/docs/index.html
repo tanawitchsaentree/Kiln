@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Design system</title>
+    <script>
+      // Runs before the first paint so the theme is known up front and nothing flips after load.
+      (function () {
+        var q = new URLSearchParams(location.search);
+        var pref = q.get('theme') || localStorage.getItem('ds-theme') || 'system';
+        var theme = pref === 'system' ? (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark') : pref;
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+  </head>
+  <body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body>
+</html>

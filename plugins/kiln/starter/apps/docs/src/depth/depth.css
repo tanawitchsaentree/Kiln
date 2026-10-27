@@ -1,0 +1,46 @@
+/* Component tabs: header demo, tab links, live pairs, anatomy callouts, spec subjects and redlines.
+   Plain docs chrome: the system's look appears only inside the stages. */
+/* wrappers inside .prose own the same rhythm as .prose itself (container-owned spacing) */
+.prose > [data-registry], .deep-dive, .modifier { display: flex; flex-direction: column; gap: var(--ds-gap-lg); }
+.live-demo { display: flex; flex-direction: column; gap: var(--ds-gap-md); margin-block-start: var(--ds-gap-xl); }
+.live-demo-controls { display: flex; flex-wrap: wrap; gap: var(--ds-gap-lg); align-items: end; }
+.live-demo-stage .example-live { justify-content: center; }
+
+.tab-nav { display: flex; gap: var(--ds-gap-xs); margin-block-start: var(--ds-gap-2xl); border-block-end: var(--ds-width-hairline) solid var(--ds-line-divider); overflow-x: auto; }
+.tab-link { display: inline-flex; align-items: center; min-block-size: var(--ds-layout-touch); padding: var(--ds-gap-md) var(--ds-gap-lg); font-weight: var(--ds-type-weight-semibold); text-decoration: none; color: var(--ds-text-secondary); border-block-end: var(--ds-focus-ring-width) solid transparent; margin-block-end: calc(var(--ds-width-hairline) * -1); white-space: nowrap; }
+main a.tab-link { color: var(--ds-text-secondary); text-decoration: none; }
+main a.tab-link[aria-current='page'] { color: var(--ds-text-primary); border-block-end-color: var(--ds-text-primary); }
+main a.tab-link:hover { color: var(--ds-text-primary); }
+
+.live-pair { margin-block: var(--ds-gap-xl); }
+
+.anatomy-figure { margin: 0; display: grid; gap: var(--ds-gap-xl); }
+.anatomy-stage { justify-content: center; }
+.anatomy-host { position: relative; display: inline-block; padding: var(--ds-gap-2xl) calc(var(--ds-gap-section) * 2) var(--ds-gap-2xl) var(--ds-gap-2xl); }
+.anatomy-mark { position: absolute; transform: translate(-50%, -50%); inline-size: var(--ds-gap-2xl); block-size: var(--ds-gap-2xl); border-radius: var(--ds-radius-pill); display: grid; place-items: center; font-size: var(--ds-type-label); font-weight: var(--ds-type-weight-semibold); background: var(--ds-surface-light); color: var(--ds-text-on-light); box-shadow: var(--ds-elevation-lift); text-shadow: none; pointer-events: none; }
+[dir='rtl'] .anatomy-mark { transform: translate(50%, -50%); }
+.anatomy-lead { position: absolute; overflow: visible; pointer-events: none; }
+.anatomy-lead path { fill: none; stroke: var(--ds-text-primary); stroke-width: var(--ds-width-hairline); opacity: 0.8; }
+.anatomy-legend { margin: 0; padding-inline-start: var(--ds-gap-2xl); display: grid; gap: var(--ds-gap-sm); }
+
+.in-context-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: var(--ds-gap-2xl); margin-block: var(--ds-gap-xl); }
+.in-context { margin: 0; display: flex; flex-direction: column; gap: var(--ds-gap-md); }
+.in-context figcaption { font-size: var(--ds-type-label); }
+.narrow-stage .example-live, .narrow-stage { max-inline-size: 360px; }
+.overflow-probe { max-inline-size: 260px; overflow: hidden; }
+
+.deep-dive, .modifier { margin-block-start: var(--ds-gap-section); }
+.deep-dive h4 { margin-block: var(--ds-gap-xl) var(--ds-gap-sm); }
+
+.spec-subjects { margin-block: var(--ds-gap-xl); }
+.spec-row { gap: var(--ds-gap-xl); }
+.spec-cell { display: inline-flex; }
+.redlines { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: var(--ds-gap-2xl); margin-block: var(--ds-gap-xl); }
+.redline { margin: 0; display: flex; flex-direction: column; gap: var(--ds-gap-md); }
+.redline-host { position: relative; display: inline-flex; padding-block: var(--ds-gap-2xl); padding-inline: var(--ds-gap-2xl) var(--ds-gap-section); }
+.rl { position: absolute; font-size: var(--ds-type-caption, var(--ds-type-label)); font-family: var(--ds-type-mono); color: var(--ds-text-primary); }
+.rl-h { inset-inline-end: 0; inset-block-start: 50%; transform: translateY(-50%); padding-inline-start: var(--ds-gap-sm); border-inline-start: var(--ds-width-hairline) solid currentColor; }
+.rl-p { inset-inline-start: var(--ds-gap-2xl); inset-block-start: 0; }
+/* loading placeholders for the patterns (surface.placeholder tokens), the size of the text they stand for */
+.placeholder-line { display: block; block-size: var(--ds-type-body); border-radius: var(--ds-radius-pill); background: linear-gradient(90deg, var(--ds-surface-placeholder-lo), var(--ds-surface-placeholder-hi)); }
+.indent { padding-inline-start: var(--ds-gap-2xl); }

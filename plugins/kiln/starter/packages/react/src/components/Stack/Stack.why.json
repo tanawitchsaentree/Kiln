@@ -1,0 +1,69 @@
+{
+  "identity": false,
+  "identity_reason": "a layout primitive only places other components and has no look of its own to derive",
+  "concept": "A starter layout primitive with no form of its own, which Phase 1 restates in this system's own terms.",
+  "parts": {
+    "root": {
+      "p": "SEED",
+      "axis": "space",
+      "why": "seed reason from the kiln starter; Phase 1 rewrites it against this system's own principles in system/CONCEPT.md"
+    },
+    "column": {
+      "p": "SEED",
+      "axis": "space",
+      "why": "seed reason from the kiln starter; Phase 1 rewrites it against this system's own principles in system/CONCEPT.md"
+    },
+    "row": {
+      "p": "SEED",
+      "axis": "space",
+      "why": "seed reason from the kiln starter; Phase 1 rewrites it against this system's own principles in system/CONCEPT.md"
+    },
+    "g-xs": {
+      "p": "SEED",
+      "axis": "space",
+      "why": "seed reason from the kiln starter; Phase 1 rewrites it against this system's own principles in system/CONCEPT.md"
+    },
+    "g-sm": {
+      "p": "SEED",
+      "axis": "space",
+      "why": "seed reason from the kiln starter; Phase 1 rewrites it against this system's own principles in system/CONCEPT.md"
+    },
+    "g-md": {
+      "p": "SEED",
+      "axis": "space",
+      "why": "seed reason from the kiln starter; Phase 1 rewrites it against this system's own principles in system/CONCEPT.md"
+    },
+    "g-lg": {
+      "p": "SEED",
+      "axis": "space",
+      "why": "seed reason from the kiln starter; Phase 1 rewrites it against this system's own principles in system/CONCEPT.md"
+    },
+    "g-xl": {
+      "p": "SEED",
+      "axis": "space",
+      "why": "seed reason from the kiln starter; Phase 1 rewrites it against this system's own principles in system/CONCEPT.md"
+    },
+    "a-start": {
+      "p": "SEED",
+      "axis": "space",
+      "why": "seed reason from the kiln starter; Phase 1 rewrites it against this system's own principles in system/CONCEPT.md"
+    },
+    "a-center": {
+      "p": "SEED",
+      "axis": "space",
+      "why": "seed reason from the kiln starter; Phase 1 rewrites it against this system's own principles in system/CONCEPT.md"
+    },
+    "a-end": {
+      "p": "SEED",
+      "axis": "space",
+      "why": "seed reason from the kiln starter; Phase 1 rewrites it against this system's own principles in system/CONCEPT.md"
+    },
+    "a-stretch": {
+      "p": "SEED",
+      "axis": "space",
+      "why": "seed reason from the kiln starter; Phase 1 rewrites it against this system's own principles in system/CONCEPT.md"
+    }
+  },
+  "states": {},
+  "motion": {}
+}

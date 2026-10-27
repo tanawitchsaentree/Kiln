@@ -8,6 +8,16 @@ Before asking anything, run `python3 scripts/kiln_state.py init --verb build --s
 the scale is decided (below) — this starts the real state machine `scripts/kiln_state.py`
 enforces; skip this for `study`/`audit`/`extend`/`component`/`docs`, which don't use it.
 
+## In a kiln system repo: one batch, then silence
+
+A repo made from kiln's starter (`system/INTAKE.md` exists) asks its intake questions **once, in one
+batch** (AskUserQuestion, up to four per call), writes the answers into INTAKE.md, and does not ask
+again until the milestone review. The only later question is the anchor pick (Phase 5's checkpoint).
+Every other choice the agent makes itself, renders the alternatives, and logs in `system/REVIEW.md`
+when `autonomy.picks` is `"agent"`. A missing answer gets a default written into INTAKE.md as
+"(default, agent)". Per-step questions stalled Pane for days; the user asked for this
+explicitly (2026-10-27). The adaptive questions below are what goes into that one batch.
+
 ## The three questions
 
 Adaptive, not scripted. Ask only what the brief hasn't already answered, and stop at three even if

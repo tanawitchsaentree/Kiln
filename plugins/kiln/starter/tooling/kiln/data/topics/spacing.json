@@ -1,0 +1,88 @@
+{
+ "page": "foundation: spacing",
+ "collectedAt": "2026-10-27",
+ "how": "h2/h3 headings of each system's page, fetched 2026-10-27 (Carbon and Atlassian as HTML, Apple HIG as its JSON document); one topic per idea, merged across systems",
+ "sources": {
+  "carbon": "https://carbondesignsystem.com/elements/spacing/overview/",
+  "atlassian": "https://atlassian.design/foundations/spacing",
+  "apple": "https://developer.apple.com/design/human-interface-guidelines/layout"
+ },
+ "topics": [
+  {
+   "id": "base-unit",
+   "topic": "The base unit spacing is built from",
+   "from": [
+    "atlassian"
+   ]
+  },
+  {
+   "id": "scale",
+   "topic": "The spacing scale",
+   "from": [
+    "carbon",
+    "atlassian"
+   ]
+  },
+  {
+   "id": "tokens",
+   "topic": "Space tokens, including negative values",
+   "from": [
+    "atlassian"
+   ]
+  },
+  {
+   "id": "applying",
+   "topic": "Applying spacing: which sizes for which jobs",
+   "from": [
+    "carbon",
+    "atlassian"
+   ]
+  },
+  {
+   "id": "stacking",
+   "topic": "Stacking: vertical spacing between blocks",
+   "from": [
+    "carbon"
+   ]
+  },
+  {
+   "id": "relationships",
+   "topic": "Grouping by proximity and similarity",
+   "from": [
+    "carbon",
+    "atlassian"
+   ]
+  },
+  {
+   "id": "hierarchy",
+   "topic": "Creating hierarchy and order with space",
+   "from": [
+    "carbon",
+    "atlassian",
+    "apple"
+   ]
+  },
+  {
+   "id": "white-space",
+   "topic": "White space and visual rhythm",
+   "from": [
+    "carbon",
+    "atlassian"
+   ]
+  },
+  {
+   "id": "optical",
+   "topic": "Optical adjustment",
+   "from": [
+    "atlassian"
+   ]
+  },
+  {
+   "id": "safe-areas",
+   "topic": "Adaptability, safe areas and guides",
+   "from": [
+    "apple"
+   ]
+  }
+ ]
+}
