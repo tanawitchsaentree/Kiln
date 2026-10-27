@@ -64,6 +64,9 @@ Checklist, all 13 points required for a page to count as done:
 
 ## Page-type: foundation
 
+> **Depth:** before writing, enumerate the reference systems' topics for the page and cover or
+> decline each one (`foundation-depth.md`, gate G-BT1). The bullets below are the wiring floor only.
+
 One per token category (color, type, spacing, motion, icons, etc.):
 
 - Live values only — read from the token build output at render time, never retyped into the
