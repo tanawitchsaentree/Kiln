@@ -57,7 +57,10 @@ cannot run. `references/scale.md` carries the detail and the honest limits.
 Every visible and invisible decision traces to a principle distilled from the concept
 (`references/concept.md`): `system/CONCEPT.md` is written at the end of Phase 2, before any token, and
 `tooling/kiln/rationale.mjs` fails a build where a token, a CSS part, a state or a motion has no reason or
-only a taste reason. Phase 2 cannot be left without `concept_file` and `principles`.
+only a taste reason. Phase 2 cannot be left without `concept_file` and `principles`. Every component after the anchor is
+**derived** before it is coded (`references/derivation.md`): the default it avoids, a lineage
+reference, steps quoting the principles, three rendered variants, the user's pick. A hook blocks its
+CSS/TSX until then, and gate G-X1 flags habitual patterns the derivation does not justify.
 
 ## Phase sequence
 

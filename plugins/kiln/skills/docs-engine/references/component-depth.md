@@ -69,6 +69,11 @@ announcements (what is spoken, per state) · how it is tested, with the componen
 
 ## Depth benchmark (G-K6)
 
+**Scope:** benchmarks measure how much a page explains, never what a component looks like. Copying a
+benchmark's anatomy (Carbon's stripe-and-icon notification, its button set) imports its look; form
+comes from the system's own derivation (kiln `references/derivation.md`).
+
+
 `benchmarks/carbon-depth.json` holds measured word counts and section counts of Carbon's usage tab
 for every component Carbon also has (fetched by `scripts/benchmark-depth.mjs`, dated). The audit
 reports each page's usage words and sections against it, and FAILS a page below **0.5 × the

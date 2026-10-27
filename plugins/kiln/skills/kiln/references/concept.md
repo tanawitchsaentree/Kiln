@@ -58,5 +58,7 @@ fails on reasons for things the CSS no longer has (stale), on unknown principles
 ## 4. Order of work
 
 anchor pick → vector → **CONCEPT.md** (user sees the principles, one round) → tokens with reasons →
-atoms → molecules → organisms, each with its why.json before its docs page. A component whose
-reasons do not hold is redesigned, not re-explained.
+atoms → molecules → organisms, **each one derived first** (`references/derivation.md`: default to
+avoid, lineage reference, derivation quoting the principles, three variants, user pick), code after.
+Reasons written after the code only explain a habit; a component whose form was not derived is
+redesigned, not re-explained.
