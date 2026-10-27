@@ -186,3 +186,9 @@ migration guides (MUI/Carbon, before 1.0), feedback/research/roadmap sections (G
 | G-A1 affordance | nav links differ from part titles in ≥2 of size, weight, case, colour, tracking; part titles never look pressable; links visibly react to hover |
 | G-PF1 first frame | in every theme the first painted frame already has the final theme (set before paint, never in an effect), ≥98% of the page text (verification data bundled, not fetched after mount), and cumulative layout shift ≤0.02 |
 | G-PF2 weight | no image over 300 kB and no page over 1.5 MB transferred; backdrops ship WebP, tiles and thumbnails ship a small variant, and the page paints the backdrop's average colour on the first frame |
+
+## Chrome gate (user, 2026-10-27: "I don't like a glass layout for the docs. Other sites use a normal layout; show the system in foundations, components and patterns")
+
+| Gate | Pass condition |
+|---|---|
+| G-SH1 plain chrome | the docs shell (top bar, nav, page, sections, tables, code) is opaque and plain, like Carbon, MUI or Apple's docs: no `backdrop-filter` and no see-through page background outside demo stages (`[data-example-live]`, `[data-cell]`, `[data-preview]`). However expressive the system is, its look is shown on stages, never worn by the reading layout |
