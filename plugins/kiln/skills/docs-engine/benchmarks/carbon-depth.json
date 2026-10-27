@@ -1,0 +1,138 @@
+{
+  "source": "carbondesignsystem.com usage tabs",
+  "measuredAt": "2026-10-27",
+  "components": {
+    "Accordion": {
+      "carbon": "accordion",
+      "words": 1007,
+      "sections": 18
+    },
+    "Breadcrumb": {
+      "carbon": "breadcrumb",
+      "words": 817,
+      "sections": 19
+    },
+    "Button": {
+      "carbon": "button",
+      "words": 5260,
+      "sections": 36
+    },
+    "Checkbox": {
+      "carbon": "checkbox",
+      "words": 1378,
+      "sections": 23
+    },
+    "CodeSnippet": {
+      "carbon": "code-snippet",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "SegmentedControl": {
+      "carbon": "content-switcher",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "DataGrid": {
+      "carbon": "data-table",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "DatePicker": {
+      "carbon": "date-picker",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "Select": {
+      "carbon": "dropdown",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "FileUpload": {
+      "carbon": "file-uploader",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "Link": {
+      "carbon": "link",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "List": {
+      "carbon": "list",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "Spinner": {
+      "carbon": "loading",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "Menu": {
+      "carbon": "menu",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "Dialog": {
+      "carbon": "modal",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "Banner": {
+      "carbon": "notification",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "NumberInput": {
+      "carbon": "number-input",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "Pagination": {
+      "carbon": "pagination",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "Popover": {
+      "carbon": "popover",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "Progress": {
+      "carbon": "progress-bar",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "Stepper": {
+      "carbon": "progress-indicator",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "Radio": {
+      "carbon": "radio-button",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "SearchInput": {
+      "carbon": "search",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "Slider": {
+      "carbon": "slider",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "DescriptionList": {
+      "carbon": "structured-list",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "Tabs": {
+      "carbon": "tabs",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "Tag": {
+      "carbon": "tag",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "Input": {
+      "carbon": "text-input",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "Card": {
+      "carbon": "tile",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "Switch": {
+      "carbon": "toggle",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "Tooltip": {
+      "carbon": "tooltip",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    },
+    "TreeView": {
+      "carbon": "tree-view",
+      "error": "UND_ERR_CONNECT_TIMEOUT"
+    }
+  }
+}

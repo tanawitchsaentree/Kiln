@@ -6,6 +6,10 @@ here is a round number chosen because it felt right.
 
 ## Page-type: component
 
+> **Depth:** this checklist is the wiring floor. How much each page must *say*, and the four-tab
+> shape (Usage / Style / Code / Accessibility), is `component-depth.md` (the Carbon bar, gates
+> G-K1–G-K8, G-IA1). A page that clears these 13 points but not `component-depth.md` is not done.
+
 Checklist, all 13 points required for a page to count as done:
 
 1. **Header** — breadcrumb category · component name · one-sentence purpose describing what it

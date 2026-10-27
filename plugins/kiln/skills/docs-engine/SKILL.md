@@ -57,6 +57,13 @@ dimensions, floor 7), read via a TS-aware parser (`react-docgen-typescript` for 
 `scripts/audit.mjs`), never by counting union-member *options* (that overcounts layout primitives
 like Flex into an absurd floor) and never hand-typed.
 
+## Component depth
+
+Load `references/component-depth.md` for every component page. Four tab routes, a Usage
+section registry (variants, anatomy, sizes, emphasis, placement, combinations, content with RTL
+and overflow, behaviours, a deep dive per variant, modifiers, references), a Style tab generated
+from computed style, and a depth floor measured against Carbon's page for the same component.
+
 ## Research protocol
 
 Load `references/research-protocol.md` when a checklist item lacks material. Order: (1) component
