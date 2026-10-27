@@ -33,3 +33,10 @@ not that there was no time.
 | Grid | `benchmarks/topics/grid.json` (Carbon 2x Grid, Atlassian Grid, Dell Grid) |
 
 Add a file the first time any system builds a page that has none.
+
+## Backdrops for structure
+
+When a system's demos sit on scenes or photos, diagrams of structure (grids, spacing, anatomy, regions)
+use a neutral field backdrop instead: tokenised, theme-aware, with construction lines on the system's
+base unit, quiet enough that the drawing is the subject. A photo behind a column diagram only competes
+with it (Pane, 2026-10-27).
