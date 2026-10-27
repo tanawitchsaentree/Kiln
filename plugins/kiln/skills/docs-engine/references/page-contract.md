@@ -52,6 +52,13 @@ Paths and lists come from `system/kiln.config.json` → `docs` (see "Config" at 
 | `[data-history] tbody tr`, `[data-limitations] li`, `[data-a11y-duties] li` | lifecycle furniture | G-L1 |
 | `[data-example]` | each live demo with code | demo floor |
 
+## Diagrams
+
+| Marker | On | Used by |
+|---|---|---|
+| `[data-graphic-ground]` | the area a diagram is drawn on | G-NT1 |
+| `[data-graphic="<kind>"]` | each part a reader must tell apart (column, margin, region…) | G-NT1 |
+
 ## Reference pages
 
 | Marker | On | Used by |
