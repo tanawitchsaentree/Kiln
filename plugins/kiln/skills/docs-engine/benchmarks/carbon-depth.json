@@ -24,115 +24,143 @@
     },
     "CodeSnippet": {
       "carbon": "code-snippet",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 881,
+      "sections": 22
     },
     "SegmentedControl": {
       "carbon": "content-switcher",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 1478,
+      "sections": 26
     },
     "DataGrid": {
       "carbon": "data-table",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 2507,
+      "sections": 34
     },
     "DatePicker": {
       "carbon": "date-picker",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 2820,
+      "sections": 30
     },
     "Select": {
       "carbon": "dropdown",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 3259,
+      "sections": 44
     },
     "FileUpload": {
       "carbon": "file-uploader",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 1197,
+      "sections": 24
     },
     "Link": {
       "carbon": "link",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 1348,
+      "sections": 29
     },
     "List": {
       "carbon": "list",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 827,
+      "sections": 17
     },
     "Spinner": {
       "carbon": "loading",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 890,
+      "sections": 16
     },
     "Menu": {
       "carbon": "menu",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 1895,
+      "sections": 24
     },
     "Dialog": {
       "carbon": "modal",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 2654,
+      "sections": 34
     },
     "Banner": {
       "carbon": "notification",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 2507,
+      "sections": 34
     },
     "NumberInput": {
       "carbon": "number-input",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 1430,
+      "sections": 20
     },
     "Pagination": {
       "carbon": "pagination",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 1654,
+      "sections": 30
     },
     "Popover": {
       "carbon": "popover",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 1521,
+      "sections": 35
     },
     "Progress": {
       "carbon": "progress-bar",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 1874,
+      "sections": 26
     },
     "Stepper": {
       "carbon": "progress-indicator",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 1115,
+      "sections": 18
     },
     "Radio": {
       "carbon": "radio-button",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 1333,
+      "sections": 24
     },
     "SearchInput": {
       "carbon": "search",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 827,
+      "sections": 17
     },
     "Slider": {
       "carbon": "slider",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 1592,
+      "sections": 22
     },
     "DescriptionList": {
       "carbon": "structured-list",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 925,
+      "sections": 24
     },
     "Tabs": {
       "carbon": "tabs",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 3081,
+      "sections": 33
     },
     "Tag": {
       "carbon": "tag",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 1910,
+      "sections": 27
     },
     "Input": {
       "carbon": "text-input",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 2580,
+      "sections": 31
     },
     "Card": {
       "carbon": "tile",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 2181,
+      "sections": 44
     },
     "Switch": {
       "carbon": "toggle",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 1076,
+      "sections": 22
     },
     "Tooltip": {
       "carbon": "tooltip",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 1266,
+      "sections": 21
     },
     "TreeView": {
       "carbon": "tree-view",
-      "error": "UND_ERR_CONNECT_TIMEOUT"
+      "words": 1472,
+      "sections": 23
     }
   }
 }

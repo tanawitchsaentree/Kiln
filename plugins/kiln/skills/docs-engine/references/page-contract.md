@@ -40,12 +40,13 @@ Paths and lists come from `system/kiln.config.json` → `docs` (see "Config" at 
 |---|---|---|
 | route `/<componentsBase>/<slug>/<tab>` for every tab in config | | G-K1 |
 | `[data-component-header]` with `[data-fact="status"]`, `[data-fact="updated"]`, `[data-fact="size"]` | shared header | G-K1, G-L1 |
-| `[data-live-demo]` with `select[data-selector="theme"]` and `select[data-selector="variant"]` | header demo | G-K1 |
+| `[data-live-demo]` with `[data-selector="theme"]` and `[data-selector="variant"]` on the system's own select controls (any element, so G-N1 holds) | header demo | G-K1 |
 | `[data-registry="U1"…"U14"]` | each Usage section; or the same element with `data-na="reason"` and the reason as text | G-K2 |
 | `[data-registry="U4"] tbody tr[data-option]` | one row per variant option | G-K3 |
 | `[data-registry="U6"] tbody tr[data-option]` | one row per size option | G-K3 |
 | `[data-deep-dive="<option>"]` with `[data-in-context]`, `[data-do]`, `[data-dont]` | per-variant block inside U12 | G-K4 |
 | `[data-spec]` tables on the Style tab, each cell `data-token` + `data-value` | generated spec | G-K5 |
+| `[data-spec-theme="<theme>"] [data-spec-target="<prop>=<option>;…"]`, plus `data-spec-disabled` on a target whose disabled twin is rendered | Style tab subjects measured by `spec-capture.mjs` into `<app>/public/specs.json` | G-K5 |
 | `[data-registry="U10"] [dir="rtl"]`, `[data-overflow-demo]` | content demos | G-K8 |
 | `[data-registry="U14"] a[data-reference][href^="http"]` | references | G-K7 |
 | `[data-backdrops] [data-cell][data-theme][data-scene-kind="dark|bright"]` | backdrop matrix (Style tab) | G-B1 |
