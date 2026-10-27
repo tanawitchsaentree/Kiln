@@ -160,6 +160,7 @@ read as machine output. Read the result aloud before calling it done.
 | G-T1 themes | a theme control (system / light / dark) exists, switching it changes surface and text tokens, and the contrast evidence reports both themes |
 | G-B1 backdrops | every component page has a "bright and dark backdrops" section rendering the component on a bright and a dark scene in both themes, with prose saying what changes |
 | G-L1 lifecycle | every component page shows a status (Alpha / Beta / Stable) linked to a page of written criteria, its own change history parsed from the package changelog (a component with no entry fails), a Limitations list, and an accessibility section split into *what you get*, *what you still have to do* and *how it is tested* |
+| G-N1 crafted controls | no select, slider, checkbox or text field in the docs (or in the system's own components) shows the browser default look in either theme: `appearance: none`, track/thumb/chevron drawn from tokens, the chevron sits inside reserved padding so text never runs under it, and the theme scope sets `color-scheme` so native popups and scrollbars follow it. Checked by computed style on every page in both themes |
 | G-M1 matrix | a reference page lists every component against behaviour/keyboard, contrast per theme, reduced transparency, forced colours and screen reader, each cell read from the verify output; untested cells say "Not tested", never blank or pass |
 
 ## Benchmarks behind G-L1 / G-M1 (researched 2026-10-26, 10 systems)
