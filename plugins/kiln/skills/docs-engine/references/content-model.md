@@ -192,3 +192,9 @@ migration guides (MUI/Carbon, before 1.0), feedback/research/roadmap sections (G
 | Gate | Pass condition |
 |---|---|
 | G-SH1 plain chrome | the docs shell (top bar, nav, page, sections, tables, code) is opaque and plain, like Carbon, MUI or Apple's docs: no `backdrop-filter` and no see-through page background outside demo stages (`[data-example-live]`, `[data-cell]`, `[data-preview]`). However expressive the system is, its look is shown on stages, never worn by the reading layout |
+
+## Rationale gate (user, 2026-10-27: "every detail, seen or unseen, needs a meaning distilled from the concept")
+
+| Gate | Pass condition |
+|---|---|
+| G-W1 reasons on the page | every token table has a Why column filled from `kiln.why` (principle chip + reason); every component page has a "Why it looks and moves like this" section generated from its `why.json`, listing every part, state and motion with its principle; the Principles chapter lists each principle with its Therefore per axis. Source data must already pass `tooling/kiln/rationale.mjs` |

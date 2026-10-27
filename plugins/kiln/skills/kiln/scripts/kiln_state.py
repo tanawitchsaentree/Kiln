@@ -35,7 +35,7 @@ STATE_PATH = os.path.join(".kiln", "state.json")
 REQUIRED_FIELDS = {
     0: ["brief", "scale", "has_reference"],
     1: ["lineage_name", "home_vector", "signature_move", "fit_statement"],
-    2: ["vector", "loud_axis", "loud_axis_payment"],
+    2: ["vector", "loud_axis", "loud_axis_payment", "concept_file", "principles"],  # references/concept.md: no tokens before principles
     3: ["reference_table"],
     4: ["plan", "out_of_scope", "acceptance_criteria", "riskiest_slice"],
     5: ["stamp", "token_block", "acceptance_criteria"],

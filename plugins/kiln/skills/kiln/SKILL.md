@@ -52,6 +52,13 @@ Decide the delivery scale at Phase 0 and say it in the first reply. Spec is one 
 one component per session, indefinitely. Program adds a governance layer this skill can draft but
 cannot run. `references/scale.md` carries the detail and the honest limits.
 
+## Concept before design
+
+Every visible and invisible decision traces to a principle distilled from the concept
+(`references/concept.md`): `system/CONCEPT.md` is written at the end of Phase 2, before any token, and
+`tooling/kiln/rationale.mjs` fails a build where a token, a CSS part, a state or a motion has no reason or
+only a taste reason. Phase 2 cannot be left without `concept_file` and `principles`.
+
 ## Phase sequence
 
 Read the phase file when you reach that phase, and not before. Each phase file names what to load
