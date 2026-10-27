@@ -177,3 +177,12 @@ props playground generated from the props table, increased-contrast token mode (
 design foundation pages (Atlassian), Figma library with variable parity, versioned docs +
 migration guides (MUI/Carbon, before 1.0), feedback/research/roadmap sections (GOV.UK).
 
+
+## Reading, affordance and loading gates (user, 2026-10-27: "type hard to read, slow, loads out of step, can't tell what is clickable")
+
+| Gate | Pass condition |
+|---|---|
+| G-R1 reading | every paragraph of ≥20 words outside demos is ≥16px with line height ≥1.5 and ≤80 characters per line (Carbon body-long, Material body-large, Apple 17pt are all ≥16px) |
+| G-A1 affordance | nav links differ from part titles in ≥2 of size, weight, case, colour, tracking; part titles never look pressable; links visibly react to hover |
+| G-PF1 first frame | in every theme the first painted frame already has the final theme (set before paint, never in an effect), ≥98% of the page text (verification data bundled, not fetched after mount), and cumulative layout shift ≤0.02 |
+| G-PF2 weight | no image over 300 kB and no page over 1.5 MB transferred; backdrops ship WebP, tiles and thumbnails ship a small variant, and the page paints the backdrop's average colour on the first frame |
