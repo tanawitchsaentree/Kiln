@@ -1,0 +1,71 @@
+{
+ "page": "foundation: icons",
+ "collectedAt": "2026-10-27",
+ "how": "h2/h3 headings of each system's page, fetched 2026-10-27 (Carbon and Atlassian as HTML, Apple HIG as its JSON document); one topic per idea, merged across systems",
+ "sources": {
+  "carbon": "https://carbondesignsystem.com/elements/icons/usage/",
+  "atlassian": "https://atlassian.design/foundations/iconography",
+  "apple": "https://developer.apple.com/design/human-interface-guidelines/icons"
+ },
+ "topics": [
+  {
+   "id": "principles",
+   "topic": "Iconography principles, simplicity and metaphor",
+   "from": [
+    "atlassian",
+    "apple"
+   ]
+  },
+  {
+   "id": "sizing",
+   "topic": "Icon sizes",
+   "from": [
+    "carbon",
+    "atlassian"
+   ]
+  },
+  {
+   "id": "targets",
+   "topic": "Touch targets around icons",
+   "from": [
+    "carbon"
+   ]
+  },
+  {
+   "id": "color",
+   "topic": "Icon colour",
+   "from": [
+    "carbon",
+    "atlassian"
+   ]
+  },
+  {
+   "id": "alignment",
+   "topic": "Aligning icons with text",
+   "from": [
+    "carbon"
+   ]
+  },
+  {
+   "id": "style",
+   "topic": "Visual style: perspective, shapes, corners, end caps",
+   "from": [
+    "atlassian"
+   ]
+  },
+  {
+   "id": "standard",
+   "topic": "Standard icons for common actions",
+   "from": [
+    "apple"
+   ]
+  },
+  {
+   "id": "contribution",
+   "topic": "Adding a new icon to the set",
+   "from": [
+    "atlassian"
+   ]
+  }
+ ]
+}

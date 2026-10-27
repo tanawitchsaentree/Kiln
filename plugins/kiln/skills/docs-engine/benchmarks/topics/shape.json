@@ -1,0 +1,82 @@
+{
+ "page": "foundation: shape",
+ "collectedAt": "2026-10-27",
+ "how": "h2/h3 headings of each system's page, fetched 2026-10-27 (Carbon and Atlassian as HTML, Apple HIG as its JSON document); one topic per idea, merged across systems",
+ "sources": {
+  "atlassian-elevation": "https://atlassian.design/foundations/elevation",
+  "atlassian-radius": "https://atlassian.design/foundations/radius",
+  "apple": "https://developer.apple.com/design/human-interface-guidelines/materials"
+ },
+ "topics": [
+  {
+   "id": "radius-scale",
+   "topic": "The radius scale",
+   "from": [
+    "atlassian-radius"
+   ]
+  },
+  {
+   "id": "radius-usage",
+   "topic": "Which radius for which size of element",
+   "from": [
+    "atlassian-radius"
+   ]
+  },
+  {
+   "id": "focus-radius",
+   "topic": "The focus ring’s radius",
+   "from": [
+    "atlassian-radius"
+   ]
+  },
+  {
+   "id": "elevation-types",
+   "topic": "Types of elevation (sunken, default, raised, overlay)",
+   "from": [
+    "atlassian-elevation"
+   ]
+  },
+  {
+   "id": "pairings",
+   "topic": "Surface and shadow pairings",
+   "from": [
+    "atlassian-elevation"
+   ]
+  },
+  {
+   "id": "dark",
+   "topic": "Elevation in the dark theme",
+   "from": [
+    "atlassian-elevation"
+   ]
+  },
+  {
+   "id": "interaction",
+   "topic": "Elevation for hovered, pressed and dragged states",
+   "from": [
+    "atlassian-elevation"
+   ]
+  },
+  {
+   "id": "z-index",
+   "topic": "Stacking order and z-index",
+   "from": [
+    "atlassian-elevation"
+   ]
+  },
+  {
+   "id": "materials",
+   "topic": "Materials and translucency as depth",
+   "from": [
+    "apple"
+   ]
+  },
+  {
+   "id": "contrast",
+   "topic": "Checking contrast on elevated surfaces",
+   "from": [
+    "atlassian-elevation"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,76 @@
+{
+ "page": "foundation: themes",
+ "collectedAt": "2026-10-27",
+ "how": "h2/h3 headings of each system's page, fetched 2026-10-27 (Carbon and Atlassian as HTML, Apple HIG as its JSON document); one topic per idea, merged across systems",
+ "sources": {
+  "carbon": "https://carbondesignsystem.com/elements/themes/overview/",
+  "atlassian": "https://atlassian.design/foundations/color",
+  "apple": "https://developer.apple.com/design/human-interface-guidelines/dark-mode"
+ },
+ "topics": [
+  {
+   "id": "basics",
+   "topic": "Theming basics and terms",
+   "from": [
+    "carbon"
+   ]
+  },
+  {
+   "id": "default",
+   "topic": "The default theme",
+   "from": [
+    "carbon"
+   ]
+  },
+  {
+   "id": "customising",
+   "topic": "Customising a theme",
+   "from": [
+    "carbon"
+   ]
+  },
+  {
+   "id": "tokens",
+   "topic": "Which tokens change between themes (colour, spacing, type, global)",
+   "from": [
+    "carbon"
+   ]
+  },
+  {
+   "id": "dark-colors",
+   "topic": "Dark mode colours",
+   "from": [
+    "apple",
+    "atlassian"
+   ]
+  },
+  {
+   "id": "images",
+   "topic": "Icons and images in dark mode",
+   "from": [
+    "apple"
+   ]
+  },
+  {
+   "id": "text",
+   "topic": "Text in dark mode",
+   "from": [
+    "apple"
+   ]
+  },
+  {
+   "id": "respect-setting",
+   "topic": "Following the reader’s system setting",
+   "from": [
+    "apple"
+   ]
+  },
+  {
+   "id": "applied",
+   "topic": "Theming applied to a real screen",
+   "from": [
+    "carbon"
+   ]
+  }
+ ]
+}

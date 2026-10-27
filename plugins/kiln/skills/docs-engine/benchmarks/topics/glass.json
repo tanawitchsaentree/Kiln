@@ -1,0 +1,56 @@
+{
+ "page": "foundation: glass",
+ "collectedAt": "2026-10-27",
+ "how": "h2/h3 headings of each system's page, fetched 2026-10-27 (Carbon and Atlassian as HTML, Apple HIG as its JSON document); one topic per idea, merged across systems",
+ "sources": {
+  "apple": "https://developer.apple.com/design/human-interface-guidelines/materials",
+  "apple-visionos": "https://developer.apple.com/design/human-interface-guidelines/designing-for-visionos",
+  "atlassian": "https://atlassian.design/foundations/elevation"
+ },
+ "topics": [
+  {
+   "id": "what",
+   "topic": "What the material is and what it is for",
+   "from": [
+    "apple"
+   ]
+  },
+  {
+   "id": "thickness",
+   "topic": "Standard material thicknesses and when to use each",
+   "from": [
+    "apple"
+   ]
+  },
+  {
+   "id": "legibility",
+   "topic": "Keeping content legible on the material (vibrancy, contrast)",
+   "from": [
+    "apple",
+    "atlassian"
+   ]
+  },
+  {
+   "id": "spatial",
+   "topic": "Glass in a spatial setting (visionOS)",
+   "from": [
+    "apple-visionos",
+    "apple"
+   ]
+  },
+  {
+   "id": "surfaces",
+   "topic": "How glass relates to other surfaces and elevations",
+   "from": [
+    "atlassian"
+   ]
+  },
+  {
+   "id": "fallbacks",
+   "topic": "Fallbacks when transparency is reduced",
+   "from": [
+    "apple"
+   ]
+  }
+ ]
+}
