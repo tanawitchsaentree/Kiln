@@ -32,7 +32,7 @@ Paths and lists come from `system/kiln.config.json` → `docs` (see "Config" at 
 | Marker | On | Used by |
 |---|---|---|
 | `[data-playground]` with `[data-controls]` and `[data-preview]` | each foundation playground | G-F1 |
-| form controls inside: real `input` / `select`, wrapped `select` has a sibling `[data-chevron]` | | G-N1 |
+| `[data-component="<Name>"]` on the root of every system component the docs render; every select, slider, checkbox, radio, switch and combobox on any docs page sits inside one. A visible native `<select>` fails outright: it opens the operating system's menu. If the system has no such component yet, build it before the docs need it | | G-N1 |
 
 ## Component pages
 
