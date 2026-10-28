@@ -42,9 +42,9 @@ const STEPS = [
   ['smoke-import', ['node', 'tooling/smoke-import.mjs'], { needs: ['build'] }],
   ['spec-capture', ['node', 'tooling/kiln/spec-capture.mjs'], { needs: ['build'], browser: true }],
   ['evidence', ['node', 'tooling/kiln/evidence.mjs'], { needs: ['build'], browser: true }],
-  // specs.json and evidence.json are read by the book, so it is built again before anything reads the pages
-  ['rebuild', ['pnpm', '--filter', DOCS, 'build'], { needs: ['build'], after: ['spec-capture', 'evidence'] }],
   ['conformance', ['node', 'tooling/kiln/conformance.mjs', '--no-build'], { needs: ['build'], browser: true, quick: true }],
+  // conformance.json, specs.json and evidence.json are read by the book, so it is built again before anything reads the pages
+  ['rebuild', ['pnpm', '--filter', DOCS, 'build'], { needs: ['build'], after: ['spec-capture', 'evidence', 'conformance'] }],
   ['gates', ['node', 'tooling/kiln/gates.mjs', '--report'], { needs: ['rebuild'], browser: true }],
   ['tone', ['node', 'tooling/kiln/tone-gate.mjs'], { needs: ['rebuild'], browser: true }],
 ];

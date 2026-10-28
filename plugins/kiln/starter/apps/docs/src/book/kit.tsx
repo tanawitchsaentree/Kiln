@@ -288,9 +288,9 @@ export function VerifiedTags() {
   const tier = (t: string) => Object.values(TOKENS).filter((x) => x.tier === t).length;
   return (
     <ul className="stats flush" aria-label="Verification summary">
-      <li><Fact>{evidence ? `${evidence.summary.gatingChecks - evidence.summary.gatingFailures - (evidence.summary.excepted ?? 0)}/${evidence.summary.gatingChecks} text checks pass` : 'contrast: unverified'}</Fact></li>
+      <li><Fact>{evidence ? `${evidence.summary.gatingChecks - evidence.summary.gatingFailures - (evidence.summary.excepted ?? 0)}/${evidence.summary.gatingChecks} text checks pass` : 'contrast not measured yet'}</Fact></li>
       {evidence?.summary.excepted ? <li><Fact>{`${evidence.summary.excepted} excepted (E-001)`}</Fact></li> : null}
-      <li><Fact>{conformance ? `${conformance.passed}/${conformance.total} conformance` : 'conformance: unverified'}</Fact></li>
+      <li><Fact>{conformance ? `${conformance.passed}/${conformance.total} conformance` : 'conformance not run yet'}</Fact></li>
       <li><Fact>{`${tier('primitive')} · ${tier('semantic')} · ${tier('component')} tokens`}</Fact></li>
     </ul>
   );
