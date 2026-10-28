@@ -34,10 +34,11 @@ const STEPS = [
   ['lint', ['node', 'tooling/no-hardcode-lint.mjs'], { quick: true }],
   ['barrel', ['node', 'tooling/generate-barrel.mjs', '--check'], { quick: true }],
   ['token-contract', ['node', 'tooling/kiln/token-contract.mjs'], { needs: ['tokens'], quick: true }],
-  ['typecheck', ['sh', '-c', `pnpm --filter ${REACT} typecheck && pnpm --filter ${DOCS} exec tsc --noEmit -p .`], { needs: ['tokens'], quick: true }],
   ['rationale', ['node', 'tooling/kiln/rationale.mjs'], { needs: ['tokens'], quick: true }],
   ['meta', ['node', 'tooling/kiln/meta.mjs'], { quick: true }],
   ['build', ['sh', '-c', `pnpm --filter ${REACT} build && pnpm --filter ${DOCS} build`], { needs: ['tokens', 'meta'], quick: true }],
+  // the book typechecks against the built package's types, so it runs after the build (a fresh clone has no dist yet)
+  ['typecheck', ['sh', '-c', `pnpm --filter ${REACT} typecheck && pnpm --filter ${DOCS} exec tsc --noEmit -p .`], { needs: ['build'], quick: true }],
   ['smoke-import', ['node', 'tooling/smoke-import.mjs'], { needs: ['build'] }],
   ['spec-capture', ['node', 'tooling/kiln/spec-capture.mjs'], { needs: ['build'], browser: true }],
   ['evidence', ['node', 'tooling/kiln/evidence.mjs'], { needs: ['build'], browser: true }],
