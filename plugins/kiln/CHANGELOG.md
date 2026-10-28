@@ -3,8 +3,8 @@
 ## 2.0.0 — a system repo you can start from, and the Pane retro built into it
 
 Pane (glass on a curtain-wall frame) was the first system kiln built to a real milestone. The user
-hit 68 problems on the way; `docs/PANE-RETRO-ANALYSIS.md` in the kit lists them all. This release
-moves the fixes into what the next system starts from, so nobody hits them again.
+hit 68 problems on the way. This release moves the fixes into what the next system starts from,
+so nobody hits them again.
 
 - **Starter + `bin/create.mjs`** — `node bin/create.mjs <dir> --name <name>` makes a working
   monorepo (tokens, React, the docs book, engine, data, hooks) that builds and renders on day one
@@ -25,6 +25,11 @@ moves the fixes into what the next system starts from, so nobody hits them again
   `var(--ds-*)` declared), lint for raw opacity and scale, the derivation guard on Bash writes.
 - **Engine-owned conformance** — component behaviour checks live in `system/conformance/*.mjs`;
   a component chapter with no checks fails.
+- **Proven on a second system** — a lab sample-tracking system (pharmaceutical-label lineage, no
+  glass) was built from an empty folder with `bin/create.mjs` to milestone M1: `pnpm run milestone`
+  25/25 on a full recorded verify (16/16 steps, docs gates 40/40, tone 83/83 pages). The run found
+  and fixed about fifteen faults in kiln itself, among them G-CL1 (stale colour values in prose),
+  forced-colours knobs drawn as backgrounds, and verify typechecking before the build on a fresh clone.
 
 ## 1.5.0 — Phase 5's checkpoint now shows on the page itself, not just in chat
 
