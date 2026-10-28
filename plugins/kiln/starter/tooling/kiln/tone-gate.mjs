@@ -15,7 +15,7 @@ import { serveDist } from './serve-dist.mjs';
 
 const C = docsConfig();
 const LINT = C.abs(C.tone.lint) ?? process.env.HUMAN_TONE_LINT ?? path.join(homedir(), 'Downloads', 'human-tone-folder', '.claude', 'skills', 'human-tone', 'scripts', 'lint.py');
-if (!existsSync(LINT)) { console.error(`✗ tone gate: lint.py not found at ${LINT}. Nothing was checked, so this fails.`); process.exit(1); }
+if (!existsSync(LINT)) { console.error(`✗ tone gate: lint.py not found at ${LINT}. Nothing was checked, so this fails. Set docs.tone.lint in system/kiln.config.json or HUMAN_TONE_LINT to the human-tone linter's lint.py.`); process.exit(1); }
 const EXCLUDE = new Set(C.tone.exclude);
 const ROUTES = routes(C).filter((r) => !EXCLUDE.has(r));
 

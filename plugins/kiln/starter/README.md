@@ -1,64 +1,51 @@
-# kiln — โรงงานผลิต Design System (วางลง repo แล้วเริ่มได้เลย)
+# kiln-ds
 
-**หลักการ:** kit นี้คือโรงงาน ไม่มีสไตล์เป็นของตัวเอง — decision ทั้งหมด (สไตล์, platform, สี, ฯลฯ) อยู่ใน `system/` เท่านั้น สลับงานใหม่ด้วย `/new-system {ชื่อ}` โดยไม่ปนกัน
+A design system built with [kiln](https://github.com/tanawitchsaentree/Kiln): a tokens package, a
+React component library and a docs book, every decision traced to a concept and a lineage.
 
-## ติดตั้ง (Session 0)
+| Package | What it is |
+|---|---|
+| `kiln-ds-react` | the components; carries the tokens, so it is the only install a React app needs |
+| `kiln-ds-tokens` | the design tokens on their own (CSS, JSON, ESM with types, SCSS), three tiers from DTCG |
+| `apps/docs` | the docs book |
+
 ```bash
-mkdir design-system && cd design-system && git init
-# แตกไฟล์ kit นี้ทับลงไป (ทั้ง .claude/ ต้องอยู่ root ของ repo)
-npm install -g @anthropic-ai/claude-code   # ถ้ายังไม่มี
-corepack enable && corepack prepare pnpm@latest --activate
-git add -A && git commit -m "chore: kiln factory"
-claude
+npm install kiln-ds-react
 ```
-แล้วพิมพ์: `อ่าน CLAUDE.md แล้ว scaffold monorepo ตาม docs/BLUEPRINT.md ข้อ 2`
 
-## เริ่มงานจริง
-1. ลากภาพ ref ใส่ `system/refs/`
-2. พิมพ์: `เริ่ม Phase 0 กับ system/refs/`
-3. ตอบคำถามทีละข้อ (ข้อ 0 = platform ก่อนเสมอ) → agent จะ `/lock-decision` ให้เอง → ถ้าเป็นเรื่องเห็นด้วยตาได้ จะ render ให้ดูใน `apps/lab/` ก่อนถาม → ไล่ phase ตามลำดับ
-4. เริ่มงานใหม่คนละ system? สั่ง `/new-system {ชื่อ}` — ระบบเดิมจะถูกเก็บไว้ที่ `systems-archive/{ชื่อเดิม}/` ไม่ลบ
-
-## Memory ของระบบ (สำคัญ)
-| ไฟล์ | ทำหน้าที่ | ใครเขียน |
-|------|-----------|----------|
-| `CLAUDE.md` | กฎถาวรของโรงงาน — โหลดอัตโนมัติทุก session | คุณ (แก้ได้) |
-| `system/DECISIONS.md` | ความจำระยะยาวของ system ปัจจุบัน: ทุกอย่างที่ lock | skill `lock-decision` เท่านั้น |
-| `system/STATE.md` | ความจำใช้งาน: อยู่ไหน ค้างอะไร ต่ออะไร | agent อัพเดตทุก task ใหญ่ |
-| `system/reports/` | หลักฐานจาก ref | subagent `intake` |
-| `system/sheets/` | โปสเตอร์ PNG สรุประบบ (timeline วิวัฒนาการ) | skill `system-sheet` |
-| `apps/lab/candidates.js` | ตัวเลือกเชิงภาพที่รอ user เทียบ/ตัดสิน | agent ต่างๆ ตอน PROPOSE→RENDER |
-| hooks | กฎที่ไม่พึ่งความจำเลย (รันเสมอ) | `.claude/settings.json` |
-
-เปิด session ใหม่เมื่อไหร่ agent อ่าน `CLAUDE.md` + `system/STATE.md` + `system/DECISIONS.md` แล้วทำงานต่อจากเดิมได้ทันที
-สั่งแค่คำว่า `ทำต่อ` ก็พอ
-
-## โครงไฟล์
+```tsx
+import 'kiln-ds-react/all.css';   // tokens and component styles, once at the root
+import { Container, Stack } from 'kiln-ds-react';
 ```
-CLAUDE.md                          กฎ orchestrator ของโรงงาน
-README.md                          ไฟล์นี้
-docs/
-├── BLUEPRINT.md                   engine spec ฉบับเต็ม (อ่านเมื่อต้องรายละเอียด)
-├── KIT-CHANGELOG.md                version history ของตัวโรงงาน
-├── CATALOG.md                      component inventory 103 ตัว / 10 waves (ปรับจาก 108 เดิม —
-│                                   ดู D-017/D-022 ใน system/DECISIONS.md)
-├── SCALING.md                      กลไกสเกลถึงระดับ MUI-X
-└── style-recipes/                  recipe ต่อสไตล์ที่มีความเสี่ยง a11y (เช่น neumorphism.md)
-system/                            *** ของ system ที่กำลังทำอยู่ — ไม่ share ข้าม system ***
-├── DECISIONS.md                    locked decisions
-├── STATE.md                        working memory
-├── refs/                           โยนภาพ ref ที่นี่ (archive/ เก็บ ref ที่แพ้)
-├── reports/                        extraction reports
-└── sheets/                         System Sheet PNG (เก็บทุกใบ)
-templates/system/                  blank template สำหรับ /new-system scaffold ใหม่
-apps/
-├── lab/                            Layout Lab — เทียบ candidate ก่อน CONFIRM
-└── sheet/                          System Sheet generator (template.html + render.mjs)
-tooling/no-hardcode-lint.mjs
-.claude/
-├── settings.json                   hooks
-├── agents/                         subagents 6 ตัว (intake, foundation-inference, token-architect,
-│                                   component-engineer, qa-a11y, docs-publisher)
-└── skills/                         ds-conventions · new-component · lock-decision ·
-                                    production-run · new-system · system-sheet · abstract-interpreter
+
+## Requirements
+
+- Node 22 or newer, and pnpm 9 (`corepack enable`).
+- Chromium for Playwright, used by every browser check: `pnpm exec playwright install chromium`.
+- The human-tone linter for the tone gate. Point `docs.tone.lint` in `system/kiln.config.json`, or
+  the `HUMAN_TONE_LINT` environment variable, at its `lint.py`. Without it the tone step fails on
+  purpose, because nothing was checked.
+
+## Work on it
+
+```bash
+pnpm install
+pnpm run docs:dev        # the book, with hot reload
+pnpm run verify:quick    # build, lint, types, token contract, reasons, component checks (minutes)
+pnpm run verify          # everything, recorded in system/reports/verify-latest.json (60–90 minutes)
+pnpm run milestone       # may the current milestone close
+pnpm run release:pack    # one installable tarball in release/
 ```
+
+Open Claude Code in this folder to build the system. `CLAUDE.md` is the working contract: the
+intake questions are asked once (`system/INTAKE.md`), then the agent works to the milestone and
+logs every choice it made in `system/REVIEW.md` for one review.
+
+| Path | What it is |
+|---|---|
+| `system/` | intake, concept, decisions, review log, exceptions, handoff (`NEXT.md`), settings (`kiln.config.json`) |
+| `system/conformance/` | each component's behaviour checks, run by `tooling/kiln/conformance.mjs` |
+| `packages/tokens/src` | DTCG token sources; every token carries a reason |
+| `packages/react/src/components` | one folder per component, with `<Name>.why.json` |
+| `apps/lab/` | rendered alternatives for every visual decision |
+| `tooling/kiln/` | the kiln engine, a read-only copy; fixes go to kiln and are synced back |

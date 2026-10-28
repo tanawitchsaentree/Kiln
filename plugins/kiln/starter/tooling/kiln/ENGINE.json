@@ -1,6 +1,6 @@
 {
-  "kiln": "31aa0fd+dirty",
-  "syncedAt": "2026-10-28T04:31:20.390Z",
+  "kiln": "4adc510",
+  "syncedAt": "2026-10-28T05:54:05.111Z",
   "files": {
     "config.mjs": "5417d22a2b4092085e214831a740312012ea00703220bce845eba5bb25d2e076",
     "conformance.mjs": "3377eff3b1f14b90ce98ac76ce9e70480573e93f76c121685723219017243c67",
@@ -16,7 +16,7 @@
     "sync.mjs": "564e43641c8dc7e7ea6414084150bac7f74c1c09d6405e1ce37b63018a471496",
     "text-contrast.mjs": "c8acbc808e9dc801c7108379eddac15ecacb0746dda460d421cf4426bfb291bd",
     "token-contract.mjs": "c83450d287690e5d725ac7c6e98f66c1f88501223f35603685099e11ee3abf11",
-    "tone-gate.mjs": "b3b9b550e83365d0d32dc57a413337bae7fb42da0eb23926ee5a827e3150edea",
+    "tone-gate.mjs": "0b0abc6e1f9006f2d375165dd82be8763c78f99ec95103694dfdf3714a51bdfe",
     "verify.mjs": "1ed7fe243637433a1e2a3a3ff7405cbc8fa81c8165774c49d8ae6cd8676f2ed3",
     "data/carbon-depth.json": "ae53753abf953e435e738b1beb15662fe68e2f00c13df21d58cc94dfebe9b4b7",
     "data/topics/accessibility.json": "5069d71f1f1bb86719a06a4a11ecc4f1aeceb2b31cb8744c832df0becc7d3892",
