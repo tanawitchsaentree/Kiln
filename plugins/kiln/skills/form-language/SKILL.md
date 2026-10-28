@@ -3,6 +3,13 @@ name: form-language
 description: Derives a per-component-class form language (silhouette, depth treatment, corner logic, label placement, pressed metaphor) from a system's lineage, once its palette/spacing/type foundations are locked and before components get built — kiln's own Phase 6 (Expand), or the equivalent point in a project's own pipeline. Use when a system's palette/spacing/type are locked but no decision states what a control's SHAPE and DEPTH should be — a behavior/API/states contract covers everything except form, so nothing else in the pipeline asks this question. Also use to audit a shipped system for palette-survived-form-died drift.
 ---
 
+> **autonomy (kiln 2.0):** in a system repo whose `system/kiln.config.json` sets `autonomy.picks: "agent"`,
+> the user's questions were asked once in `system/INTAKE.md`. Do not stop to ask or confirm here: render the
+> candidates, pick with a reason from the principles, record `by: "agent"` and the reason, add a row to
+> `system/REVIEW.md`, and keep working. The user reviews every pick at the milestone. Only the anchor pick
+> still goes to the user. With `"user"`, ask as written below.
+
+
 # Form Language
 
 ## Why this exists

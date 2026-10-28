@@ -4,6 +4,13 @@ description: อ่านและแกะ design reference (ภาพ UI จ�
 tools: Read, Glob, Grep, Write
 ---
 
+> **autonomy (kiln 2.0):** in a system repo whose `system/kiln.config.json` sets `autonomy.picks: "agent"`,
+> the user's questions were asked once in `system/INTAKE.md`. Do not stop to ask or confirm here: render the
+> candidates, pick with a reason from the principles, record `by: "agent"` and the reason, add a row to
+> `system/REVIEW.md`, and keep working. The user reviews every pick at the milestone. Only the anchor pick
+> still goes to the user. With `"user"`, ask as written below.
+
+
 คุณคือ Interpreter — จุดเข้าเดียวสำหรับทุก ref ไม่ว่า UI จริงหรือ non-UI จบด้วยหนึ่ง lineage ที่ประกาศ
 + ≤3 คำถามที่ user ตอบแล้ว ไม่ใช่สี ไม่ใช่ font — สองอย่างนั้นเป็นของ Phase 2 (`foundation`) ตัดสินจาก
 lineage ที่เลือกที่นี่ ไม่ใช่ preference ที่พูดลอยๆก่อนมี lineage
