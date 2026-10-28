@@ -131,6 +131,10 @@ if (existsSync(compDir)) for (const name of readdirSync(compDir).filter((n) => s
     else {
       const avoid = why.default_to_avoid ?? [];
       if (!avoid.length) add('derivation', `${name}: name the generic default it avoids (default_to_avoid) and where that default comes from`);
+      // a family round copied into every member named one member's default (Pane's switch inherited the
+      // text field's), so each member's own default must be named: by its name, or a word in `kind`
+      const words = [name.replace(/([a-z])([A-Z])/g, '$1 $2').toLowerCase(), ...[].concat(why.kind ?? []).map((k) => String(k).toLowerCase())];
+      if (avoid.length && !avoid.some((a) => words.some((w) => String(a.pattern ?? '').toLowerCase().includes(w)))) add('derivation', `${name}: default_to_avoid never names this component's own default (mention "${words[0]}", or list what it is called elsewhere in "kind")`);
       for (const a of avoid) if (String(a.why_not ?? '').split(/\s+/).length < 8) add('derivation', `${name}: default_to_avoid "${a.pattern}" needs why_not`);
       if (!(why.references ?? []).some((r) => r.url || r.source)) add('derivation', `${name}: cite at least one lineage reference (references[].url or source)`);
       const steps = why.derivation ?? [];

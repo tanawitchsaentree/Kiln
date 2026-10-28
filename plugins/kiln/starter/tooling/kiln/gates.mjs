@@ -14,6 +14,7 @@
 //   benchmarks   G-BT1 every reference topic for a page covered or declined (benchmarks/topics)
 //   reasons      G-W1 (Why column, component reasons section; data from rationale.mjs)
 //   claims       G-CL1 every hex in the book is a current token value
+//   non-text     G-NT2 form-control edges ≥3:1 in every theme · G-NR1 flyout rows nest the flyout's corner
 //   milestone    G-TODO1 no starter placeholder or seed reason left   reach  G-NAV1 G-SM1   touch  G-TT1
 //
 // Usage: node tooling/engine/gates.mjs [--only G-K2,G-K3] [--report]
@@ -772,6 +773,99 @@ try {
     }
     fail(bad, 'colour values that are not tokens');
     return `${n} values checked`;
+  });
+
+  // contrast helpers shared by the boundary gate, evaluated in the page
+  const CONTRAST_JS = `
+    const parse = (c) => { const m = c.match(/rgba?\\(([^)]+)\\)/); if (!m) return null; const p = m[1].split(/[ ,\\/]+/).filter(Boolean).map(Number); return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 }; };
+    const over = (top, under) => ({ r: top.r * top.a + under.r * (1 - top.a), g: top.g * top.a + under.g * (1 - top.a), b: top.b * top.a + under.b * (1 - top.a), a: 1 });
+    const lin = (v) => { v /= 255; return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; };
+    const lum = (c) => 0.2126 * lin(c.r) + 0.7152 * lin(c.g) + 0.0722 * lin(c.b);
+    const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
+    const groundOf = (el) => { const stack = []; for (let e = el; e; e = e.parentElement) { const c = parse(getComputedStyle(e).backgroundColor); if (c && c.a > 0) { stack.push(c); if (c.a >= 1) break; } } let g = { r: 255, g: 255, b: 255, a: 1 }; for (const c of stack.reverse()) g = over(c, g); return g; };
+  `;
+  await gate('G-NT2', 'every form control shows its boundary at least 3:1 against what it sits on, in every theme (WCAG 1.4.11)', async () => {
+    // assay/Pane dry run, 2026-10-28: a search field in the light theme vanished into a white panel,
+    // because only text was ever measured. A field, select, checkbox, radio, switch or slider must be
+    // findable by its edge or its fill, not only by its placeholder.
+    const bad = []; let n = 0;
+    for (const theme of C.themes) for (const r of ROUTES.filter((x) => x.startsWith(`${C.componentsBase}/`) && x.endsWith('/code'))) {
+      await go(r, { theme });
+      const res = await page.evaluate((js) => {
+        new Function(js + 'window.__nt2 = { parse, over, ratio, groundOf };')();
+        const { parse, over, ratio, groundOf } = window.__nt2;
+        const sel = '[data-example-live] :is(input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]), textarea, [role="combobox"], [role="switch"], [role="checkbox"], [role="radio"])';
+        return [...document.querySelectorAll(sel)].filter((el) => el.getBoundingClientRect().width > 0 && !el.closest('[data-dont], :disabled, [aria-disabled="true"], [data-disabled]') && !el.matches(':disabled')).map((el) => {
+          // the drawn box is the control itself or the nearest ancestor inside its component that draws an edge or a fill
+          const root = el.closest('[data-component]') ?? el;
+          let best = 0;
+          // a switch or checkbox often draws its track or box in an aria-hidden child, so those count too
+          const drawn = [...el.querySelectorAll('[aria-hidden="true"], [aria-hidden="true"] *')].filter((d) => d.getBoundingClientRect().width >= 8);
+          for (const d of drawn) {
+            const cs = getComputedStyle(d); const ground = groundOf(d.parentElement ?? d);
+            const fill = parse(cs.backgroundColor);
+            if (fill && fill.a > 0) best = Math.max(best, ratio(over(fill, ground), ground));
+            const bw = parseFloat(cs.borderTopWidth) || 0; const bc = parse(cs.borderTopColor);
+            if (bw >= 1 && bc && bc.a > 0 && cs.borderTopStyle !== 'none') best = Math.max(best, ratio(over(bc, ground), ground));
+          }
+          for (let e = el; e && root.contains(e); e = e.parentElement) {
+            const cs = getComputedStyle(e);
+            const ground = groundOf(e.parentElement ?? e);
+            const fill = parse(cs.backgroundColor);
+            if (fill && fill.a > 0) best = Math.max(best, ratio(over(fill, ground), ground));
+            const bw = parseFloat(cs.borderTopWidth) || 0; const bc = parse(cs.borderTopColor);
+            if (bw >= 1 && bc && bc.a > 0 && cs.borderTopStyle !== 'none') best = Math.max(best, ratio(over(bc, ground), ground));
+            for (const m of cs.boxShadow.matchAll(/rgba?\([^)]+\)/g)) { const c = parse(m[0]); if (c && c.a > 0) best = Math.max(best, ratio(over(c, ground), ground)); }
+            const ow = parseFloat(cs.outlineWidth) || 0; const oc = parse(cs.outlineColor);
+            if (ow >= 1 && cs.outlineStyle !== 'none' && oc && document.activeElement !== e) best = Math.max(best, ratio(over(oc, ground), ground));
+            if (e === root) break;
+          }
+          return [root.dataset.component ?? el.tagName, Math.round(best * 100) / 100];
+        });
+      }, CONTRAST_JS);
+      for (const [name, best] of res) { n++; if (best < 3) bad.push(`${theme} ${r}: ${name} edge ${best}:1`); }
+    }
+    expect(n > 0, 'NO FORM CONTROLS FOUND on any component Code page');
+    fail([...new Set(bad)], 'controls whose edge is under 3:1');
+    return `${n} controls in ${C.themes.length} themes`;
+  });
+
+  await gate('G-NR1', 'a highlighted row inside a rounded flyout nests its corner: inner radius = outer radius − inset', async () => {
+    // Pane dry run, 2026-10-28: the dropdown's highlighted row had its own pill radius and an uneven
+    // inset, so its curve did not follow the flyout's. Checked on every open listbox and menu.
+    const bad = []; let n = 0; let tried = 0;
+    for (const r of ROUTES.filter((x) => x.startsWith(`${C.componentsBase}/`) && x.endsWith('/code'))) {
+      await go(r);
+      const triggers = await page.locator('[data-example-live] button[role="combobox"], [data-example-live] [aria-haspopup="menu"]').count();
+      for (let i = 0; i < Math.min(triggers, 2); i++) {
+        const t = page.locator('[data-example-live] button[role="combobox"], [data-example-live] [aria-haspopup="menu"]').nth(i);
+        if (!(await t.isVisible()) || (await t.isDisabled())) continue;
+        tried++;
+        await t.focus(); await page.keyboard.press('Enter'); await page.waitForTimeout(150);
+        const res = await page.evaluate(() => {
+          const pop = [...document.querySelectorAll('[role="listbox"], [role="menu"]')].find((x) => x.getBoundingClientRect().width > 0);
+          if (!pop) return null;
+          const R = parseFloat(getComputedStyle(pop).borderTopLeftRadius) || 0;
+          const pb = pop.getBoundingClientRect(); const pcs = getComputedStyle(pop);
+          const item = pop.querySelector('[data-highlighted], [aria-selected="true"], [data-active], [role="option"], [role="menuitem"]');
+          if (!item) return null;
+          const ib = item.getBoundingClientRect(); const r = parseFloat(getComputedStyle(item).borderTopLeftRadius) || 0;
+          const inset = Math.max(0, ib.left - pb.left - (parseFloat(pcs.borderLeftWidth) || 0));
+          return { R, r: Math.min(r, ib.height / 2), h: ib.height, inset, want: Math.max(0, R - inset - (parseFloat(pcs.borderLeftWidth) || 0)) };
+        });
+        await page.keyboard.press('Escape');
+        if (!res) continue;
+        n++;
+        // the row's drawn radius is capped at half its height; a nested radius above that turns every
+        // row into a pill whose round ends cannot follow the flyout's straight sides
+        if (res.R > 0 && res.want >= res.h / 2 - 0.5) bad.push(`${r}: a ${res.R}px flyout with ${Math.round(res.inset)}px inset needs a ${Math.round(res.want)}px row radius, more than half the ${Math.round(res.h)}px row, so rows read as pills (use a smaller flyout radius or a larger inset)`);
+        else if (res.R > 0 && Math.abs(res.r - res.want) > 2) bad.push(`${r}: row radius ${Math.round(res.r)}px in a ${res.R}px flyout with ${Math.round(res.inset)}px inset (nested radius ${Math.round(res.want)}px)`);
+      }
+    }
+    if (!tried) return 'no flyout triggers on any Code page';
+    expect(n > 0, `${tried} flyout triggers found but no listbox or menu opened, so nothing was measured`);
+    fail(bad, 'flyouts whose rows do not nest');
+    return `${n} flyouts`;
   });
 
   await gate('G-NAV1', 'every page in routes.json is reachable from the book nav at 375 and 1280px', async () => {

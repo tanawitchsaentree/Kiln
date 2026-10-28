@@ -15,7 +15,7 @@ const TOKENS = { space: { $extensions: W('P1', 'a four pixel step keeps related 
 const CSS = `.root { border-radius: var(--r); transition: transform var(--d); }\n.root:hover { transform: translateY(-1px); }\n.label { color: var(--t); }\n`;
 const LAB = 'apps/lab/button';
 const WHY = { concept: 'The button is the one action a reader takes after reading, so it stays quiet until needed.',
-  default_to_avoid: [{ pattern: 'gradient filled pill with a drop shadow from UI kits', why_not: 'it shouts on every screen and competes with the words the page exists for' }],
+  default_to_avoid: [{ pattern: 'gradient filled pill button with a drop shadow from UI kits', why_not: 'it shouts on every screen and competes with the words the page exists for' }],
   references: [{ title: 'fixture lineage', source: 'fixture' }],
   derivation: [
     { p: 'P1', axis: 'type', consequence: 'one family, weight carries rank', form: 'the label uses the body family and only semibold weight marks it as the action' },
@@ -52,6 +52,7 @@ const cases = [
   ['agent pick missing from REVIEW.md', (f) => { const w = structuredClone(WHY); Object.assign(w.variants, { by: 'agent', reason: 'B keeps the weight on the label and the lift on press, so P1 and P2 both show at rest' }); f['c/Button/Button.why.json'] = JSON.stringify(w); f['system/kiln.config.json'] = JSON.stringify({ autonomy: { picks: 'agent' }, docs: { componentsDir: 'c' } }); }, 1, /row in system\/REVIEW.md/],
   ['SEED reason passes in seed mode', (f) => { f['packages/tokens/src/primitive.json'] = JSON.stringify({ $extensions: W('SEED', 'seed value from the kiln starter so the build works from day one'), radius: { 1: { $value: '8px' } } }); f['system/kiln.config.json'] = JSON.stringify({ tokens: { allowSeed: true }, docs: { componentsDir: 'c' } }); }, 0, /1 starter SEED reasons left/],
   ['SEED reason fails once allowSeed is off', (f) => { f['packages/tokens/src/primitive.json'] = JSON.stringify({ $extensions: W('SEED', 'seed value from the kiln starter so the build works from day one'), radius: { 1: { $value: '8px' } } }); }, 1, /still the starter's SEED reason/],
+  ['family default that never names this component', (f) => { const w = structuredClone(WHY); w.default_to_avoid = [{ pattern: 'a Material outlined text field with a floating label', why_not: 'it is drawn for a different control and says nothing about this one' }]; f['c/Button/Button.why.json'] = JSON.stringify(w); }, 1, /never names this component's own default/],
   ['no generic default named', (f) => { const w = structuredClone(WHY); w.default_to_avoid = []; f['c/Button/Button.why.json'] = JSON.stringify(w); }, 1, /generic default it avoids/],
   ['reason on an axis the principle does not touch', (f) => { const w = structuredClone(WHY); f['system/CONCEPT.md'] = CONCEPT.replace(/interaction: every target is reachable by touch\./g, 'interaction: not affected.'); f['c/Button/Button.why.json'] = JSON.stringify(w); }, 1, /says nothing about interaction/],
   ['pending component is reported, not failed', (f) => { f['system/kiln.config.json'] = JSON.stringify({ docs: { componentsDir: 'c', rationale: { pendingDerivation: ['Button'] } } }); f['c/Button/Button.why.json'] = JSON.stringify({ ...WHY, derivation: [], variants: {} }); }, 0, /awaiting its derivation round/],
