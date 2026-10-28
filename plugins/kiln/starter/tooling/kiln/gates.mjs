@@ -482,7 +482,8 @@ try {
     for (const pg of COMPONENTS) {
       if (!hasTabs(pg) || !pg.tabs.includes('style')) { bad.push(`${pg.title}: no style tab`); continue; }
       await go(tabRoute(pg.slug, 'style'));
-      const r = await page.evaluate(() => { const cells = [...document.querySelectorAll('[data-spec] [data-value]')]; return { cells: cells.length, untokened: cells.filter((c) => !c.dataset.token).length }; });
+      // a property left at its default (opacity 1, auto, normal, transparent, none) is not a design value, so it needs no token
+      const r = await page.evaluate(() => { const DEF = new Set(['1', 'auto', 'normal', 'none', 'transparent', 'rgba(0, 0, 0, 0)', '0px']); const cells = [...document.querySelectorAll('[data-spec] [data-value]')].filter((c) => !DEF.has(c.dataset.value)); return { cells: cells.length, untokened: cells.filter((c) => !c.dataset.token).length }; });
       if (!r.cells) bad.push(`${pg.title}: no [data-spec] cells`);
       else if (r.untokened / r.cells > 0.1) bad.push(`${pg.title}: ${r.untokened}/${r.cells} spec values without a token`);
     }
@@ -766,9 +767,18 @@ try {
     const known = new Set();
     for (const t of Object.values(toks)) for (const v of [t.value, ...Object.values(t.themes ?? {}).map((x) => x.value)]) for (const m of String(v).matchAll(/#[0-9a-f]{6}(?:[0-9a-f]{2})?\b/gi)) known.add(m[0].toUpperCase().slice(0, 7));
     const bad = []; let n = 0;
-    for (const r of ROUTES) {
+    // a history page (a decision log) records values as they were, and an element marked data-not-token
+    // quotes a colour on purpose (another brand's blue, for comparison); both are declared, never silent
+    const history = new Set(C.history ?? []);
+    for (const r of ROUTES.filter((x) => !history.has(x))) {
       await go(r);
-      const hexes = await page.evaluate(() => [...(document.querySelector('main')?.innerText ?? '').matchAll(/#[0-9a-f]{6}(?:[0-9a-f]{2})?\b/gi)].map((m) => m[0]));
+      const hexes = await page.evaluate(() => {
+        const m = document.querySelector('main')?.cloneNode(true); if (!m) return [];
+        for (const e of m.querySelectorAll('[data-not-token]')) e.remove();
+        document.body.appendChild(m); m.style.cssText = 'position:absolute; inset-inline-start:-99999px';
+        const t = m.innerText; m.remove();
+        return [...t.matchAll(/#[0-9a-f]{6}(?:[0-9a-f]{2})?\b/gi)].map((x) => x[0]);
+      });
       for (const h of new Set(hexes)) { n++; if (!known.has(h.toUpperCase().slice(0, 7))) bad.push(`${r}: ${h}`); }
     }
     fail(bad, 'colour values that are not tokens');

@@ -19,6 +19,14 @@ closes those steps.
   radius minus the inset, and a radius over half the row height fails as pill rows.
 - **No release with underived components.** `release-pack` refuses while
   `rationale.pendingDerivation` is not empty (`--allow-pending` only for a private test pack).
+- **Style tab names the right tokens.** spec-capture painted every token into every probe property,
+  and a token invalid for a property (a shadow in `color`) read back as the inherited value, so white
+  text was named a shadow token. The probe now sits in a wrapper whose inherited values no token has.
+  A root that draws nothing (a wrapper around cells) is described by its first part that draws, and a
+  part with no text is not given a text colour.
+- **G-CL1 exceptions are declared.** A page in `docs.history` (a decision log) and an element marked
+  `data-not-token` (another brand's colour, quoted for comparison) are skipped; nothing else is.
+- **G-K5** ignores properties left at their defaults (opacity 1, auto, normal, transparent).
 - **Pane as the proof.** Button, Switch, Input (and its family) and Select went through a second
   derivation round with three rendered variants each and agent picks logged in `system/REVIEW.md`;
   both new gates failed the shipped forms first and pass on the redraw (188 controls).

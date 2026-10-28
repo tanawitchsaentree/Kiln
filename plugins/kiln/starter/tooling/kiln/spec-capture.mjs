@@ -42,7 +42,7 @@ const TOKEN_MAP = () => {
   const FAMILY = [[/^color$/, /fg|text|ink|on-|label/], [/^background-color$/, /bg|surface|fill|accent/], [/border.*color$/, /border|line|rim|ring/],
     [/^font-size$/, /type|font|text|label|body|title/], [/^font-weight$/, /weight/], [/^line-height$/, /leading|line/], [/^letter-spacing$/, /tracking|letter/],
     [/height$/, /height|control|size/], [/^padding|gap$/, /padding|gap|inset|space/], [/radius$/, /radius|corner/], [/^min-width$/, /width|min|size/],
-    [/^outline-(width|offset)$/, /focus|ring|width/], [/^icon-size$/, /icon|size/], [/duration$/, /motion|duration/], [/timing-function$/, /easing|ease|motion/]];
+    [/^outline-(width|offset)$/, /focus|ring|width/], [/^icon-size$/, /icon|size/], [/duration$/, /motion|duration/], [/timing-function$/, /easing|ease|motion/], [/^opacity$/, /opacity|alpha|disabled/]];
   const PRIMITIVE = /^--ds-(color|duration|size|space|ease|easing|font|weight)-/;
   window.__specPick = (names, prop, comp, options = []) => {
     const fam = FAMILY.find(([re]) => re.test(prop))?.[1];
@@ -53,15 +53,24 @@ const TOKEN_MAP = () => {
     return [...fit].sort((a, b) => score(a) - score(b))[0] ?? null;
   };
   window.__specTokens = (host) => {
-    const probe = document.createElement('div'); host.appendChild(probe);
+    // the probe sits in a wrapper whose inherited values no real token has, so a baseline match is never a token
+    const wrap = document.createElement('div'); wrap.style.cssText = 'position:absolute; width:3px; color:rgb(1, 2, 3); font-weight:123; visibility:hidden';
+    const probe = document.createElement('div'); wrap.appendChild(probe); host.appendChild(wrap);
     const map = {};
+    // A var() that is invalid for a property computes to that property's inherited or initial value, so a
+    // shadow token painted into color reads as the text colour. Only a value that differs from the
+    // probe's own baseline came from the token (Pane, 2026-10-28: white text was named a shadow token).
+    const PROPS = ['color', 'width', 'font-weight', 'transition-duration', 'transition-timing-function', 'box-shadow', 'opacity'];
+    probe.style.cssText = '';
+    const base = Object.fromEntries(PROPS.map((p) => [p, getComputedStyle(probe).getPropertyValue(p)]));
     for (const n of names) {
       const raw = getComputedStyle(host).getPropertyValue(n).trim(); if (!raw) continue;
-      probe.style.cssText = `color: var(${n}); width: var(${n}); font-size: var(${n}); font-weight: var(${n}); transition-duration: var(${n}); transition-timing-function: var(${n}); box-shadow: var(${n}); opacity: var(${n})`;
+      probe.style.cssText = PROPS.map((p) => `${p}: var(${n})`).join('; ');
       const cs = getComputedStyle(probe);
-      for (const v of new Set([raw, cs.color, cs.width, cs.fontWeight, cs.transitionDuration, cs.transitionTimingFunction, cs.boxShadow, cs.opacity])) if (v && v !== 'auto' && v !== 'none' && v !== '0s' && v !== 'ease') (map[v] ??= []).push(n);
+      const vals = [raw, ...PROPS.map((p) => cs.getPropertyValue(p)).filter((v, i) => v !== base[PROPS[i]])];
+      for (const v of new Set(vals)) if (v && v !== 'auto' && v !== 'none' && v !== '0s' && v !== 'ease') (map[v] ??= []).push(n);
     }
-    probe.remove();
+    wrap.remove();
     return map;
   };
 };
@@ -85,7 +94,10 @@ try {
       const read = async (props) => { const res = await cdp.send('Runtime.callFunctionOn', {
         objectId: object.objectId, returnByValue: true,
         functionDeclaration: `function (props) {
-          const el = this.matches('[data-component]') ? this : this.querySelector('[data-component]') ?? this;
+          let el = this.matches('[data-component]') ? this : this.querySelector('[data-component]') ?? this;
+          // a root that draws nothing (a wrapper around cells) is described by the first part that does
+          const draws = (e) => { const c = getComputedStyle(e); return c.boxShadow !== 'none' || c.borderTopStyle !== 'none' || !['rgba(0, 0, 0, 0)', 'transparent'].includes(c.backgroundColor) || c.backgroundImage !== 'none'; };
+          if (!draws(el)) el = [...el.querySelectorAll('input, textarea, button, [role]')].find(draws) ?? el;
           const host = this.closest('[data-spec-theme]') ?? document.body;
           const map = window.__specTokens(host);
           const cs = getComputedStyle(el);
@@ -98,6 +110,8 @@ try {
             if (p.startsWith('outline') && cs.outlineStyle === 'none') continue;
             if (p.startsWith('border') && p.endsWith('color') && cs.borderTopStyle === 'none') continue;
             if (['font-size', 'line-height', 'letter-spacing', 'font-weight'].includes(p) && !hasText) continue;
+            // a part with no text and no icon paints nothing in its text colour (a switch track, a radio circle)
+            if (p === 'color' && !hasText && !el.querySelector('svg')) continue;
             const v = cs.getPropertyValue(p).trim();
             if (p === 'min-width' && !/^[\\d.]+px$/.test(v)) continue;
             let token = pick(v, p);

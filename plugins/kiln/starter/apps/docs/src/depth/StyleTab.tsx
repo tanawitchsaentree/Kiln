@@ -25,7 +25,7 @@ export function combos(kinds: Record<string, string[]>, sizes: string[]) {
 const keyOf = (p: Record<string, string>) => Object.entries(p).map(([k, v]) => `${k}=${v}`).join(';') || 'default';
 
 // unset is not a value the component chose (no shadow, no fill, no minimum), so it gets no data-value
-const UNSET = new Set(['', 'none', '0px', 'rgba(0, 0, 0, 0)', 'normal', 'auto', '0s']);
+const UNSET = new Set(['', 'none', '0px', 'rgba(0, 0, 0, 0)', 'transparent', 'normal', 'auto', '0s', '1']);
 const V = ({ c }: { c?: Cell }) => !c || UNSET.has(c.value) ? <td className="muted">none</td> : (
   <td data-value={c.value} data-token={c.token ?? undefined}>{c.token ? <><code>{c.token.replace(/^--ds-/, '')}</code><br /><span className="muted small">{c.value}</span></> : <><span className="fail">no token</span> <span className="muted small">{c.value}</span></>}</td>
 );
