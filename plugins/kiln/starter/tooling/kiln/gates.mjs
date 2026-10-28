@@ -13,6 +13,7 @@
 //   diagrams     G-NT1 graphic parts ≥3:1 off their ground (WCAG 1.4.11)
 //   benchmarks   G-BT1 every reference topic for a page covered or declined (benchmarks/topics)
 //   reasons      G-W1 (Why column, component reasons section; data from rationale.mjs)
+//   claims       G-CL1 every hex in the book is a current token value
 //   milestone    G-TODO1 no starter placeholder or seed reason left   reach  G-NAV1 G-SM1   touch  G-TT1
 //
 // Usage: node tooling/engine/gates.mjs [--only G-K2,G-K3] [--report]
@@ -755,6 +756,24 @@ try {
     return `${ROUTES.length} pages clean`;
   });
 
+  await gate('G-CL1', 'every colour value written in the book is a current token value (no stale hex in prose)', async () => {
+    // a hex typed into prose drifts when the token changes (assay dry run: #B3261E stayed in four pages
+    // after the hazard red was darkened); the book should read values from tokens, and this catches it
+    const tokFile = path.join(C.root, 'packages/tokens/build/json/tokens.json');
+    expect(existsSync(tokFile), 'no built tokens json');
+    const toks = JSON.parse(readFileSync(tokFile, 'utf8'));
+    const known = new Set();
+    for (const t of Object.values(toks)) for (const v of [t.value, ...Object.values(t.themes ?? {}).map((x) => x.value)]) for (const m of String(v).matchAll(/#[0-9a-f]{6}(?:[0-9a-f]{2})?\b/gi)) known.add(m[0].toUpperCase().slice(0, 7));
+    const bad = []; let n = 0;
+    for (const r of ROUTES) {
+      await go(r);
+      const hexes = await page.evaluate(() => [...(document.querySelector('main')?.innerText ?? '').matchAll(/#[0-9a-f]{6}(?:[0-9a-f]{2})?\b/gi)].map((m) => m[0]));
+      for (const h of new Set(hexes)) { n++; if (!known.has(h.toUpperCase().slice(0, 7))) bad.push(`${r}: ${h}`); }
+    }
+    fail(bad, 'colour values that are not tokens');
+    return `${n} values checked`;
+  });
+
   await gate('G-NAV1', 'every page in routes.json is reachable from the book nav at 375 and 1280px', async () => {
     const want = JSON.parse(readFileSync(C.abs(C.routes), 'utf8')).parts.flatMap((p) => p.pages.map((pg) => pg.path));
     const bad = [];
@@ -836,7 +855,12 @@ try {
       try {
         for (const r of ROUTES) {
           await p.goto(url(srv.base, r, { theme: THEME, scene: SCENE }, C), { waitUntil: 'networkidle' });
-          const res = await new AxeBuilder({ page: p }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']).analyze();
+          // In forced colours the reader's own palette sets every colour, and axe reads authored colours for
+          // text inside a nested theme region (assay dry run: #F2F2EF reported on a forced white page while the
+          // computed colour was black). Contrast in that mode is measured per pixel by evidence.mjs instead.
+          const builder = new AxeBuilder({ page: p }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']);
+          if (mode === 'active') builder.disableRules(['color-contrast']);
+          const res = await builder.analyze();
           for (const v of res.violations) bad.push(`${r} ${v.id}×${v.nodes.length}`);
         }
       } finally { await c.close(); }

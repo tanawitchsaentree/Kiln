@@ -199,7 +199,7 @@ export function TokenTable({ prefix, tier, query = '' }: { prefix?: string; tier
 import conceptMd from '../../../../system/CONCEPT.md?raw';
 export const PRINCIPLES: Array<{ id: string; name: string; claim: string; therefore: Array<[string, string]> }> = [...conceptMd.matchAll(/^### (P\d+)\s+(.+)\n([\s\S]*?)(?=^### P\d+|(?![\s\S]))/gm)].map((m) => {
   const [claim, rest = ''] = m[3].split(/\*\*Therefore\*\*/);
-  const therefore = [...rest.matchAll(/(space|shape|depth|colour|type|motion|interaction): ([^]*?)(?= (?:space|shape|depth|colour|type|motion|interaction): |$)/g)].map((x) => [x[1], x[2].trim()] as [string, string]);
+  const therefore = [...rest.matchAll(/(space|shape|depth|colour|type|motion|interaction): ([^]*?)(?= (?:space|shape|depth|colour|type|motion|interaction): |\n|$)/g)].map((x) => [x[1], x[2].trim()] as [string, string]);
   return { id: m[1], name: m[2].trim(), claim: claim.trim(), therefore };
 });
 export const CONCEPT_INTRO = conceptMd.replace(/<!--[\s\S]*?-->/g, '').split(/^## Principles/m)[0].replace(/^#.*$/m, '').trim();
