@@ -784,6 +784,32 @@ try {
     const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
     const groundOf = (el) => { const stack = []; for (let e = el; e; e = e.parentElement) { const c = parse(getComputedStyle(e).backgroundColor); if (c && c.a > 0) { stack.push(c); if (c.a >= 1) break; } } let g = { r: 255, g: 255, b: 255, a: 1 }; for (const c of stack.reverse()) g = over(c, g); return g; };
   `;
+  // Measured edge of a control over glass: the ground is the median of a ring of pixels just outside the
+  // control, the edge is the 85th-percentile contrast of a 2px band just inside its box (a lip along one
+  // side is enough, as WCAG allows), and the floor is its median fill. Real pixels, after blur and dimming.
+  const pixelEdge = async (loc) => {
+    const { PNG } = await import('pngjs');
+    await loc.scrollIntoViewIfNeeded().catch(() => {});
+    const b = await loc.boundingBox(); if (!b) return 0;
+    const pad = 6, x0 = Math.max(0, Math.floor(b.x - pad)), y0 = Math.max(0, Math.floor(b.y - pad));
+    const png = PNG.sync.read(await page.screenshot({ clip: { x: x0, y: y0, width: Math.ceil(b.width + pad * 2), height: Math.ceil(b.height + pad * 2) } }));
+    const lumAt = (x, y) => { const k = (y * png.width + x) * 4; return [0, 1, 2].map((c) => { const v = png.data[k + c] / 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }).reduce((s, v, j) => s + v * [0.2126, 0.7152, 0.0722][j], 0); };
+    const rad = await loc.evaluate((e) => parseFloat(getComputedStyle(e).borderTopLeftRadius) || 0);
+    const bx = b.x - x0, by = b.y - y0, r = Math.min(rad, b.height / 2, b.width / 2);
+    // distance from the control's rounded box: < 0 inside, > 0 outside
+    const sd = (x, y) => { const cx = Math.min(Math.max(x, bx + r), bx + b.width - r), cy = Math.min(Math.max(y, by + r), by + b.height - r); return Math.hypot(x - cx, y - cy) - r; };
+    const ring = [], band = [], inner = [];
+    for (let y = 0; y < png.height; y++) for (let x = 0; x < png.width; x++) {
+      const d = sd(x + 0.5, y + 0.5);
+      if (d > 2 && d < 5) ring.push(lumAt(x, y)); else if (d <= 0 && d > -2.5) band.push(lumAt(x, y)); else if (d < -6) inner.push(lumAt(x, y));
+    }
+    if (!ring.length || !band.length) return 0;
+    const med = (a) => a.sort((p, q) => p - q)[Math.floor(a.length / 2)];
+    const g = med(ring); const cr = (l) => (Math.max(l, g) + 0.05) / (Math.min(l, g) + 0.05);
+    const edge = band.map(cr).sort((p, q) => p - q)[Math.floor(band.length * 0.85)];
+    const fill = inner.length ? cr(med(inner)) : 0;
+    return Math.round(Math.max(edge, fill) * 100) / 100;
+  };
   await gate('G-NT2', 'every form control shows its boundary at least 3:1 against what it sits on, in every theme (WCAG 1.4.11)', async () => {
     // assay/Pane dry run, 2026-10-28: a search field in the light theme vanished into a white panel,
     // because only text was ever measured. A field, select, checkbox, radio, switch or slider must be
@@ -820,10 +846,31 @@ try {
             if (ow >= 1 && cs.outlineStyle !== 'none' && oc && document.activeElement !== e) best = Math.max(best, ratio(over(oc, ground), ground));
             if (e === root) break;
           }
-          return [root.dataset.component ?? el.tagName, Math.round(best * 100) / 100];
+          // over glass or a photo the ground is pixels, not a colour: no opaque colour is reached before an
+          // ancestor that blurs or paints an image, so this control is measured from the screenshot below
+          let glass = false;
+          for (let e = el.parentElement; e; e = e.parentElement) {
+            const cs = getComputedStyle(e); const c = parse(cs.backgroundColor);
+            if (c && c.a >= 1) break;
+            if ((cs.backdropFilter && cs.backdropFilter !== 'none') || (cs.webkitBackdropFilter && cs.webkitBackdropFilter !== 'none') || cs.backgroundImage.includes('url(')) { glass = true; break; }
+          }
+          // the box that draws the edge: the control, or the nearest ancestor inside its component that paints one
+          let box = el;
+          for (let e = el; e && root.contains(e); e = e.parentElement) {
+            const cs = getComputedStyle(e); const c = parse(cs.backgroundColor);
+            if (cs.boxShadow !== 'none' || (parseFloat(cs.borderTopWidth) || 0) >= 1 || (c && c.a > 0)) { box = e; break; }
+            if (e === root) break;
+          }
+          const i = document.querySelectorAll('[data-nt2]').length; box.setAttribute('data-nt2', String(i));
+          return [root.dataset.component ?? el.tagName, Math.round(best * 100) / 100, glass, i];
         });
       }, CONTRAST_JS);
-      for (const [name, best] of res) { n++; if (best < 3) bad.push(`${theme} ${r}: ${name} edge ${best}:1`); }
+      for (const [name, computed, glass, i] of res) {
+        n++;
+        let best = computed;
+        if (glass) best = await pixelEdge(page.locator(`[data-nt2="${i}"]`));
+        if (best < 3) bad.push(`${theme} ${r}: ${name} edge ${best}:1${glass ? ' (measured over glass)' : ''}`);
+      }
     }
     expect(n > 0, 'NO FORM CONTROLS FOUND on any component Code page');
     fail([...new Set(bad)], 'controls whose edge is under 3:1');

@@ -1,5 +1,28 @@
 # kiln — changelog
 
+## 2.1.0 — design quality is checked, not hoped for
+
+The user put Pane into a real app and found four components that were the defaults of every UI
+kit: an iOS toggle, a dropdown whose highlight did not sit in its flyout, a search field that
+vanished on white, and a flat blue button. Each came from a step kiln let through. This release
+closes those steps.
+
+- **Every component names its own default.** A family derivation (one form language for eleven
+  components) used to be copied into every member, so a member's own habit was never named. The
+  rationale check now fails a `default_to_avoid` that does not mention the component or a word
+  from its `kind` (for example `"kind": ["toggle"]` for a Switch).
+- **G-NT2, control edges at 3:1** (WCAG 1.4.11) for every field, select, checkbox, radio and
+  switch on every component page, in every theme. Over glass or a photo the ground is read from
+  real pixels (a ring just outside the control against a band just inside it), because a walk over
+  background colours cannot see a dimmed photo and falls through to white.
+- **G-NR1, nested flyout corners.** Every open listbox and menu: a row's radius equals the sheet
+  radius minus the inset, and a radius over half the row height fails as pill rows.
+- **No release with underived components.** `release-pack` refuses while
+  `rationale.pendingDerivation` is not empty (`--allow-pending` only for a private test pack).
+- **Pane as the proof.** Button, Switch, Input (and its family) and Select went through a second
+  derivation round with three rendered variants each and agent picks logged in `system/REVIEW.md`;
+  both new gates failed the shipped forms first and pass on the redraw (188 controls).
+
 ## 2.0.0 — a system repo you can start from, and the Pane retro built into it
 
 Pane (glass on a curtain-wall frame) was the first system kiln built to a real milestone. The user

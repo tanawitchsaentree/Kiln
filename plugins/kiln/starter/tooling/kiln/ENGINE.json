@@ -1,12 +1,12 @@
 {
-  "kiln": "11e6cf9",
-  "syncedAt": "2026-10-28T09:11:45.167Z",
+  "kiln": "12d62ca",
+  "syncedAt": "2026-10-28T10:33:13.809Z",
   "files": {
     "config.mjs": "5417d22a2b4092085e214831a740312012ea00703220bce845eba5bb25d2e076",
     "conformance.mjs": "3377eff3b1f14b90ce98ac76ce9e70480573e93f76c121685723219017243c67",
     "derivation-guard.mjs": "6a9fe74046ecdbfc045f083052fb88cf69f9cab7f0990338e3295414cbc99813",
     "evidence.mjs": "03445181cf61448d4c884a35d8714a8c90eb1fb36ffd2ad69d1b42e114c32f20",
-    "gates.mjs": "3dc61ad2dc22c676bc68d65e3f859878a005afe33c1bb135cf4bc827d4ddbdcd",
+    "gates.mjs": "4f1a3b5c73698cc59915bc9a0c466e0e78d5f880164e1dabb565e3a44f61c4ef",
     "meta.mjs": "20803fc4195339ac415dcf0132dd09ceddbfd85da4aaa7eff00a0925658bb3fb",
     "milestone.mjs": "8a87cc4a2f44710edc1359bd758bdbf1dd76f0e6687cce9c022ee6d4f3421e46",
     "rationale.mjs": "ffe5f790cca093afc2979898298921eef9148a7c24e98b4eef32e8d2362bc105",
