@@ -59,7 +59,7 @@ export async function measurePageText(page, threshold = 4.5) {
     const band = { left: 0, right: innerWidth, top: Math.max(0, ...bars.filter((b) => b.top <= 1).map((b) => b.bottom)), bottom: Math.min(innerHeight, ...bars.filter((b) => b.bottom >= innerHeight - 1).map((b) => b.top)) };
     for (const n of nodes) {
       const parent = n.parentElement;
-      if (!n.textContent.trim() || !parent || parent.closest('[aria-hidden="true"], .skip, script, style, title, :disabled, [aria-disabled="true"]')) continue; // disabled controls are exempt (WCAG 1.4.3, inactive user interface components)
+      if (!n.textContent.trim() || !parent || parent.closest('[aria-hidden="true"], .skip, script, style, title, :disabled, [aria-disabled="true"], [data-disabled]') || parent.closest('label')?.control?.disabled) continue; // disabled controls are exempt (WCAG 1.4.3, inactive user interface components), and so is the label of one
       let span = parent.matches('[data-ev-doc]') && parent.childNodes.length === 1 ? parent : null;
       if (!span) {
         span = document.createElement('span');

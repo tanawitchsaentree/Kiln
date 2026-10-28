@@ -831,6 +831,8 @@ try {
           }
           const child = el.querySelector('[data-hit]');
           if (child) { const c = child.getBoundingClientRect(); w = Math.max(w, c.width); h = Math.max(h, c.height); }
+          // a form field may take its press area from a label marked [data-hit] that surrounds it
+          for (const l of el.labels ?? []) if (l.matches('[data-hit]')) { const c = l.getBoundingClientRect(); w = Math.max(w, c.width); h = Math.max(h, c.height); }
           return [w, h];
         };
         const sel = '[data-example-live] :is(button, a[href], [role="button"], [role="tab"], [role="slider"], [role="checkbox"], [role="radio"], [role="switch"], [role="combobox"], input:not([type="hidden"]), select, textarea), header :is(button, a[href]), nav[data-book-nav] button';
