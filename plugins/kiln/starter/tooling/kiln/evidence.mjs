@@ -75,6 +75,8 @@ try {
         await d.close();
         agg.textElements += dr.textElements;
         agg.pages += 1;
+        // progress inside a set, so a long run never looks stuck
+        if (agg.pages % 25 === 0) console.log(`  … ${mode} ${key} ${agg.pages}/${ROUTES.length} pages, ${agg.failures} failing so far`);
         for (const t of dr.failures.filter((x) => !K.infoGroups.includes(x.group))) { if (!isExcepted(t)) agg.failures += 1; record(`[${mode}] docs ${route} ${key}`, t); }
       }
       console.log(`${mode.padEnd(21)} ${key.padEnd(14)} ${K.harness ? `harness ${K.gatingGroups.map((g) => `${g} ${result.harness[mode][key][g].failures}/${result.harness[mode][key][g].texts}`).join(' · ')} | ` : ''}docs ${agg.failures}/${agg.textElements} over ${agg.pages} pages`);

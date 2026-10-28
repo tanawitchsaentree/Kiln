@@ -14,7 +14,7 @@
 // Usage: node tooling/kiln/verify.mjs            full run (60–90 min with a browser on every page)
 //        node tooling/kiln/verify.mjs --quick    builds, lint, types, reasons, conformance (minutes)
 // Browser steps run at nice 19 so the machine stays usable. Never edit source during a full run.
-import { spawnSync } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { ROOT, sourceHash } from './config.mjs';
@@ -60,9 +60,15 @@ for (const [id, cmd, o] of STEPS) {
   const full = o.browser ? ['nice', '-n', '19', ...cmd] : cmd;
   const t0 = Date.now();
   console.log(`\n▶ ${id}: ${cmd.join(' ')}`);
-  const r = spawnSync(full[0], full.slice(1), { cwd: ROOT, encoding: 'utf8', maxBuffer: 1 << 28 });
-  const out = `${r.stdout ?? ''}${r.stderr ?? ''}`;
-  process.stdout.write(out.split('\n').slice(-40).join('\n') + '\n');
+  // stream every line as it comes, so a long step (evidence, gates) shows its progress live
+  const r = await new Promise((resolve) => {
+    const child = spawn(full[0], full.slice(1), { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] });
+    let buf = '';
+    const take = (d) => { const t = d.toString(); buf += t; process.stdout.write(t.replace(/^(?=.)/gm, `  [${id}] `)); };
+    child.stdout.on('data', take); child.stderr.on('data', take);
+    child.on('close', (status) => resolve({ status, out: buf }));
+  });
+  const out = r.out;
   status[id] = r.status === 0 ? 'pass' : 'fail';
   const reds = out.split('\n').filter((l) => /^\s*✗/.test(l)).slice(0, 30);
   steps.push({ id, status: status[id], seconds: Math.round((Date.now() - t0) / 1000), reds, tail: out.split('\n').filter(Boolean).slice(-6) });

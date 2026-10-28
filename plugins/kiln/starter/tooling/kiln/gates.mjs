@@ -39,12 +39,16 @@ const SCENE = C.scenes[0];
 const results = [];
 async function gate(id, name, fn) {
   if (ONLY && !ONLY.has(id)) return;
+  const t0 = Date.now();
   try {
     const detail = await fn();
     results.push({ id, name, ok: true, detail: typeof detail === 'string' ? detail : undefined });
   } catch (e) {
     results.push({ id, name, ok: false, detail: String(e.message ?? e).split('\n')[0], problems: e.problems });
   }
+  // progress as each gate finishes; the full table still prints at the end
+  const r = results.at(-1);
+  console.log(`  ${r.ok ? 'pass' : 'FAIL'} ${id} (${Math.round((Date.now() - t0) / 1000)}s)${r.ok ? '' : `: ${r.detail.slice(0, 120)}`}`);
 }
 // Fail with a list: the punch list keeps every item, the console shows the first few.
 function fail(problems, what = 'problems') {
