@@ -23,3 +23,5 @@ disable-model-invocation: false
 5. **Gate:** ส่งให้ subagent `qa-a11y` ตรวจ → ถ้า FAIL วนกลับข้อ 4 พร้อมรายการแก้ (สูงสุด 3 รอบ เกินนั้นหยุดถาม user)
 6. **Ship:** PASS แล้ว → subagent `publisher` ทำ docs page + จัด Storybook + changeset
 7. **Close:** อัพเดต system/STATE.md (เพิ่มเข้าลิสต์ผ่าน QA, ระบุตัวถัดไปตามลำดับ) + commit ข้อความ `feat({name}): complete per anatomy contract`
+
+**Registering (kiln 2.0 starter):** once the component, its `<Name>.why.json`, `apps/docs/src/depth/<slug>.tsx`, its examples and `system/conformance/<slug>.mjs` exist, run `node tooling/register-component.mjs <Name> --chapter <file> --subject <file> --changelog "…"`. It adds the chapter, depth index, Style subject, route, barrel entry and changelog line in one step, and refuses a component with no derivation or no checks. Then add the pick to `system/REVIEW.md` and run `pnpm run verify:quick`.
