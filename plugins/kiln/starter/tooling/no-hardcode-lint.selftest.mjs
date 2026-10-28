@@ -108,7 +108,7 @@ assertCase(
 assertCase(
   'เตือน background-color-only indicator ที่ไม่มี border ในบล็อกเดียวกัน',
   'bg-only.module.css',
-  '.thumb {\n  background-color: #000000ff;\n}\n',
+  '.dot {\n  background-color: #000000ff;\n}\n',
   (r, combined) => r.exitCode === 1 && /background-only visual indicator/.test(combined),
   // หมายเหตุ: exit 1 มาจาก hex ดิบ (#000000ff) ที่เป็นกฎ error อยู่แล้ว ไม่ใช่จาก warning เอง —
   // ใช้ var() แทนเพื่อแยกให้เห็นว่า warning ทำงานเดี่ยวๆ ได้โดยไม่ fail build (case ถัดไป)
@@ -138,7 +138,7 @@ assertCase(
 assertCase(
   'no-hardcode-ok suppress background-only warning ได้ทีละจุด (inline บนบรรทัดเดียวกัน)',
   'bg-suppressed.module.css',
-  '.thumb {\n  background-color: var(--ds-color-danger-500); /* no-hardcode-ok: proof of suppression mechanism */\n}\n',
+  '.dot {\n  background-color: var(--ds-color-danger-500); /* no-hardcode-ok: proof of suppression mechanism */\n}\n',
   (r, combined) => r.exitCode === 0 && !/background-only visual indicator/.test(combined),
 );
 
@@ -146,6 +146,10 @@ assertCase('จับ opacity ดิบ', 'op.module.css', '.root:disabled {\n  
 assertCase('opacity จาก token ผ่าน', 'op-ok.module.css', '.root:disabled {\n  opacity: var(--ds-opacity-disabled);\n}\n', (r) => r.exitCode === 0);
 assertCase('จับ scale() ดิบ', 'sc.module.css', '.thumb:active {\n  transform: scale(1.08);\n}\n', (r) => r.exitCode === 1);
 assertCase('scale() จาก token ผ่าน', 'sc-ok.module.css', '.thumb:active {\n  transform: scale(var(--ds-scale-press));\n}\n', (r) => r.exitCode === 0);
+
+assertCase('error: a knob drawn only as a background', 'knob.module.css', '.knob {\n  background: var(--ds-switch-knob);\n}\n', (r) => r.exitCode === 1);
+assertCase('a knob drawn as a border passes', 'knob-ok.module.css', '.knob {\n  border-block-start: var(--ds-switch-knob-size) solid var(--ds-switch-knob);\n}\n', (r) => r.exitCode === 0);
+assertCase('a hover re-tint of a ruled track is not flagged', 'track-hover.module.css', '.root:hover .track {\n  background: var(--ds-switch-hover);\n}\n', (r, c) => r.exitCode === 0 && !/background-only/.test(c));
 
 rmSync(dir, { recursive: true, force: true });
 

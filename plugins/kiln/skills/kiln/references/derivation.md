@@ -31,11 +31,13 @@ never decide a component's form.
 If a principle's text does not lead anywhere for this component, that is a finding about the
 principle, not permission to fill the gap with taste.
 
-## 4. Render three, let the user pick
+## 4. Render three, then pick
 
 Three variants that follow the derivation in different ways, rendered in `apps/lab/<component>/`,
-same content, compared against the default to avoid. The user picks (`variants.picked`,
-`variants.by: "user"`). Only `identity: false` components (layout primitives with no form of their
+same content, compared against the default to avoid. With `autonomy.picks: "user"` the user picks
+(`variants.picked`, `variants.by: "user"`). With `"agent"` (questions asked once at intake) the
+agent picks, writes `variants.by: "agent"` and a `variants.reason` that argues from the principles,
+and adds a row to `system/REVIEW.md`; the user reviews every such pick at the milestone. Only `identity: false` components (layout primitives with no form of their
 own) skip this, with `identity_reason`.
 
 ## 5. Then the code, with reasons on the axis they act on

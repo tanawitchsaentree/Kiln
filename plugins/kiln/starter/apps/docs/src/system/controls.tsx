@@ -8,9 +8,9 @@ export function Range({ label, min, max, step, value, onChange, unit = '' }: { l
     </label>
   );
 }
-export function Choice<T extends string>({ label, value, options, onChange }: { label: string; value: T; options: Array<[T, string]>; onChange: (v: T) => void }) {
+export function Choice<T extends string>({ label, value, options, onChange, hideLabel }: { label: string; value: T; options: Array<[T, string]>; onChange: (v: T) => void; hideLabel?: boolean }) {
   return (
-    <label className="pg-control"><span className="pg-label">{label}</span>
+    <label className="pg-control"><span className={hideLabel ? 'visually-hidden' : 'pg-label'}>{label}</span>
       <select value={value} onChange={(e) => onChange(e.target.value as T)}>{options.map(([v, l]) => <option key={v} value={v}>{l}</option>)}</select>
     </label>
   );

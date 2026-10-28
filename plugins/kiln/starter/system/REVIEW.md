@@ -5,7 +5,7 @@ renders the alternatives in `apps/lab/<component>/`, and logs the pick here. At 
 milestone the user reviews this list in one sitting; anything sent back becomes a RETRO entry and a
 new round. Nothing here is final until the review.
 
-Put the component name alone in the What cell (`| Button |`); `tooling/kiln/milestone.mjs` and
+Put the component name alone in the What cell (`| <Name> |`); `tooling/kiln/milestone.mjs` and
 `rationale.mjs` find each pick by it.
 
 | Date | What | Picked | Alternatives (lab) | Why, quoting the principles |

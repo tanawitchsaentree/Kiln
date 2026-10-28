@@ -154,9 +154,11 @@ export function ShapePlayground() {
 export function MotionPlayground() {
   const durs = byPrefix('duration.').filter(([p]) => !p.endsWith('stagger'));
   const eases = byPrefix('easing.');
-  const [dur, setDur] = useState('duration.slow');
-  const [ease, setEase] = useState('easing.soft');
+  // start on the longest duration and the first easing the system has; names differ between systems
+  const [dur, setDur] = useState(() => [...durs].sort((a, b) => parseFloat(String(b[1].value)) - parseFloat(String(a[1].value)))[0]?.[0] ?? '');
+  const [ease, setEase] = useState(eases[0]?.[0] ?? '');
   const [on, setOn] = useState(false);
+  if (!TOKENS[dur] || !TOKENS[ease]) return <p className="fail">No duration or easing primitives to show.</p>;
   const bez = String(TOKENS[ease].value).match(/[\d.]+/g)?.map(Number) ?? [0.2, 0, 0, 1];
   const path = `M0,100 C${bez[0] * 100},${100 - bez[1] * 100} ${bez[2] * 100},${100 - bez[3] * 100} 100,0`;
   return (
@@ -191,7 +193,7 @@ export function IconBrowser() {
     <Playground
       title="Icon browser"
       controls={<>
-        <label className="pg-control"><span className="pg-label">Search</span><input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="share, heart…" /></label>
+        <label className="pg-control"><span className="pg-label">Search</span><input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search by name" /></label>
         <Select label="Size" value={size} options={[['control.icon-sm', `small · ${TOKENS['control.icon-sm'].value}`], ['control.icon-md', `medium · ${TOKENS['control.icon-md'].value}`]]} onChange={setSize} />
       </>}
       preview={

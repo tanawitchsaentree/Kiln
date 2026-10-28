@@ -143,7 +143,11 @@ function stripComments(content, ext) {
 // รันเป็น warning เท่านั้น (ไม่ increment n / ไม่ exit 1) — ดูหมายเหตุ scope ท้ายไฟล์
 // ---------------------------------------------------------------------------
 // \b กัน substring match มั่ว เช่น "line" ใน "outline" (Button variant ไม่เกี่ยวกับ indicator เลย)
-const INDICATOR_KEYWORDS = /\b(indicator|thumb|dot|mark|track|line|check|dash)\b/i;
+const INDICATOR_KEYWORDS = /\b(indicator|thumb|knob|pointer|dot|mark|track|line|check|dash|tick)\b/i;
+// A knob, thumb or pointer drawn only as a background disappears entirely in forced colours, because the
+// browser replaces author backgrounds (assay dry run, 2026-10-28: Switch's knob and Slider's pointer).
+// These are errors; the other keywords stay warnings.
+const MUST_BORDER = /\b(thumb|knob|pointer)\b/i;
 const BLOCK_RE = /([^{}]+)\{([^}]*)\}/g;
 
 function lineOfIndex(content, index) {
@@ -164,6 +168,8 @@ function checkBgOnlyIndicator(file, content) {
 
     if (!selector || selector.startsWith('@')) continue; // ข้าม @media/@keyframes ฯลฯ (selector อยู่ชั้นนอก)
     if (!INDICATOR_KEYWORDS.test(selector)) continue;
+    // a state rule (hover, press, disabled) only re-tints a part drawn elsewhere; judge the part's own rule
+    if (/:(hover|active|focus|focus-visible|disabled)\b/.test(selector)) continue;
 
     // หา background-color/background ที่มีค่าไม่ใช่ transparent/none/inherit
     const bgRe = /\bbackground(?:-color)?\s*:\s*([^;]+);/g;
@@ -192,7 +198,7 @@ function checkBgOnlyIndicator(file, content) {
     const absoluteBgIndex = bodyStart + bgHit.index;
     const lineNo = lineOfIndex(content, absoluteBgIndex);
     const lineText = content.split('\n')[lineNo - 1]?.trim() ?? '';
-    warnings.push({ file, line: lineNo, selector, text: lineText });
+    warnings.push({ file, line: lineNo, selector, text: lineText, error: MUST_BORDER.test(selector) });
   }
   return warnings;
 }
@@ -234,6 +240,7 @@ for (const file of files) {
       // เช็ค no-hardcode-ok ที่บรรทัดเดียวกัน (raw, ไม่ strip) — ให้ suppress ได้ทีละจุดพร้อมเหตุผล
       // ติดกับโค้ด ไม่ใช่ปล่อย warning ลอยที่ไม่มีใครอ่านซ้ำ (ดู CLAUDE.md hardening notes)
       if (/no-hardcode-ok/.test(rawLines[w.line - 1] ?? '')) continue;
+      if (w.error) { console.error(`${w.file}:${w.line}  a knob, thumb or pointer drawn only as a background vanishes in forced colours; draw it as a border (selector: ${w.selector})\n    ${w.text}`); n++; continue; }
       console.warn(`⚠ ${w.file}:${w.line}  background-only visual indicator (selector: ${w.selector}) — ไม่มี border จริง จะหายไปใน forced-colors mode\n    ${w.text}`);
       warnCount++;
     }

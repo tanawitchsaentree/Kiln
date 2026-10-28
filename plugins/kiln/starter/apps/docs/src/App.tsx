@@ -99,7 +99,7 @@ export function App() {
               ))}
             </div>
             <div className="topbar-scene" data-scene-control=""><span className="topbar-scene-label" aria-hidden="true">Demo backdrop</span>
-              <Choice label="Demo backdrop" value={scene} onChange={setScene} options={BACKDROPS.map((b) => [b.id, b.label] as [string, string])} />
+              <Choice hideLabel label="Demo backdrop" value={scene} onChange={setScene} options={BACKDROPS.map((b) => [b.id, b.label] as [string, string])} />
             </div>
           </div>
           <button ref={menuButton} type="button" className="menu-btn" data-menu-toggle="" aria-expanded={menuOpen} aria-controls="book-nav" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? 'Close' : 'Menu'}</button>
