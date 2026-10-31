@@ -14,7 +14,7 @@ import type { ComponentChapter } from './components-data';
 import { DEPTH } from '../depth';
 import { UsageTab } from '../depth/UsageTab';
 import { StyleTab } from '../depth/StyleTab';
-import { OnSurface, SUBJECTS } from '../depth/subjects';
+import { BareHost, OnSurface, SUBJECTS } from '../depth/subjects';
 import changelog from '../../../../packages/react/CHANGELOG.md?raw';
 import '../depth/depth.css';
 
@@ -103,7 +103,7 @@ function LiveDemo({ c, m }: { c: ComponentChapter; m: Meta }) {
           : <Choice label="Variant" value="default" onChange={() => {}} options={[['default', `${c.name} has one variant`]]} />}</div>
         {dims.slice(1).map(([k, opts]) => <div key={k} data-selector={k}><Choice label={k[0].toUpperCase() + k.slice(1)} value={picked[k]} onChange={(v) => setPicked({ ...picked, [k]: v })} options={opts.map((o) => [o, o] as [string, string])} /></div>)}
       </div>
-      <div data-theme={theme} className="live-demo-stage"><Stage>{!subject ? <c.hero.Render /> : subject.bare ? subject.render(picked) : <OnSurface>{subject.render(picked)}</OnSurface>}</Stage></div>
+      <div data-theme={theme} className="live-demo-stage"><Stage>{!subject ? <c.hero.Render /> : subject.bare ? <BareHost bare={subject.bare}>{subject.render(picked)}</BareHost> : <OnSurface>{subject.render(picked)}</OnSurface>}</Stage></div>
       {subject && <CodeBlock code={subject.code(picked)} label="TSX" />}
     </div>
   );

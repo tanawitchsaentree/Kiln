@@ -40,7 +40,9 @@
       "dark",
       "light"
     ],
-    "scenes": [],
+    "scenes": [
+      "page"
+    ],
     "contrast": {
       "threshold": 4.5,
       "exception": null,
@@ -80,8 +82,42 @@
     "advisory": {
       "G-TODO1": "the starter's TODO(phase) placeholders and SEED reasons; Phases 1–2 and the wave replace them, and the milestone check refuses M1 while this is red",
       "G-N1": "system/controls.tsx is native until wave 1 builds this system's own Select and Slider; the docs need them, so they are in wave 1",
-      "G-BT1": "the foundation topics are this system's own prose (system/foundation-extras.tsx), written in Phase 2 once the tokens carry real decisions"
+      "G-BT1": "the foundation topics are this system's own prose (system/foundation-extras.tsx), written in Phase 2 once the tokens carry real decisions",
+      "G-SV1": "the state matrix (apps/docs/src/system/states.tsx) is empty until wave 1 builds a component with states; each one adds its row as it passes QA",
+      "G-AN1": "the anchor is picked and recorded after Phase 1; until then there is nothing to compare the card with"
     },
-    "$advisory": "Gates listed in advisory are run and shown as ! but do not fail verify. Each needs a reason. tooling/kiln/milestone.mjs fails while any advisory gate is red, so this list must be empty when a milestone closes."
+    "$advisory": "Gates listed in advisory are run and shown as ! but do not fail verify. Each needs a reason. tooling/kiln/milestone.mjs fails while any advisory gate is red, so this list must be empty when a milestone closes.",
+    "$scenes": "backdrop ids from apps/docs/src/system/backdrops.tsx, default first. G-ST1 fails when the book has a backdrop control and this list is empty. A system on photographs lists every scene and sets photoScene to the brightest one (G-BR1 checks text over it).",
+    "statesRoute": "/patterns/states",
+    "treeShake": {
+      "package": "kiln-ds-react",
+      "probe": "Stack",
+      "maxJsGz": 8000,
+      "tokensCss": "kiln-ds-react/tokens.css",
+      "packageDir": "packages/react",
+      "cssPrefix": "ds-",
+      "$comment": "G-TS1 (treeshake-probe.mjs): importing probe alone must cost only that component. packages/react/vite.config.ts keeps preserveModules for this; set probe to a wave-1 component with its own CSS once one exists."
+    },
+    "surfaceSelector": "[data-surface]",
+    "glassRecipe": {
+      "functions": [
+        "blur",
+        "saturate",
+        "brightness"
+      ],
+      "$comment": "G-GR1: every backdrop-filter in component CSS is none or written through tokens, and what renders carries every function here (docs/style-recipes/glass.md). A system with no glass passes."
+    },
+    "bareMinAlpha": 0.9,
+    "paneAlpha": 0.35,
+    "meshMaxShare": 0.1,
+    "anchor": {
+      "route": null,
+      "selector": "[data-anchor]",
+      "reference": "system/anchor/anchor-likeness.json",
+      "maxDeltaL": 0.05,
+      "maxDeltaC": 0.03,
+      "maxDeltaRim": 0.4,
+      "$comment": "G-AN1: at the anchor lock run node tooling/kiln/anchor-likeness.mjs --record apps/lab/anchor/<picked>.html, then set route to the book page whose example carries data-anchor on the current card."
+    }
   }
 }

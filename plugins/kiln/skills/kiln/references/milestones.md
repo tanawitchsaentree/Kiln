@@ -62,3 +62,10 @@ At a milestone the agent hands over, in the user's language:
 
 Anything the user sends back becomes a `system/RETRO.md` entry (the complaint, the step that made
 it, what changed in that step) and a new round for that component.
+
+## The path the user walks
+
+`docs/MILESTONES.md` (in the kiln repo) walks the same milestones from the user's side, as M0 to M5:
+what kiln asks, renders, measures and hands over at each, and the menu of what is still missing
+against the benchmark. `milestone.mjs` prints that menu from `tooling/kiln/milestone-menu.json`.
+M0 is the brief, concept and anchor rows of M1 above, and M1 is the table above unchanged.

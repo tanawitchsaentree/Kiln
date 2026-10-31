@@ -2,7 +2,7 @@
 // release-pack — packs the tokens and React packages into ./release as installable tarballs,
 // for handing to another project without publishing anywhere (publishing stays the user's call).
 //   npm install ./release/<react package>-<version>.tgz   (one tarball carries the tokens too)
-import { mkdirSync, readdirSync, readFileSync } from 'node:fs';
+import { mkdirSync, readdirSync, readFileSync, copyFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
@@ -23,3 +23,20 @@ for (const dir of ['tokens', 'react']) {
   if (r.status !== 0) process.exit(r.status ?? 1);
 }
 console.log(`\n✓ release/: ${readdirSync(OUT).filter((f) => f.endsWith('.tgz')).join(', ')}`);
+
+// Released means on the user's screen (Pane, 2026-10-29: 0.4.0 was announced while the app the user
+// judged by still installed 0.3.0). --consumers installs the React tarball into every app listed in
+// kiln.config.json `consumers` ([{ "path": "../my-app", "vendor": "vendor" }]) and typechecks it there;
+// the agent then screenshots each app in both themes before calling the release done.
+if (process.argv.includes('--consumers')) {
+  const react = readdirSync(OUT).filter((f) => f.endsWith('.tgz') && f.includes('react')).sort().pop();
+  for (const c of cfg.consumers ?? []) {
+    const app = path.resolve(ROOT, c.path);
+    const dest = path.join(app, c.vendor ?? 'vendor'); mkdirSync(dest, { recursive: true });
+    copyFileSync(path.join(OUT, react), path.join(dest, react));
+    const i = spawnSync('npm', ['install', `./${path.relative(app, path.join(dest, react))}`, '--no-audit', '--no-fund'], { cwd: app, stdio: 'inherit' });
+    const t = spawnSync('npx', ['tsc', '--noEmit'], { cwd: app, stdio: 'inherit' });
+    console.log(`${i.status || t.status ? '✗' : '✓'} ${c.path}: ${react} installed${t.status ? ', typecheck failed' : ', typechecks'}; now screenshot it in both themes`);
+  }
+  if (!(cfg.consumers ?? []).length) console.log('! no consumers listed in kiln.config.json; add the apps that use this system');
+}

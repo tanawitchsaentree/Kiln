@@ -20,6 +20,29 @@ import path from 'node:path';
 import { ROOT, sourceHash } from './config.mjs';
 
 const QUICK = process.argv.includes('--quick');
+// --changed: every step, but the browser steps only on the routes the changed files reach. Minutes
+// instead of an hour while working; recorded as kind "changed", which a milestone never accepts.
+const CHANGED = process.argv.includes('--changed');
+import { execSync } from 'node:child_process';
+function changedRoutes() {
+  const files = execSync('git status --porcelain', { cwd: ROOT, encoding: 'utf8' }).split('\n').map((l) => l.slice(3).trim()).filter(Boolean);
+  const slug = (n) => n.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+  const out = new Set(); let all = false;
+  for (const f of files) {
+    let m;
+    if ((m = f.match(/packages\/react\/src\/components\/(\w+)\//))) out.add(`/components/${slug(m[1])}`);
+    else if ((m = f.match(/apps\/docs\/src\/depth\/([\w-]+)\.tsx$/)) && !['StyleTab', 'UsageTab', 'subjects', 'layout', 'forms', 'types', 'index'].includes(m[1])) out.add(`/components/${m[1]}`);
+    else if (/^(apps\/lab|system\/(REVIEW|RETRO|STATE|NEXT|DECISIONS)|docs\/)/.test(f)) continue;
+    else all = true; // tokens, the shell, shared book code: everything can change
+  }
+  return all ? null : [...out];
+}
+if (CHANGED) {
+  const r = changedRoutes();
+  if (r && r.length) { process.env.KILN_ROUTES = r.join(','); console.log(`--changed: browser steps limited to ${r.join(', ')}`); }
+  else if (r) { console.log('--changed: nothing that reaches a page changed'); }
+  else console.log('--changed: tokens or shared files changed, so every route is checked');
+}
 const SYS = JSON.parse(readFileSync(path.join(ROOT, 'system', 'kiln.config.json'), 'utf8'));
 const pkg = (dir) => JSON.parse(readFileSync(path.join(ROOT, dir, 'package.json'), 'utf8')).name;
 const DOCS = pkg(SYS.docs?.app ?? 'apps/docs');
@@ -35,6 +58,8 @@ const STEPS = [
   ['barrel', ['node', 'tooling/generate-barrel.mjs', '--check'], { quick: true }],
   ['token-contract', ['node', 'tooling/kiln/token-contract.mjs'], { needs: ['tokens'], quick: true }],
   ['rationale', ['node', 'tooling/kiln/rationale.mjs'], { needs: ['tokens'], quick: true }],
+  ['i18n', ['node', 'tooling/kiln/i18n-lint.mjs'], { quick: true }],
+  ['treeshake', ['node', 'tooling/kiln/treeshake-probe.mjs'], { quick: true }],
   ['meta', ['node', 'tooling/kiln/meta.mjs'], { quick: true }],
   ['build', ['sh', '-c', `pnpm --filter ${REACT} build && pnpm --filter ${DOCS} build`], { needs: ['tokens', 'meta'], quick: true }],
   // the book typechecks against the built package's types, so it runs after the build (a fresh clone has no dist yet)
@@ -76,9 +101,9 @@ for (const [id, cmd, o] of STEPS) {
 }
 const after = sourceHash();
 const ok = steps.every((s) => s.status === 'pass') && before === after;
-const run = { kind: QUICK ? 'quick' : 'full', startedAt: started.toISOString(), finishedAt: new Date().toISOString(), sourceHash: after, sourceChanged: before !== after, ok, steps };
+const run = { kind: QUICK ? 'quick' : CHANGED ? 'changed' : 'full', routes: process.env.KILN_ROUTES?.split(',') ?? 'all', startedAt: started.toISOString(), finishedAt: new Date().toISOString(), sourceHash: after, sourceChanged: before !== after, ok, steps };
 mkdirSync(path.join(ROOT, 'system', 'reports'), { recursive: true });
-writeFileSync(path.join(ROOT, 'system', 'reports', `verify-${QUICK ? 'quick' : 'latest'}.json`), JSON.stringify(run, null, 2) + '\n');
+writeFileSync(path.join(ROOT, 'system', 'reports', `verify-${QUICK ? 'quick' : CHANGED ? 'changed' : 'latest'}.json`), JSON.stringify(run, null, 2) + '\n');
 
 console.log('\n' + steps.map((s) => `${s.status === 'pass' ? '✓' : s.status === 'skipped' ? '-' : '✗'} ${s.id}`).join('  '));
 if (before !== after) console.log('✗ source changed while verify ran, so this result describes code that no longer exists. Run again without editing.');

@@ -1,0 +1,15 @@
+{
+  "page": "foundation: materials",
+  "collectedAt": "2026-10-31",
+  "how": "h2/h3 headings of Apple HIG Materials (its JSON document) and Fluent 2 Material, fetched 2026-10-31; one topic per idea, merged across systems",
+  "sources": { "apple": "https://developer.apple.com/design/human-interface-guidelines/materials", "fluent": "https://fluent2.microsoft.design/material" },
+  "topics": [
+    { "id": "types", "topic": "The material types and what each is for", "from": ["fluent", "apple"] },
+    { "id": "solid", "topic": "An opaque material", "from": ["fluent"] },
+    { "id": "translucent", "topic": "A translucent material over content (acrylic, Liquid Glass)", "from": ["fluent", "apple"] },
+    { "id": "wallpaper", "topic": "A material tinted by the wallpaper behind the app (Mica)", "from": ["fluent"] },
+    { "id": "scrim", "topic": "A dimming layer behind transient surfaces (Smoke)", "from": ["fluent"] },
+    { "id": "legibility", "topic": "Material thickness and legibility of what sits on it", "from": ["apple"] },
+    { "id": "platform", "topic": "Platform and setting considerations (reduced transparency, performance)", "from": ["apple"] }
+  ]
+}

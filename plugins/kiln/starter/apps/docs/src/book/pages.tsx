@@ -12,6 +12,7 @@ import { COMPONENTS } from './components-data';
 import { GridLayoutPage } from './grid-page';
 import { ComponentPage, EVIDENCE_GROUPS, HISTORY, STATUS_LABEL, TABS } from './ComponentPage';
 import { TabRedirect } from './TabRedirect';
+import { StatesPage } from './states';
 import { PATTERN_DEPTH } from '../system/patterns';
 import { EXTRAS } from '../system/foundation-extras';
 import { GUIDES } from '../system/guides';
@@ -389,6 +390,7 @@ const BASE_PAGES: Record<string, () => ReactElement> = {
     [`/components/${c.slug}`, () => <TabRedirect to={`/components/${c.slug}/usage`} />] as const,
     ...TABS.map((t) => [`/components/${c.slug}/${t}`, () => <ComponentPage c={c} tab={t} />] as const),
   ])),
+  '/patterns/states': StatesPage,
   ...Object.fromEntries(Object.entries(PATTERN_DEPTH).map(([path, p]) => [path, () => <PatternDepthPage p={p} />])),
   '/accessibility': Accessibility,
   '/reference/tokens': Tokens,

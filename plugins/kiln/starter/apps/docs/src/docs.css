@@ -141,12 +141,14 @@ thead th { font-weight: var(--ds-type-weight-semibold); }
 /* every reading line is capped, wherever it sits (ledes, callouts, notes, list items) */
 main p, main li { max-inline-size: var(--ds-type-measure); }
 main td p, main [data-example-live] p { max-inline-size: none; }
+/* book prose rules skip anything inside a live component or example (Pane R-030: .prose ul and .prose a
+   restyled Pagination and Sidebar inside the gallery). G-LK1 measures it. */
 /* reading text: 16px / 1.6 (type.reading), the size Carbon, Material and Apple use for long-form docs */
-.prose p, .prose li, .page-head .lede p { font-size: var(--ds-type-reading); line-height: var(--ds-type-leading-reading); }
+.prose p:not(:is([data-component], [data-example-live]) *), .prose li:not(:is([data-component], [data-example-live]) *), .page-head .lede p { font-size: var(--ds-type-reading); line-height: var(--ds-type-leading-reading); }
 .page-head .lede p { font-size: var(--ds-type-emphasis); }
-.prose h3 { margin-block-start: var(--ds-gap-lg); font-size: var(--ds-type-emphasis); }
-.prose ul, .prose ol { display: flex; flex-direction: column; gap: var(--ds-gap-sm); margin: 0; }
-.prose a, .callout a { color: var(--ds-text-primary); text-decoration: underline; text-underline-offset: 3px; }
+.prose h3:not(:is([data-component], [data-example-live]) *) { margin-block-start: var(--ds-gap-lg); font-size: var(--ds-type-emphasis); }
+.prose ul:not(:is([data-component], [data-example-live]) *), .prose ol:not(:is([data-component], [data-example-live]) *) { display: flex; flex-direction: column; gap: var(--ds-gap-sm); margin: 0; }
+.prose a:not(:is([data-component], [data-example-live]) *), .callout a:not(:is([data-component], [data-example-live]) *) { color: var(--ds-text-primary); text-decoration: underline; text-underline-offset: 3px; }
 .heading-anchor { color: var(--ds-text-secondary); text-decoration: none; margin-inline-end: var(--ds-gap-md); font-weight: var(--ds-type-weight-regular); }
 .callout { padding: var(--ds-gap-xl) var(--ds-gap-inset); border-radius: var(--ds-corner-inner); background: var(--ds-surface-quiet); box-shadow: inset 0 0 0 var(--ds-width-hairline) var(--ds-line-ring); display: flex; flex-direction: column; gap: var(--ds-gap-sm); max-inline-size: var(--ds-type-measure); }
 .callout-title { font-weight: var(--ds-type-weight-semibold); }
@@ -215,7 +217,7 @@ main a:not([class]) { text-decoration: underline; text-underline-offset: 3px; te
 .category-grid .card-link { color: var(--ds-text-primary); font-size: var(--ds-type-emphasis); font-weight: var(--ds-type-weight-semibold); }
 .pkg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: var(--ds-gap-2xl); }
 
-.prose p { margin: 0; }
+.prose p:not(:is([data-component], [data-example-live]) *) { margin: 0; }
 
 .demo-full { inline-size: 100%; }
 .grid-cell { padding: var(--ds-gap-lg); align-items: center; }
@@ -415,19 +417,18 @@ main a, .on-page a, .rail a { color: var(--ds-text-primary); }
 .why-line { font-size: var(--ds-type-label); }
 @media (max-width: 860px) { .gx-pair-row, .gx-span-row { grid-template-columns: minmax(0, 1fr); } }
 
-/* Field: the plain ground for diagrams and layout demos. A faint accent glow over fine construction
-   lines on the 4px grid (minor every 8px, major every 32px). Theme-aware through the field tokens;
-   quiet enough that the demo stays the subject. */
+/* Field: the plain ground for diagrams and layout demos. Fine construction lines on the 4px grid
+   (minor every 8px, major every 32px) over the field base. Theme-aware through the field tokens; quiet
+   enough that the demo stays the subject. The two accent glows it once carried were a mesh used as a
+   wallpaper, which G-MS1 refuses (user rule, 2026-10-31). */
 .stage-field {
   background-color: var(--ds-field-base);
   background-image:
-    radial-gradient(60% 80% at 15% 10%, var(--ds-field-glow), transparent 70%),
-    radial-gradient(50% 70% at 90% 100%, var(--ds-field-glow-soft), transparent 70%),
     linear-gradient(var(--ds-field-line-major) var(--ds-width-hairline), transparent var(--ds-width-hairline)),
     linear-gradient(90deg, var(--ds-field-line-major) var(--ds-width-hairline), transparent var(--ds-width-hairline)),
     linear-gradient(var(--ds-field-line) var(--ds-width-hairline), transparent var(--ds-width-hairline)),
     linear-gradient(90deg, var(--ds-field-line) var(--ds-width-hairline), transparent var(--ds-width-hairline));
-  background-size: 100% 100%, 100% 100%, 32px 32px, 32px 32px, 8px 8px, 8px 8px;
+  background-size: 32px 32px, 32px 32px, 8px 8px, 8px 8px;
   background-position: center;
   box-shadow: inset 0 0 0 var(--ds-width-hairline) var(--ds-line-divider);
 }
@@ -472,3 +473,20 @@ main a, .on-page a, .rail a { color: var(--ds-text-primary); }
   transform: translate(-50%, -50%);
 }
 [dir='rtl'] :is(.seg-btn, .copy-btn, .menu-btn, .brand-link)::after { transform: translate(50%, -50%); }
+
+/* the state matrix (/patterns/states, G-SV1): one raised stage per cell, so alike cells rasterise alike */
+.state-row { display: flex; flex-direction: column; gap: var(--ds-gap-sm); }
+.state-name { font-size: var(--ds-type-emphasis); }
+.state-cells { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr)); gap: var(--ds-gap-md); }
+.state-cell { display: flex; flex-direction: column; gap: var(--ds-gap-sm); margin: 0; min-inline-size: 0; }
+.state-stage { position: relative; display: flex; align-items: flex-start; padding: var(--ds-gap-lg); border-radius: var(--ds-corner-media); background: var(--ds-surface-raised); min-inline-size: 0; overflow-wrap: anywhere; overflow-x: clip; }
+.state-stage > * { min-inline-size: 0; max-inline-size: 100%; }
+.state-cell figcaption { font-size: var(--ds-type-caption); color: var(--ds-text-secondary); }
+
+/* the Appearance menu (book/appearance.tsx): one top-bar control for backdrop, material and brand */
+.tb-appearance { position: relative; }
+.tb-appearance > summary { cursor: pointer; list-style: none; display: inline-flex; gap: var(--ds-gap-sm); align-items: center; padding: var(--ds-gap-xs) var(--ds-gap-md); border-radius: var(--ds-corner-round); box-shadow: inset 0 0 0 var(--ds-width-hairline) var(--ds-line-ring); font-size: var(--ds-type-label); }
+.tb-appearance > summary::-webkit-details-marker { display: none; }
+.tb-appearance-body { position: absolute; inset-inline-end: 0; inset-block-start: calc(100% + var(--ds-gap-sm)); z-index: 30; display: flex; flex-direction: column; gap: var(--ds-gap-md); inline-size: min(20rem, 90vw); padding: var(--ds-gap-lg); border-radius: var(--ds-corner-inner); background: var(--ds-surface-raised); box-shadow: inset 0 0 0 var(--ds-width-hairline) var(--ds-line-ring); }
+.tb-appearance-body p { margin: 0; font-size: var(--ds-type-caption); }
+.bare-subject { display: contents; }

@@ -3,9 +3,9 @@
 // edit here. A value with no token is shown as a gap, because a raw value in a component is a bug.
 import type { ReactNode } from 'react';
 import { Stage } from '../book/kit';
-import { OnSurface, SUBJECTS } from './subjects';
+import { BareHost, OnSurface, SUBJECTS } from './subjects';
 
-const Wrap = ({ bare, children }: { bare?: boolean; children: ReactNode }) => (bare ? <div className="demo-row spec-row">{children}</div> : <OnSurface>{children}</OnSurface>);
+const Wrap = ({ bare, children }: { bare?: boolean | 'layout'; children: ReactNode }) => (bare ? <div className="demo-row spec-row" data-bare={bare === 'layout' ? 'layout' : 'surface'}>{children}</div> : <OnSurface>{children}</OnSurface>);
 
 type Cell = { value: string; token: string | null };
 type Target = { key: string; theme: string | null; states: Record<string, Record<string, Cell>> };
@@ -102,7 +102,7 @@ export function StyleTab({ name, kinds, sizes, backdrops }: { name: string; kind
             rows={(sizes.length ? sizeKeys : [kindKeys[0] ?? {}]).map((p) => { const v = find(keyOf(p), 'dark')?.states.default ?? {}; return [p.size ?? 'default', v['min-height']?.value && v['min-height'].value !== '0px' ? v['min-height'] : v.height, v['padding-inline-start'], v['column-gap'], v['border-top-left-radius'], v['icon-size']]; })} />
           {subject && <div className="redlines">{(sizes.length ? sizeKeys : [kindKeys[0] ?? {}]).map((p) => { const v = find(keyOf(p), 'dark')?.states.default ?? {}; return (
             <figure key={keyOf(p)} className="redline" data-example="">
-              <Stage backdrop="field"><div className="redline-host">{subject.bare ? subject.render(p) : <OnSurface>{subject.render(p)}</OnSurface>}
+              <Stage backdrop="field"><div className="redline-host">{subject.bare ? <BareHost bare={subject.bare}>{subject.render(p)}</BareHost> : <OnSurface>{subject.render(p)}</OnSurface>}
                 <span className="rl rl-h" aria-hidden="true">{v['min-height']?.value !== '0px' ? v['min-height']?.value : v.height?.value}</span>
                 <span className="rl rl-p" aria-hidden="true">{v['padding-inline-start']?.value}</span>
               </div></Stage>

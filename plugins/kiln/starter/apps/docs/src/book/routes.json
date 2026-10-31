@@ -127,6 +127,10 @@
       "title": "Patterns",
       "pages": [
         {
+          "path": "/patterns/states",
+          "title": "States"
+        },
+        {
           "path": "/patterns/common-actions",
           "title": "Common actions"
         },

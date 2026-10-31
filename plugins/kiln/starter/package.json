@@ -16,6 +16,7 @@
     "gate:selftest": "node tooling/hooks.selftest.mjs && node tooling/no-hardcode-lint.selftest.mjs && node tooling/contrast-check.selftest.mjs && node tooling/generate-barrel.selftest.mjs && node tooling/pack-verify.selftest.mjs && node tooling/kiln/rationale.selftest.mjs",
     "verify": "node tooling/kiln/verify.mjs",
     "verify:quick": "node tooling/kiln/verify.mjs --quick",
+    "verify:changed": "node tooling/kiln/verify.mjs --changed",
     "milestone": "node tooling/kiln/milestone.mjs",
     "conformance": "nice -n 19 node tooling/kiln/conformance.mjs",
     "gates": "nice -n 19 node tooling/kiln/gates.mjs --report",

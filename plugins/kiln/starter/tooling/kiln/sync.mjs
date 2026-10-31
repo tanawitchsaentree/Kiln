@@ -16,7 +16,8 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const sha = (f) => createHash('sha256').update(readFileSync(f)).digest('hex');
-const engineFiles = (dir) => readdirSync(dir).filter((n) => n.endsWith('.mjs'));
+// engine code and its own data files (milestone-menu.json); the manifest itself is written, never copied
+const engineFiles = (dir) => readdirSync(dir).filter((n) => n.endsWith('.mjs') || (n.endsWith('.json') && n !== 'ENGINE.json'));
 
 if (process.argv.includes('--check')) {
   const manifest = path.join(HERE, 'ENGINE.json');

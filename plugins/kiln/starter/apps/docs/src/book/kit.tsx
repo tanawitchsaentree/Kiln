@@ -103,7 +103,7 @@ export function Stage({ children, plain, className = '', backdrop }: { children:
   const b = backdropById(backdrop === 'field' || (backdrop !== 'scene' && chosen === 'field') ? 'field' : chosen);
   const field = b.id === 'field';
   return (
-    <div className={`example-live${plain ? ' plain' : ''}${field ? ' stage-field' : ''} ${b.className ?? ''} ${className}`} data-example-live="" data-surface="" data-backdrop={b.id} style={b.image ? { backgroundImage: `url(${b.image})` } : undefined}>
+    <div className={`example-live${plain ? ' plain' : ''}${field ? ' stage-field' : ''} ${b.className ?? ''} ${className}`} data-example-live="" data-surface="" data-backdrop={b.id} data-backdrop-kind={b.kind} style={b.image ? { backgroundImage: `url(${b.image})` } : undefined}>
       <StageWrap backdrop={b}>{children}</StageWrap>
     </div>
   );

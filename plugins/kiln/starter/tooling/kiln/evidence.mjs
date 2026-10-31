@@ -14,13 +14,14 @@
 import { writeFileSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 import { chromium } from 'playwright';
-import { docsConfig, routes, url } from './config.mjs';
+import { docsConfig, routes, url, pool, routeFilter } from './config.mjs';
 import { serveDist } from './serve-dist.mjs';
 import { measurePageText } from './text-contrast.mjs';
 
 const C = docsConfig();
 const K = C.contrast;
-const ROUTES = routes(C);
+const ROUTES = routeFilter(routes(C));
+const PAR = Math.max(1, Number(C.parallel ?? 1)); // more than 1 only on a machine with room to spare (2026-10-29: 3 browsers at load 96 ran all night)
 const SCENES = C.scenes.length ? C.scenes : [null];
 const MODES = {
   normal: {},
@@ -43,6 +44,8 @@ async function open(mode, href) {
   if (opt.features) await (await ctx.newCDPSession(page)).send('Emulation.setEmulatedMedia', { features: opt.features });
   await page.goto(href, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
+  // folded sections are measured open, as a reader who opens them sees them
+  await page.evaluate(() => { for (const d of document.querySelectorAll('details')) d.open = true; });
   const active = await page.evaluate((m) => ({ normal: true, 'reduced-transparency': matchMedia('(prefers-reduced-transparency: reduce)').matches, 'forced-colors': matchMedia('(forced-colors: active)').matches })[m], mode);
   if (!active) throw new Error(`mode ${mode} did not take effect in this browser`);
   return { page, close: () => ctx.close() };
@@ -69,7 +72,8 @@ try {
         for (const g of K.gatingGroups) for (const t of r.all.filter((x) => x.group === g && (x.min == null || x.min < x.required))) record(`[${mode}] harness ${key}/${g}`, t);
       }
       const agg = (result.docsPage[mode][key] = { textElements: 0, failures: 0, pages: 0 });
-      if (docsScenes(mode).includes(scene)) for (const route of ROUTES) {
+      // pages are measured PAR at a time, each in its own context, so a set takes about 1/PAR as long
+      if (docsScenes(mode).includes(scene)) await pool(ROUTES, PAR, async (route) => {
         const d = await open(mode, url(srv.base, route, { theme, scene }, C));
         const dr = await measurePageText(d.page, K.threshold);
         await d.close();
@@ -78,7 +82,7 @@ try {
         // progress inside a set, so a long run never looks stuck
         if (agg.pages % 25 === 0) console.log(`  … ${mode} ${key} ${agg.pages}/${ROUTES.length} pages, ${agg.failures} failing so far`);
         for (const t of dr.failures.filter((x) => !K.infoGroups.includes(x.group))) { if (!isExcepted(t)) agg.failures += 1; record(`[${mode}] docs ${route} ${key}`, t); }
-      }
+      });
       console.log(`${mode.padEnd(21)} ${key.padEnd(14)} ${K.harness ? `harness ${K.gatingGroups.map((g) => `${g} ${result.harness[mode][key][g].failures}/${result.harness[mode][key][g].texts}`).join(' · ')} | ` : ''}docs ${agg.failures}/${agg.textElements} over ${agg.pages} pages`);
     }
   }
@@ -95,7 +99,17 @@ for (const [mode, m] of Object.entries(result.harness)) for (const [key, s] of O
 result.summary = { gatingChecks: total, gatingFailures: result.failures.length, excepted: result.excepted.length, informational };
 if (total === 0) result.failures.push('NOTHING MEASURED, so nothing was proven');
 
-for (const out of [path.join(C.abs(C.app), 'public', 'evidence.json'), path.join(C.root, 'system', 'reports', `evidence-${result.generatedAt.slice(0, 10)}.json`)]) {
+// A run limited by KILN_ROUTES or KILN_SCENES measured part of the book. It must never replace the published
+// full result (public/evidence.json is what the book shows): it goes to a partial report only, marked as
+// such, and milestone.mjs refuses it. (Pane: a quick partial run overwrote the book's full evidence.)
+result.partial = Boolean((process.env.KILN_ROUTES ?? '').trim() || (process.env.KILN_SCENES ?? '').trim());
+if (result.partial) result.limitedTo = { routes: process.env.KILN_ROUTES || null, scenes: process.env.KILN_SCENES || null };
+const day = result.generatedAt.slice(0, 10);
+const outs = result.partial
+  ? [path.join(C.root, 'system', 'reports', `evidence-partial-${day}.json`)]
+  : [path.join(C.abs(C.app), 'public', 'evidence.json'), path.join(C.root, 'system', 'reports', `evidence-${day}.json`)];
+if (result.partial) console.log(`partial run (${[result.limitedTo.routes && 'KILN_ROUTES', result.limitedTo.scenes && 'KILN_SCENES'].filter(Boolean).join(' + ')}): written to system/reports/evidence-partial-${day}.json only; public/evidence.json is left as it was`);
+for (const out of outs) {
   mkdirSync(path.dirname(out), { recursive: true });
   writeFileSync(out, JSON.stringify(result, null, 2) + '\n');
 }

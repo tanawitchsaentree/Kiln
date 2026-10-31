@@ -119,8 +119,13 @@ try {
             if (!token && (p === 'line-height' || p === 'letter-spacing') && fs) { const ratio = String(+(parseFloat(v) / fs).toFixed(3)); token = pick(ratio, p) ?? pick(ratio + 'em', p); }
             // a shadow composed from several tokens (focus ring and halo) names the ones whose colours it carries
             if (!token && p === 'box-shadow') { const parts = Object.keys(map).filter((k) => /^rgba?\\(/.test(k) && v.includes(k)).map((k) => pick(k, p)).filter(Boolean); if (parts.length) token = [...new Set(parts)].join(' + '); }
+            // a colour the content brings (a swatch in a colour picker, a chart's data hue) is set through a
+            // custom property the app fills; it is named as content, never left as a missing token (Pane, 2026-10-30)
+            if (!token && /color$/.test(p) && el.closest('[data-not-token]')) token = 'content colour';
             r[p] = { value: v, token };
           }
+          // a part whose look is its size (a spacer, a divider) is described by the size, when a token sets it
+          for (const p of ['block-size', 'inline-size']) { const v = cs.getPropertyValue(p).trim(); const token = pick(v, p) ?? pick(v); if (token) r[p] = { value: v, token }; }
           const icon = el.querySelector('svg'); if (icon) { const ic = getComputedStyle(icon); r['icon-size'] = { value: ic.width, token: pick(ic.width) }; }
           return { theme: host.dataset?.specTheme ?? null, r };
         }`,

@@ -23,6 +23,9 @@ export function docsConfig() {
   const file = path.join(ROOT, 'system', 'kiln.config.json');
   const sys = existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')).docs ?? {} : {};
   const c = { ...DEFAULTS, ...sys, contrast: { ...DEFAULTS.contrast, ...(sys.contrast ?? {}) }, tone: { ...DEFAULTS.tone, ...(sys.tone ?? {}) } };
+  // KILN_DIST measures a snapshot of the build (so long runs do not block rebuilds); KILN_SCENES picks scenes
+  if (process.env.KILN_DIST) c.dist = process.env.KILN_DIST;
+  if (process.env.KILN_SCENES) c.scenes = process.env.KILN_SCENES.split(',').map((x) => x.trim()).filter(Boolean);
   const abs = (p) => (p ? path.resolve(ROOT, p) : null);
   return { ...c, abs, root: ROOT };
 }
@@ -41,6 +44,10 @@ export function url(base, route, { theme, scene } = {}, c = docsConfig()) {
   const q = new URLSearchParams();
   if (scene) q.set(c.sceneParam, scene);
   if (theme) q.set(c.themeParam, theme);
+  // KILN_BRAND measures the book under one white-label brand (a system that has brands names its param)
+  if (process.env.KILN_BRAND && c.brandParam) q.set(c.brandParam, process.env.KILN_BRAND);
+  // KILN_MATERIAL measures the book in one material (glass or solid) when the system names its param
+  if (process.env.KILN_MATERIAL && c.materialParam) q.set(c.materialParam, process.env.KILN_MATERIAL);
   const s = q.toString();
   return `${base}${route}${s ? `${route.includes('?') ? '&' : '?'}${s}` : ''}`;
 }
@@ -63,4 +70,19 @@ export function sourceHash(root = ROOT) {
   };
   for (const d of ['packages', 'apps', 'system', 'tooling']) walk(path.join(root, d));
   return h.digest('hex').slice(0, 16);
+}
+
+// Run fn over items with at most n in flight; results keep the input order.
+export async function pool(items, n, fn) {
+  const out = new Array(items.length); let next = 0;
+  await Promise.all(Array.from({ length: Math.min(Math.max(1, n), items.length) }, async () => {
+    while (next < items.length) { const k = next++; out[k] = await fn(items[k], k); }
+  }));
+  return out;
+}
+// KILN_ROUTES=/components/chip,/foundations/color limits a browser step to those routes and their tabs,
+// for a fast check while working. A run limited this way is marked partial and proves nothing about the rest.
+export function routeFilter(all) {
+  const want = (process.env.KILN_ROUTES ?? '').split(',').map((x) => x.trim()).filter(Boolean);
+  return want.length ? all.filter((r) => want.some((w) => r === w || r.startsWith(`${w}/`))) : all;
 }

@@ -1,0 +1,17 @@
+{
+  "page": "foundation: white-label brands",
+  "collectedAt": "2026-10-31",
+  "how": "h2/h3 headings of MUI's Theming page and Atlassian's Design tokens page (what are themes), fetched 2026-10-31; one topic per idea, merged across systems; API reference headings folded into the idea they document",
+  "sources": { "mui": "https://mui.com/material-ui/customization/theming/", "atlassian": "https://atlassian.design/foundations/tokens/design-tokens" },
+  "topics": [
+    { "id": "what", "topic": "What a theme or brand is and what it changes", "from": ["atlassian"] },
+    { "id": "variables", "topic": "Which values a theme may configure", "from": ["mui"] },
+    { "id": "custom", "topic": "Custom variables beyond the defaults", "from": ["mui"] },
+    { "id": "provider", "topic": "Applying a theme to an app", "from": ["mui"] },
+    { "id": "nesting", "topic": "Nesting one theme inside another", "from": ["mui"] },
+    { "id": "cssvars", "topic": "Themes as CSS custom properties and reading them in a component", "from": ["mui"] },
+    { "id": "builder", "topic": "A tool that builds or previews a theme", "from": ["mui"] },
+    { "id": "types", "topic": "Types for theme files", "from": ["mui"] },
+    { "id": "contrast", "topic": "Keeping contrast accessible in a theme", "from": ["mui"] }
+  ]
+}

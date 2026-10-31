@@ -52,3 +52,37 @@ only if `allowed_patterns` names it with a reason from the derivation.
 They go in `rationale.pendingDerivation` in `system/kiln.config.json`. The gate reports them on every
 run and the docs mark them "awaiting derivation". The list may only shrink: a component leaves it by
 going through steps 1–5, never by having its reasons rewritten.
+
+## Rules every derivation checks before the pick
+
+These three came from the first full build (Pane). Each one cost a round of redesign because no
+derivation asked about it. State in step 3 how the component meets each rule that applies to it.
+
+### A highlight is the shape's own edge
+
+A sheen, streak, rim or gloss is drawn as the shape's own border or edge gradient, faded toward the
+sides, so it follows any curve the shape has. A separate straight line laid across the top only fits
+a wide flat edge. On a disc or at the round end of a short pill the top edge is an arc, and a straight
+line hangs in the air above it. Check the highlight at 3× zoom on the roundest member of the family
+(an icon button, a chip) before the pick. (Pane RETRO R-021: the 1px streak drawn for wide pills was
+copied onto IconButton and floated above its curve.)
+
+### Status is a glyph and a word
+
+A status, tone or severity is never told by colour alone. Every status carries a glyph with its own
+shape and the tone word in text (visually or as the first words read out), so it survives greyscale,
+colour blindness and a brand swap that changes the hue (WCAG 1.4.1). A coloured dot or a tinted edge
+on its own does not count. When a family already has status glyphs (a Banner), every member reuses
+them. (Pane RETRO R-026: Toast marked info, positive and critical with a coloured dot only, breaking
+the system's own status rule.)
+
+### A component with its own surface carries the whole material
+
+Ask what happens when a product drops the component straight on the scene with no container. If
+the component paints a surface of its own (a table, a list, a listbox, radio cards), that surface is
+the whole material on its own: the blur, dimming and body of the level-1 glass on a scene, and the
+inner level only inside a container that already supplies it (`[data-surface]`, a dialog). A tint that
+assumes a card behind it leaves its words on a raw photo. A component with no surface of its own
+says so and never draws text on the scene without one. Check it on the brightest photo scene with
+no card around it. (Pane RETRO R-025: Table and List rows on a photo failed about 500 contrast
+checks per scene until each carried its own glass. Gate G-BR1 now measures this.)

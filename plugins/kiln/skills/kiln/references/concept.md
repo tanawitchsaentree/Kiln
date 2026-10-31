@@ -24,6 +24,18 @@ colour, type, motion, interaction**. If a principle does not touch an axis, writ
 ("type: not affected, because legibility is set by P2"). An axis no principle speaks to is a gap:
 any value chosen there would be taste.
 
+**A light model, for any system with material** (glass, paper, metal, anything with depth). Say where
+the light comes from and how it lands on each kind of thing: a raised surface, a recess, a chosen item,
+the loud action, a disabled part. Every component's derivation then states how each of its parts is lit
+(`derivation[].axis: "depth"`). Without it depth is decided part by part, and the parts disagree.
+(Pane, 2026-10-29: the rim was drawn from the top left on cards and buttons only; most atoms had no
+light at all, and the user showed a reference where one light from above lights every atom alike.) Then say what **emits** as well as what reflects: in a dark theme a material system usually wants a few parts to give off light, and "every white thing glows" is the habit to avoid. Name the categories by meaning (the promoted action; on or an amount; now) and the ones that never emit (text, icons, edges, chosen surfaces, held objects, status colours, disabled), give each a token, and mark the parts with `data-glow` so G-GL1 can measure them. (Pane, 2026-10-29, D-027.)
+
+**A hue is a decision, not a default.** A principle that names a brand colour carries it into every
+derivation that quotes it. Name the hue only if the concept needs it, and say where it may appear.
+(Pane: "one ink and one blue" in P1 kept the blue alive through three derivation rounds the user then
+rejected.)
+
 ```markdown
 ### P3 Things settle
 Objects in the scene have weight; they arrive and come to rest instead of snapping.

@@ -106,11 +106,12 @@ export async function measurePageText(page, threshold = 4.5) {
   for (let y = 0; y < height; y += vh) {
     // behavior 'instant' — the docs set scroll-behavior: smooth, and measuring rects mid-animation
     // then screenshotting after it settles misaligns every sample (it read mullion pixels as "text bg").
-    const at = await page.evaluate((top) => { scrollTo({ top, behavior: 'instant' }); return scrollY; }, y);
-    if (Math.abs(at - Math.min(y, height - vh)) > 1) throw new Error(`scroll landed at ${at}, wanted ${y}`);
+    // the page can grow after it was measured (a lazy image, a font), so the bottom is read again here
+    const [at, max] = await page.evaluate((top) => { scrollTo({ top, behavior: 'instant' }); return [scrollY, document.documentElement.scrollHeight - innerHeight]; }, y);
+    if (Math.abs(at - Math.min(y, Math.max(max, height - vh))) > 1 && Math.abs(at - Math.min(y, max)) > 1) throw new Error(`scroll landed at ${at}, wanted ${Math.min(y, max)}`);
     await page.waitForTimeout(50);
     const items = await collect();
-    await page.addStyleTag({ content: '[data-ev-doc] { color: transparent !important; forced-color-adjust: none !important; } * { text-decoration-line: none !important; }' }).then((h) => h.evaluate((s) => (s.id = 'ev-hide')));
+    await page.addStyleTag({ content: '[data-ev-doc] { color: transparent !important; forced-color-adjust: none !important; } * { text-decoration-line: none !important; text-overflow: clip !important; }' }).then((h) => h.evaluate((s) => (s.id = 'ev-hide')));
     await page.waitForTimeout(50);
     // one retry on a screenshot timeout (a loaded machine, not a page problem); a second failure throws
     const shot = () => page.screenshot({ timeout: 90000 });

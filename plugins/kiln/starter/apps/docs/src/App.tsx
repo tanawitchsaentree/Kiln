@@ -3,8 +3,7 @@ import { PAGES, PARTS, navigate, pageOf, useRoute } from './book/router';
 import { Link, SceneContext, VerifyContext, type Conformance, type Evidence } from './book/kit';
 import { PAGE_COMPONENTS } from './book/pages';
 import { plannedWaves } from './book/catalog';
-import { BACKDROPS, backdropById } from './system/backdrops';
-import { Choice } from './system/controls';
+import { AppearanceMenu, useAppearance } from './book/appearance';
 import { NAME } from './system/content';
 
 // Verification results ship inside the bundle (the verify run rebuilds the docs after writing them),
@@ -30,11 +29,20 @@ export function App() {
   const path = useRoute();
   const evidence = validEvidence(verifyFile<Evidence>('evidence'));
   const conformance = validConformance(verifyFile<Conformance>('conformance'));
-  const [scene, setScene] = useState(backdropById(new URLSearchParams(location.search).get('scene') ?? BACKDROPS[0].id).id);
+  // backdrop (and material or brand, when the system has them): URL only for non-defaults (G-ST1)
+  const [look, setLook] = useAppearance();
+  const scene = look.scene;
   const [q, setQ] = useState('');
   const [menuOpen, setMenuOpen] = useState(false);
-  // Theme: system follows prefers-color-scheme; the choice is stored; ?theme= overrides (tests).
-  const [themePref, setThemePref] = useState<'system' | 'light' | 'dark'>(() => (new URLSearchParams(location.search).get('theme') as 'light' | 'dark' | null) ?? ((localStorage.getItem('ds-theme') as 'system' | 'light' | 'dark' | null) ?? 'system'));
+  // Theme: system follows prefers-color-scheme. A chosen theme is stored; the default (system) never is,
+  // and ?theme= overrides for tests. Unknown values in either place fall back to system (G-ST1).
+  const asPref = (v: string | null) => (v === 'light' || v === 'dark' || v === 'system' ? v : null);
+  const [themePref, setThemePref] = useState<'system' | 'light' | 'dark'>(() => asPref(new URLSearchParams(location.search).get('theme')) ?? asPref(localStorage.getItem('ds-theme')) ?? 'system');
+  // an unknown ?theme= falls back (above) and leaves the address on the first frame
+  useEffect(() => {
+    const u = new URL(location.href);
+    if (u.searchParams.has('theme') && !asPref(u.searchParams.get('theme'))) { u.searchParams.delete('theme'); history.replaceState(null, '', u); }
+  }, []);
   const [systemLight, setSystemLight] = useState(() => matchMedia('(prefers-color-scheme: light)').matches);
   useEffect(() => {
     const mq = matchMedia('(prefers-color-scheme: light)');
@@ -43,7 +51,7 @@ export function App() {
     return () => mq.removeEventListener('change', on);
   }, []);
   const theme = themePref === 'system' ? (systemLight ? 'light' : 'dark') : themePref;
-  useLayoutEffect(() => { document.documentElement.dataset.theme = theme; localStorage.setItem('ds-theme', themePref); }, [theme, themePref]);
+  useLayoutEffect(() => { document.documentElement.dataset.theme = theme; if (themePref === 'system') localStorage.removeItem('ds-theme'); else localStorage.setItem('ds-theme', themePref); }, [theme, themePref]);
   const menuButton = useRef<HTMLButtonElement>(null);
   const firstRender = useRef(true);
 
@@ -65,11 +73,6 @@ export function App() {
   }, [menuOpen]);
   const onPage = useOnThisPage(path);
 
-  useEffect(() => {
-    const u = new URL(location.href);
-    u.searchParams.set('scene', scene);
-    history.replaceState(null, '', u);
-  }, [scene]);
   useEffect(() => {
     const pg = pageOf(path);
     const tab = pg?.tabs && path !== pg.path ? path.slice(pg.path.length + 1) : null;
@@ -98,9 +101,7 @@ export function App() {
                 <button key={t} type="button" className="seg-btn" aria-pressed={t === themePref} data-theme-value={t} onClick={() => setThemePref(t)}>{t[0].toUpperCase() + t.slice(1)}</button>
               ))}
             </div>
-            <div className="topbar-scene" data-scene-control=""><span className="topbar-scene-label" aria-hidden="true">Demo backdrop</span>
-              <Choice hideLabel label="Demo backdrop" value={scene} onChange={setScene} options={BACKDROPS.map((b) => [b.id, b.label] as [string, string])} />
-            </div>
+            <AppearanceMenu look={look} onChange={setLook} />
           </div>
           <button ref={menuButton} type="button" className="menu-btn" data-menu-toggle="" aria-expanded={menuOpen} aria-controls="book-nav" onClick={() => setMenuOpen(!menuOpen)}>{menuOpen ? 'Close' : 'Menu'}</button>
         </header>

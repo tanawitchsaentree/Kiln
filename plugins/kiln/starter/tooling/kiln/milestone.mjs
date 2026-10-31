@@ -8,7 +8,7 @@
 //       every theme, the docs book at full depth, one-package install, a full verify green on the code
 //       that is on disk now, and wave 1 (layout + atoms, including the controls the docs need) done.
 //
-// Usage: node tooling/kiln/milestone.mjs [M1]
+// Usage: node tooling/kiln/milestone.mjs [M1]   (also prints the milestone's "still missing" menu)
 import { readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { ROOT, docsConfig, componentPages, sourceHash } from './config.mjs';
@@ -39,6 +39,12 @@ need(gates && !gates.partial, 'docs gates ran in full (no --only)', gates?.parti
 const advRed = (gates?.results ?? []).filter((r) => !r.ok && r.id in (gates.advisory ?? {}));
 need(gates && !advRed.length, 'no advisory gate is still red', advRed.map((r) => `${r.id} (${gates.advisory[r.id]})`).join('; '));
 need(!Object.keys(C.advisory ?? {}).length, 'docs.advisory is empty', Object.keys(C.advisory ?? {}).join(', '));
+// the book's published measurements are whole runs: a KILN_ROUTES/KILN_SCENES run writes a partial report
+// only, and a conformance file merged from limited runs must hold no result older than its component
+const evidence = json(path.join(C.abs(C.app), 'public', 'evidence.json'));
+need(evidence && !evidence.partial, 'the published evidence is a full run (not KILN_ROUTES or KILN_SCENES)', evidence ? (evidence.partial ? 'partial run' : '') : 'public/evidence.json missing');
+const conf = json(path.join(C.abs(C.app), 'public', 'conformance.json'));
+need(conf && !conf.partial && !conf.stale, 'conformance is a full run with no stale result', conf ? [conf.partial && 'merged from a limited run', conf.stale && `${conf.stale} stale checks`].filter(Boolean).join(', ') : 'public/conformance.json missing');
 
 // 2. The system is its own: no starter seed or placeholder left.
 need(SYS.tokens?.allowSeed === false, 'tokens.allowSeed is false (every token has this system’s own reason)');
@@ -76,4 +82,12 @@ if (SYS.autonomy?.picks === 'agent') {
 for (const r of rows) console.log(`${r.ok ? '✓' : '✗'} ${r.what}${r.detail ? ` — ${r.detail}` : ''}`);
 const bad = rows.filter((r) => !r.ok).length;
 console.log(`\n${bad ? '✗' : '✓'} milestone ${M}: ${rows.length - bad}/${rows.length}${bad ? ', not done' : ', done. Hand the user system/REVIEW.md and the book.'}`);
+// What is still missing against the benchmark: the menu for this milestone (docs/MILESTONES.md in kiln,
+// milestone-menu.json here). The user ticks what the next milestone should take on; the agent writes the
+// ticked items into BACKLOG.md and system/NEXT.md. Printed every run, done or not.
+const MENU = json(path.join(path.dirname(new URL(import.meta.url).pathname), 'milestone-menu.json'));
+if (MENU?.[M]?.length) {
+  console.log(`\nStill missing against the benchmark after ${M}. Tick what comes next:`);
+  for (const item of MENU[M]) console.log(`  [ ] ${item}`);
+}
 process.exit(bad ? 1 : 0);

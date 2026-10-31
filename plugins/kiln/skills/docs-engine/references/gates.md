@@ -209,6 +209,96 @@ page's ambient background.
 **Gate-Proof:** render one raw `<table>` bypassing the shared `DocsTable`/`table`-override
 component on a real page; confirm the check flags the missing class/header treatment; revert.
 
+## Engine gates (tooling/engine/gates.mjs)
+
+The engine runs about forty more gates than this file defines; their one-line definitions are the
+header comment of `tooling/engine/gates.mjs`, which is the source of truth. The two below were added
+from Pane on 2026-10-29 and are spelled out because both failures passed every other gate.
+
+### G-IN1 — text clears its control's edge
+On every Code page, every line of text inside a control-sized bounded shape (20–72px tall, a drawn
+border, shadow or fill, radius ≥4px) sits at least max(8px, half the end radius) from the shape's
+inline edges; typed text in a bounded field is checked through its padding (centred cells such as
+PIN digits are skipped). Gate Proof: set an InputGroup's end padding to gap-xs with a text suffix;
+the gate names the suffix and its distance.
+
+### G-ST1 — the address holds only choices
+Opening `/` with no query must end with no query: the app never writes a default into the URL.
+Opening it with unknown values for the theme and scene parameters must render, fall back to the
+defaults and drop both values. Gate Proof: write the current theme into the URL on load; the gate
+names the parameter.
+
+### G-RH1 — separate steps stand apart
+On every component page, the nearest block above and below every demo stage and every tab bar is
+measured: a separate step (a table, a list, code that is not the stage's own, another stage, the
+controls) stands at least 24px off, an intro paragraph 16px, and the stage's own heading, caption,
+legend or code 8px. Watch for a details element: it does not lay its content out as flex, so put
+the gap on a wrapper inside it. Gate Proof: set the live demo's gap to 8px; the gate names each pair.
+
+### G-GL1 — glow is declared and measured
+On every Code page, in both themes: any part in a stage with a light outer shadow (blur ≥6px,
+alpha ≥0.15) must sit in a `[data-glow]` part in the dark theme and must not exist in the light
+theme; text with a light blurred halo fails in dark; no glow reaches beyond 32px (blur + spread).
+Each declared part that is on (not unchecked or disabled) is screenshotted with its glow on and off:
+the ring 2–6px outside must be lighter by strong 1.25:1, soft or mark 1.15:1, and at 32–38px the
+two shots must match within 1.03:1. Gate Proof: remove `data-glow` from a glowing part, or drop a
+soft glow to 10% white; the gate names the part and the measured step.
+
+### G-SL1 — a slider has room and holds still
+On every component page, every enabled slider is focused and taken to Home and End: it must be at
+least 200px long, and neither its own box nor its pane's may change size between the two. A control
+that sizes itself from its value text bounces its container on every drag. Gate Proof: drop the
+slider's width so it shrinks to fit inside a centred stage; the gate names its length and the jump.
+
+### G-S6 — nothing spills out of the page column
+On every page, with folds open, no element inside main may cross main's inline edges, unless it sits
+in a scroll or clip container. A spill slides under a sticky rail and puts content behind its text.
+Gate Proof: give a do/don't row two 1fr columns and a demo wider than half; the gate names the cell.
+
+G-ST1 also opens the book with every configured scene (sceneParam) and fails if the app drops it, so
+a renamed URL parameter can never leave the scene-swept checks measuring the default.
+
+G-ST1 fails when the book has a backdrop control and `docs.scenes` is empty, and when the list names a
+backdrop the control does not offer. G-SV1 fails when the book has no `/patterns/states` page
+(`docs.statesRoute`) or the matrix there has no cells; a KILN_ROUTES run that leaves the page out skips
+it. G-MT1 finds panes by `docs.surfaceSelector` (default `[data-surface]`); a system that marks its
+panes with another attribute names it there.
+
+### G-GR1 — glass follows the shared recipe
+Component CSS writes `backdrop-filter` only as `none` or through tokens (a literal `blur(` in a
+module is red), and every element in a live example that blurs what is behind it carries every
+function in `docs.glassRecipe.functions` (default blur, saturate, brightness). Pane's Navbar blurred
+only, so it was the one pane that did not darken a bright scene and its text fell to 3.4:1. Recipe:
+`docs/style-recipes/glass.md` in kiln. Gate Proof: `surface-probes.proof.mjs` plants
+`backdrop-filter: blur(20px)` in a module and on a Navbar; both are red, the full recipe is green.
+
+### G-BR1 — a bare subject paints its surface; no text on the bare photo
+A subject marked `data-bare="surface"` (a component that is its own surface and is shown without a
+pane under it) must paint one: a backdrop filter or a background at alpha 0.9 or more
+(`docs.bareMinAlpha`). Layout subjects are marked `data-bare="layout"` and skipped. On every stage
+whose background is a photo, each text node must have an ancestor inside the stage that paints a pane
+(backdrop filter, background alpha of `docs.paneAlpha` 0.35 or more, or a gradient). Pane drew chart,
+chat and agent text straight on the scene. Set `docs.photoScene` to the brightest photo scene so the
+gate looks at one. Opt out per element with `data-photo-text` only for text that is measured some
+other way. Gate Proof: a bare BarChart with no surface and a ChatMessage with no pane on a photo are
+red; the same with the recipe or a 66% body are green.
+
+### G-MS1 — a mesh gradient is an accent
+An element marked `data-mesh`, or whose own or pseudo-element background holds two or more radial or
+conic gradients, may cover at most `docs.meshMaxShare` (10%) of its region: the closest section,
+stage, surface or card. A mesh on `html` or `body` is a wallpaper and always red. User rule,
+2026-10-31. Gate Proof: a mesh filling its section and a mesh body background are red; a 120px mesh
+chip in an 800px section is green.
+
+### G-AN1 — the card still looks like the anchor
+At the anchor lock, `tooling/kiln/anchor-likeness.mjs --record <anchor html>` measures the picked
+card on its backdrop: body lightness and chroma in OKLab (median of the middle half, so text does not
+move it) and rim contrast (the outer 2px against the backdrop 4 to 8px outside). The gate opens
+`docs.anchor.route` on the recorded scene and theme, measures `docs.anchor.selector` the same way and
+fails past `maxDeltaL` 0.05, `maxDeltaC` 0.03 or `maxDeltaRim` 0.4. R-032: Pane's glass was tuned one
+number at a time until it read as opaque, and nothing compared it with the anchor. Gate Proof: a 45%
+anchor against a 92% card is red; against a 47% card it is green.
+
 ## Publish/pack gating
 
 Wire the full gate set into the docs build. A gate that has completed Gate Proof blocks

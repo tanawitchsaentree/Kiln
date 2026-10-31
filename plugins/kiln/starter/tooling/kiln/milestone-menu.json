@@ -1,0 +1,50 @@
+{
+  "M0": [
+    "A second reference system to measure against",
+    "A named material or style recipe for the anchor",
+    "A second language for the book",
+    "A brand colour other than the default",
+    "Platforms past the web (iOS, Android, Figma)",
+    "The user picks variants instead of the agent"
+  ],
+  "M1": [
+    "Form controls past Select and Slider (checkbox, radio, switch, text field)",
+    "A second backdrop scene for the book",
+    "Motion tokens shown in a playground",
+    "Dense and comfortable density modes",
+    "Right-to-left layout checked in the book",
+    "Icons drawn for this system"
+  ],
+  "M2": [
+    "Date and time pickers",
+    "A combobox with search",
+    "File upload",
+    "Form validation copy in the book's language",
+    "A command menu",
+    "Toasts placed and stacked across the app"
+  ],
+  "M3": [
+    "Charts with the dataviz palette",
+    "Virtualised long lists",
+    "A full page template (settings, dashboard, sign-in)",
+    "Chat or agent views",
+    "Print styles for data views",
+    "Empty, loading and error states for every data view"
+  ],
+  "M4": [
+    "A brand theme builder in the book",
+    "A second material",
+    "Figma variables exported from the tokens",
+    "A migration guide between versions",
+    "An accessibility statement with the evidence",
+    "Contribution guidelines"
+  ],
+  "M5": [
+    "A public docs host",
+    "Versioned changelogs per package",
+    "A Vue or Web Components adapter",
+    "A visual regression run in CI",
+    "Usage analytics opt-in for the MCP server",
+    "A licence key flow for paid parts"
+  ]
+}
