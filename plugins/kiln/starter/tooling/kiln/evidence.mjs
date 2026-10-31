@@ -73,14 +73,17 @@ try {
       }
       const agg = (result.docsPage[mode][key] = { textElements: 0, failures: 0, pages: 0 });
       // pages are measured PAR at a time, each in its own context, so a set takes about 1/PAR as long
-      if (docsScenes(mode).includes(scene)) await pool(ROUTES, PAR, async (route) => {
+      // the evidence plan (contrast.sceneRoutes): every page is measured on the first scene, and pages matching
+      // the pattern on every scene too, so a full run stays an hour, not a night (Pane: 670 pages × 5 scenes ran 16 h)
+      const onScene = scene == null || scene === SCENES[0] || !K.sceneRoutes ? ROUTES : ROUTES.filter((r) => new RegExp(K.sceneRoutes).test(r));
+      if (docsScenes(mode).includes(scene)) await pool(onScene, PAR, async (route) => {
         const d = await open(mode, url(srv.base, route, { theme, scene }, C));
         const dr = await measurePageText(d.page, K.threshold);
         await d.close();
         agg.textElements += dr.textElements;
         agg.pages += 1;
         // progress inside a set, so a long run never looks stuck
-        if (agg.pages % 25 === 0) console.log(`  … ${mode} ${key} ${agg.pages}/${ROUTES.length} pages, ${agg.failures} failing so far`);
+        if (agg.pages % 25 === 0) console.log(`  … ${mode} ${key} ${agg.pages}/${onScene.length} pages, ${agg.failures} failing so far`);
         for (const t of dr.failures.filter((x) => !K.infoGroups.includes(x.group))) { if (!isExcepted(t)) agg.failures += 1; record(`[${mode}] docs ${route} ${key}`, t); }
       });
       console.log(`${mode.padEnd(21)} ${key.padEnd(14)} ${K.harness ? `harness ${K.gatingGroups.map((g) => `${g} ${result.harness[mode][key][g].failures}/${result.harness[mode][key][g].texts}`).join(' · ')} | ` : ''}docs ${agg.failures}/${agg.textElements} over ${agg.pages} pages`);
@@ -102,6 +105,7 @@ if (total === 0) result.failures.push('NOTHING MEASURED, so nothing was proven')
 // A run limited by KILN_ROUTES or KILN_SCENES measured part of the book. It must never replace the published
 // full result (public/evidence.json is what the book shows): it goes to a partial report only, marked as
 // such, and milestone.mjs refuses it. (Pane: a quick partial run overwrote the book's full evidence.)
+result.plan = { sceneRoutes: K.sceneRoutes ?? null, parallel: PAR };
 result.partial = Boolean((process.env.KILN_ROUTES ?? '').trim() || (process.env.KILN_SCENES ?? '').trim());
 if (result.partial) result.limitedTo = { routes: process.env.KILN_ROUTES || null, scenes: process.env.KILN_SCENES || null };
 const day = result.generatedAt.slice(0, 10);

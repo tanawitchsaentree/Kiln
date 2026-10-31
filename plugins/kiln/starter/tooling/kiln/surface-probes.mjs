@@ -17,7 +17,10 @@ export function glassCssProblems(css, file) {
   for (const m of css.matchAll(/(?:-webkit-)?backdrop-filter\s*:\s*([^;}]+)/g)) {
     const v = m[1].trim();
     if (/^(none|inherit|initial|unset)$/.test(v)) continue;
-    if (/\b(blur|saturate|brightness|contrast|grayscale|sepia|hue-rotate|invert|opacity)\s*\(/.test(v)) out.push(`${file}: backdrop-filter "${v.slice(0, 60)}" writes the filter by hand; use the shared glass recipe tokens`);
+    // a filter is fine when every argument is a token (blur(var(--x-blur)) saturate(var(--x-saturate)) …);
+    // a raw number inside a filter function is the hand-written glass that drifted from the recipe
+    const args = [...v.matchAll(/\b(?:blur|saturate|brightness|contrast|grayscale|sepia|hue-rotate|invert|opacity)\s*\(([^()]*(?:\([^()]*\))?[^()]*)\)/g)].map((x) => x[1].trim());
+    if (args.some((x) => !/^var\(--[\w-]+\)$/.test(x))) out.push(`${file}: backdrop-filter "${v.slice(0, 60)}" writes the filter by hand; use the shared glass recipe tokens`);
   }
   return out;
 }

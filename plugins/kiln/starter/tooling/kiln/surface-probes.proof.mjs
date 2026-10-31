@@ -15,6 +15,8 @@ const cases = [
   // G-GR1, static: a hand-written filter is red, a token-only filter is green
   { gate: 'G-GR1 css', want: 'red', run: () => glassCssProblems('.root { backdrop-filter: blur(20px); }', 'Navbar.module.css') },
   { gate: 'G-GR1 css', want: 'green', run: () => glassCssProblems('.root { backdrop-filter: var(--x-navbar-filter); -webkit-backdrop-filter: none; }', 'Navbar.module.css') },
+  { gate: 'G-GR1 css', want: 'green', run: () => glassCssProblems('.root { backdrop-filter: blur(var(--x-blur)) saturate(var(--x-saturate)) brightness(var(--x-brightness)); }', 'Card.module.css') },
+  { gate: 'G-GR1 css', want: 'red', run: () => glassCssProblems('.root { backdrop-filter: blur(var(--x-blur)) saturate(1.8); }', 'Card.module.css') },
   // G-GR1, computed: Pane's Navbar (blur only) is red, the full recipe is green
   { gate: 'G-GR1 page', want: 'red', html: stage('<nav data-component="Navbar" style="backdrop-filter:blur(20px)">Shop</nav>'), probe: glassRecipeProbe, arg: { scope: 'main [data-example-live] *', functions: ['blur', 'saturate', 'brightness'] } },
   { gate: 'G-GR1 page', want: 'green', html: stage(`<nav data-component="Navbar" style="backdrop-filter:${RECIPE}">Shop</nav>`), probe: glassRecipeProbe, arg: { scope: 'main [data-example-live] *', functions: ['blur', 'saturate', 'brightness'] } },

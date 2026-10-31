@@ -1496,6 +1496,8 @@ try {
         const name = (el) => el.closest('[data-component]')?.getAttribute('data-component') ?? (el.className && typeof el.className === 'string' ? `.${el.className.split(' ')[0]}` : el.tagName.toLowerCase());
         for (const el of document.querySelectorAll('body *')) {
           if (el.closest(`svg, [aria-hidden="true"] [aria-hidden="true"], [data-nc-exempt]${EXEMPT ? `, ${EXEMPT}` : ''}`) || !drawn(el)) continue;
+          // a shape set inside a line of text (a keycap, an inline code chip) belongs to the text, not to the pane's corner
+          { let n = el, inText = false; for (let i = 0; n && i < 3 && !inText; i++, n = n.parentElement) inText = /^inline/.test(getComputedStyle(n).display) && [...(n.parentElement?.childNodes ?? [])].some((x) => x.nodeType === 3 && x.textContent.trim()); if (inText) continue; }
           const b = el.getBoundingClientRect();
           if (b.width < 12 || b.height < 12 || b.width > 600) continue;
           let p = el.parentElement; while (p && p !== document.body && !drawn(p)) p = p.parentElement;
@@ -1521,7 +1523,9 @@ try {
       }, C.ncExempt ?? '');
       for (const x of res) bad.push(`${r}: ${x}`);
     }
-    const u = [...new Set(bad.map((x) => x.replace(/^\S+: /, '')))];
+    // one line per distinct shape, with the first page it was seen on, so the report says where to look
+    const first = new Map(); for (const x of bad) { const m = x.match(/^(\S+): (.*)$/); if (!first.has(m[2])) first.set(m[2], m[1]); }
+    const u = [...first].map(([msg, at]) => `${msg} (${at})`);
     if (u.length) throw new Error(`${u.length} nested shapes: ${u.slice(0, 8).join(' | ')}`);
     return `${routes.length} pages`;
   });

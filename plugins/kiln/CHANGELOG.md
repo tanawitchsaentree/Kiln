@@ -1,5 +1,14 @@
 # kiln — changelog
 
+## 2.2.1 — the lessons from Pane, built into the factory
+
+- One rules block in the starter and the kit, checked to match, with the rules on small output, checking only what changed, and install lines that must work.
+- A fresh system no longer skips its own gates: the states page, a tree-shakable build and a real scene ship in the starter.
+- New gates, each proven red then green: G-GR1 (every glass uses the shared recipe), G-BR1 (no text straight on the photo), G-MS1 (a mesh gradient is an accent, at most a tenth of its region), G-AN1 (the card still looks like the anchor that was picked). G-NC1 skips shapes inside a line of text and names the page.
+- A partial evidence run no longer replaces the published one; conformance marks stale checks; the milestone check refuses partial or stale results and prints what is still missing against the benchmark.
+- An evidence plan (`contrast.sceneRoutes`) measures every page on the first scene and chosen pages on every scene, so a full run takes about an hour.
+- Docs: PACKAGES.md (a plan to split kiln into six packages), MILESTONES.md (M0 to M5 for a user who cannot ask for everything at once), style-recipes/glass.md, and the Pane retro mapped step by step.
+
 ## 2.1.0 — design quality is checked, not hoped for
 
 The user put Pane into a real app and found four components that were the defaults of every UI
