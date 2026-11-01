@@ -94,6 +94,9 @@ const systemFiles = existsSync(SYSTEM_CHECKS) ? readdirSync(SYSTEM_CHECKS).filte
 // a quick run for the pages being worked on (KILN_CHECKS=20,21 picks those check files; KILN_ROUTES limits
 // the demo floor and coverage loops to those components); a full run, without them, is still the one that counts
 const COVERED = new Set();
+// a limited run (KILN_CHECKS) still knows which components have checks in the files it skipped, so it does not
+// report every other component as untested (Pane, 2026-11-01: a one-file run flagged 120 components)
+if ((process.env.KILN_CHECKS ?? '').trim()) for (const f of systemFiles) for (const m of readFileSync(path.join(SYSTEM_CHECKS, f), 'utf8').matchAll(/check\(\s*['"]([A-Z][A-Za-z]+)['"]/g)) COVERED.add(m[1]);
 const ONLY_FILES = (process.env.KILN_CHECKS ?? '').split(',').map((x) => x.trim()).filter(Boolean);
 const ONLY_ROUTES = new Set((process.env.KILN_ROUTES ?? '').split(',').map((x) => x.trim()).filter(Boolean));
 const inScope = (slug) => !ONLY_ROUTES.size || ONLY_ROUTES.has(`/components/${slug}`);
