@@ -1,5 +1,12 @@
 # kiln — changelog
 
+## 2.5.3 — what dial's wave 1 hit
+
+- G-SL1 no longer holds a rotary to the 200px slider length. A knob marked `data-mechanism="rotary"`, or named in `docs.sliderExempt` (Rotary and Knob by default), is skipped. Before, it blocked M1.
+- `contrast-check.mjs` reads every theme from `tokens.json`, since the build writes no separate `light.css` or `dark.css`.
+- The book's lede styles no longer reach a `<p>` that a component renders in a live demo.
+- `smoke-import` stubs `.css` in its Node probes, because ESM components import their own CSS for tree-shaking.
+
 ## 2.5.2 — what the first system after Pane hit
 
 - `create` works without a global pnpm. It falls back to `corepack pnpm`, then to `npx` with the pinned version, and says which one ran.

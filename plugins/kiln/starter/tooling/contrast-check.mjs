@@ -8,7 +8,7 @@
 //   node tooling/contrast-check.mjs <fg-var> <bg-var> [...more fg:bg pairs]
 //   node tooling/contrast-check.mjs --var color-border-interactive:color-surface-canvas ...
 //
-// Resolves each `--ds-*` custom property from both packages/tokens/build/css/{light,dark}.css
+// Resolves each `--ds-*` custom property in every theme from packages/tokens/build/json/tokens.json
 // (following var() aliases down to a literal hex) and prints the ratio in both themes plus a
 // PASS/FAIL against the 4.5:1 (text) / 3:1 (UI) minimums.
 
@@ -68,10 +68,14 @@ if (pairs.length === 0) {
   process.exit(1);
 }
 
-const themes = {
-  light: parseVars(readFileSync(path.join(CSS_DIR, 'light.css'), 'utf8')),
-  dark: parseVars(readFileSync(path.join(CSS_DIR, 'dark.css'), 'utf8')),
-};
+// every theme, resolved, from build/json/tokens.json (the build writes one tokens.css with [data-theme]
+// scopes, not a file per theme; dial K-8: light.css no longer existed)
+const JSON_FILE = path.join(__dirname, '..', 'packages', 'tokens', 'build', 'json', 'tokens.json');
+const toks = JSON.parse(readFileSync(JSON_FILE, 'utf8'));
+let BASE = 'dark';
+try { BASE = JSON.parse(readFileSync(path.join(__dirname, '..', 'system', 'kiln.config.json'), 'utf8')).tokens?.baseTheme ?? BASE; } catch {}
+const names = [BASE, ...new Set(Object.values(toks).flatMap((t) => Object.keys(t.themes ?? {})))];
+const themes = Object.fromEntries(names.map((th) => [th, new Map(Object.values(toks).map((t) => [String(t.css).replace(/^--ds-/, ''), String(th === BASE ? t.value : t.themes?.[th]?.value ?? t.value)]))]));
 
 let anyFail = false;
 for (const [fg, bg] of pairs) {

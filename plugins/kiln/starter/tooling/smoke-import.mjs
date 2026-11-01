@@ -111,7 +111,11 @@ try {
   function probe(code) {
     const f = join(scratch, 'probe.mjs');
     writeFileSync(f, req + code);
-    const r = spawnSync('node', [f], { cwd: scratch, encoding: 'utf8' });
+    // ESM components import their own CSS (tree-shaking, G-TS1). A bundler handles that and plain Node does
+    // not, so the probe stubs .css the way a consumer's bundler would (kiln 2.5.3, found building dial)
+    writeFileSync(join(scratch, 'css-hook.mjs'), "export async function load(url, ctx, next) { if (url.endsWith('.css')) return { format: 'module', source: '', shortCircuit: true }; return next(url, ctx); }\n");
+    writeFileSync(join(scratch, 'css-register.mjs'), "import { register } from 'node:module';\nregister('./css-hook.mjs', import.meta.url);\n");
+    const r = spawnSync('node', ['--import', './css-register.mjs', f], { cwd: scratch, encoding: 'utf8' });
     return { ok: r.status === 0, out: (r.stdout || '').trim(), err: (r.stderr || '').trim() };
   }
 
@@ -270,7 +274,9 @@ const t = await import('${R}/tokens'); if (!t.tokens || !Object.keys(t.tokens).l
 const { renderToStaticMarkup } = await import('react-dom/server'); const React = (await import('react')).default; const m = await import('${R}');
 const html = renderToStaticMarkup(React.createElement(m.${PROBE}, null, 'solo')); if (!/solo/.test(html)) process.exit(1);
 console.log(Math.round(css.length / 1024) + ' kB all.css, ' + Object.keys(t.tokens).length + ' tokens');`);
-    const r = spawnSync('node', ['p.mjs'], { cwd: solo, encoding: 'utf8' });
+    writeFileSync(join(solo, 'css-hook.mjs'), "export async function load(url, ctx, next) { if (url.endsWith('.css')) return { format: 'module', source: '', shortCircuit: true }; return next(url, ctx); }\n");
+    writeFileSync(join(solo, 'css-register.mjs'), "import { register } from 'node:module';\nregister('./css-hook.mjs', import.meta.url);\n");
+    const r = spawnSync('node', ['--import', './css-register.mjs', 'p.mjs'], { cwd: solo, encoding: 'utf8' });
     record(r.status === 0, `${R}/all.css carries tokens and styles, ${R}/tokens resolves, a component renders`, r.status === 0 ? r.stdout.trim() : (r.stderr || r.stdout).trim().split('\n')[0]);
   } finally { rmSync(solo, { recursive: true, force: true }); }
 

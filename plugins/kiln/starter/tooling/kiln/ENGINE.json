@@ -1,6 +1,6 @@
 {
-  "kiln": "20ca1dd+dirty",
-  "syncedAt": "2026-11-01T09:13:32.723Z",
+  "kiln": "8411df8+dirty",
+  "syncedAt": "2026-11-01T12:53:57.999Z",
   "files": {
     "agent-setup.mjs": "3bb420830fe59565bfd37746176dfb6f5c8a3b802cbb4cbc350b201179d5c8bd",
     "anchor-contrast.mjs": "9f3ae49241c62efdb32f580afd5aa45ef5d170f03fedaed5d5be094ba2423282",
@@ -12,7 +12,7 @@
     "design-md.mjs": "8c38146f5b821f3e65e42c08f6ffe47e53ffc7ecab73e2481f4f671f37c61db3",
     "evidence.mjs": "ee60696161359c7bde81065eb716f227aa132053cd4937922524a3668797acc8",
     "gates-run.mjs": "bcc4760d2b50d32d0985c2cb92e856edcbca4addf003d63299b7684a25ee2255",
-    "gates.mjs": "40ba39998ddcf749a419d36fed5c7de1670e45bcb58c5e01664720b817603f6d",
+    "gates.mjs": "b9b08fd957abdbe2b31c5671f7e0f955687469c03a03f50a4a056c9ef73a9e62",
     "i18n-lint.mjs": "79f68707fa37fdc20515eddb89b3cb1e76a5f48b5c3aea369dd9a28ffe2da495",
     "meta.mjs": "86a42ff43e0185874a44f8fea02611e25827855d82a4bee674f21bf1dfc7178c",
     "milestone-menu.json": "e3e1d4e665473bbb00f44c2f5feb40f63c9c11ba7ce749e928a4cbca223b96c9",

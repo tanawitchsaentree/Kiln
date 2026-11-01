@@ -134,8 +134,8 @@ thead th { font-weight: var(--ds-type-weight-semibold); }
 .book-page { display: flex; flex-direction: column; gap: var(--ds-gap-2xl); }
 .page-head { gap: var(--ds-gap-lg); }
 .page-title { font-size: var(--ds-type-display); line-height: var(--ds-type-leading-tight); font-weight: var(--ds-type-weight-semibold); letter-spacing: var(--ds-type-tracking-display); }
-.page-head .lede p { margin: 0 0 var(--ds-gap-lg); }
-.page-head .lede p:last-child { margin: 0; }
+.page-head .lede p:not(:is([data-component], [data-example-live]) *):not([data-component]) { margin: 0 0 var(--ds-gap-lg); }
+.page-head .lede p:not(:is([data-component], [data-example-live]) *):not([data-component]):last-child { margin: 0; }
 .book-section { scroll-margin-block-start: var(--ds-gap-section); }
 .prose { gap: var(--ds-gap-lg); max-inline-size: 100%; }
 /* every reading line is capped, wherever it sits (ledes, callouts, notes, list items) */
@@ -144,8 +144,8 @@ main td p, main [data-example-live] p { max-inline-size: none; }
 /* book prose rules skip anything inside a live component or example (Pane R-030: .prose ul and .prose a
    restyled Pagination and Sidebar inside the gallery). G-LK1 measures it. */
 /* reading text: 16px / 1.6 (type.reading), the size Carbon, Material and Apple use for long-form docs */
-.prose p:not(:is([data-component], [data-example-live]) *), .prose li:not(:is([data-component], [data-example-live]) *), .page-head .lede p { font-size: var(--ds-type-reading); line-height: var(--ds-type-leading-reading); }
-.page-head .lede p { font-size: var(--ds-type-emphasis); }
+.prose p:not(:is([data-component], [data-example-live]) *), .prose li:not(:is([data-component], [data-example-live]) *), .page-head .lede p:not(:is([data-component], [data-example-live]) *):not([data-component]) { font-size: var(--ds-type-reading); line-height: var(--ds-type-leading-reading); }
+.page-head .lede p:not(:is([data-component], [data-example-live]) *):not([data-component]) { font-size: var(--ds-type-emphasis); }
 .prose h3:not(:is([data-component], [data-example-live]) *) { margin-block-start: var(--ds-gap-lg); font-size: var(--ds-type-emphasis); }
 .prose ul:not(:is([data-component], [data-example-live]) *), .prose ol:not(:is([data-component], [data-example-live]) *) { display: flex; flex-direction: column; gap: var(--ds-gap-sm); margin: 0; }
 .prose a:not(:is([data-component], [data-example-live]) *), .callout a:not(:is([data-component], [data-example-live]) *) { color: var(--ds-text-primary); text-decoration: underline; text-underline-offset: 3px; }

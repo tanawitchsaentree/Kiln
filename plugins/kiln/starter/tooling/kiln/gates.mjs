@@ -1243,6 +1243,11 @@ try {
       const thumbs = await page.locator('[data-example-live] [role="slider"]').all();
       for (const t of thumbs.slice(0, 8)) {
         if (!(await t.isVisible()) || (await t.isDisabled().catch(() => false)) || (await t.getAttribute('aria-disabled')) === 'true') continue;
+        // a rotary is a slider by role and has no length to travel (dial K-10: a 90px knob failed "needs 200");
+        // it is skipped when it says so (data-mechanism="rotary", the tactile recipe's marker) or is named in
+        // docs.sliderExempt (default Rotary, Knob). Its keys and value are checked by its own conformance file.
+        const EXEMPT = C.sliderExempt ?? ['Rotary', 'Knob'];
+        if (await t.evaluate((e, ex) => e.closest('[data-mechanism]')?.getAttribute('data-mechanism') === 'rotary' || ex.includes(e.closest('[data-component]')?.getAttribute('data-component')), EXEMPT)) continue;
         const measure = () => t.evaluate((e) => {
           const root = e.closest('[data-component]') ?? e.parentElement; const surf = root.parentElement?.closest('[data-surface], [data-component="Card"]') ?? root.parentElement;
           const a = root.getBoundingClientRect(), b = surf.getBoundingClientRect();
