@@ -1,5 +1,11 @@
 # kiln — changelog
 
+## 2.4.0 — motion rhythm, material and mechanism
+
+- Motion has a rhythm the gates measure. A token can hold another value inside a state (`kiln.state`), so hover lights up in about 130ms and fades over 380ms, and a press goes down in 70ms and rises over 300ms. G-MO2 checks the tokens, and G-MO1 hovers and presses real controls on the component pages, in normal and Reduce motion. `motion-probes.proof.mjs` proves both with 20 cases.
+- Under Reduce motion a fade of colour or light keeps its rhythm (`kiln.reduced: "keep"`), including the primitives it reads. Before, those were zeroed and every control snapped.
+- `docs/style-recipes/tactile.md` derives tactile and skeuomorphic controls from one material and one mechanism per control, all lit by one light, with springs whose damping ratio and settle time the rationale check measures. `tactile-lab.html` shows a Bauhaus panel in enamel, bakelite and print.
+
 ## 2.3.0 — app type, budget, platforms and DESIGN.md
 
 - Intake asks which kind of app the system is for. Eleven app types in `app-types.json` each add their own components to wave 1 and list the next two waves and the book's scenarios.

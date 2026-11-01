@@ -14,7 +14,8 @@ const ROOT = path.dirname(fileURLToPath(import.meta.url));
 // The theme that $value describes. Other themes come from kiln.theme overrides (system/kiln.config.json → tokens.baseTheme).
 const CFG_FILE = path.join(ROOT, '..', '..', 'system', 'kiln.config.json');
 let BASE = 'light';
-try { BASE = JSON.parse(readFileSync(CFG_FILE, 'utf8')).tokens?.baseTheme ?? BASE; } catch {}
+let SCOPE = '[data-component]';
+try { const t = JSON.parse(readFileSync(CFG_FILE, 'utf8')).tokens ?? {}; BASE = t.baseTheme ?? BASE; SCOPE = t.stateScope ?? SCOPE; } catch {}
 const ext = (node, k) => node.$extensions?.[`kiln.${k}`];
 const TIERS = ['primitive', 'semantic', 'component'];
 const tokens = new Map(); // path -> { tier, type, raw, description }
@@ -27,7 +28,7 @@ function walk(node, tier, trail, inheritedType, inheritedWhy) {
   if ('$value' in node) {
     const key = trail.join('.');
     if (tokens.has(key)) collisions.push(`${key} is defined in both ${tokens.get(key).tier} and ${tier} — paths must be unique across tiers`);
-    tokens.set(trail.join('.'), { tier, type, raw: node.$value, description: node.$description, env: ext(node, 'environment'), bp: ext(node, 'breakpoint'), theme: ext(node, 'theme'), why });
+    tokens.set(trail.join('.'), { tier, type, raw: node.$value, description: node.$description, env: ext(node, 'environment'), bp: ext(node, 'breakpoint'), theme: ext(node, 'theme'), state: ext(node, 'state'), reduced: ext(node, 'reduced'), why });
     return;
   }
   for (const [k, v] of Object.entries(node)) {
@@ -131,10 +132,40 @@ ${fallback.replace(/^/gm, '  ')}
 }` : '/* no translucent surfaces in this system */'}
 `;
 
-// Reduced motion: every duration collapses to 0 at the token level, so no component can forget it.
-const durations = [...tokens].filter(([, t]) => t.type === 'duration').map(([p]) => `    ${cssName(p)}: 0ms;`).join('\n');
+// Reduced motion: every duration collapses to 0 at the token level, so no component can forget it, except a
+// token marked $extensions["kiln.reduced"]: "keep" (a colour or light fade that moves nothing; Pane D-039:
+// zeroing those made every control snap for a user with Reduce motion on).
+// a kept token keeps the primitives it reads too (its own value and each state's), or var() resolves to 0ms
+const KEPT = new Set([...tokens].filter(([, t]) => t.reduced === 'keep').flatMap(([p, t]) => [p, refOf(p), ...Object.values(t.state ?? {}).map((r) => String(r).slice(1, -1))]).filter(Boolean));
+const durations = [...tokens].filter(([p, t]) => t.type === 'duration' && !KEPT.has(p)).map(([p]) => `    ${cssName(p)}: 0ms;`).join('\n');
+// State rhythm: $extensions["kiln.state"] gives a token another value while an element is in a state, such as
+// motion.hover = {duration.linger} with { ":hover": "{duration.brisk}" }. A transition takes its duration from
+// the state it goes to, so the element answers fast on the way in and settles slowly on the way out. The
+// value is set on a component root (tokens.stateScope, default [data-component]) in the state, so every part
+// the component restyles inherits it, and reset on any component root that is not, so a Button inside a
+// hovered Card keeps its own rhythm. Tokens that depend on it are declared again beside it (a var()
+// resolves where it is declared). Zero specificity.
+const stated = [...tokens].filter(([, t]) => t.state && typeof t.state === 'object');
+for (const [p, t] of stated) for (const [sel, raw] of Object.entries(t.state)) {
+  const m = typeof raw === 'string' && raw.match(REF);
+  if (!/^:(hover|active|focus-visible|focus-within|checked)$/.test(sel)) errors.push(`${p}: kiln.state selector ${sel} is not one of :hover :active :focus-visible :focus-within :checked`);
+  else if (!m || !tokens.has(m[1])) errors.push(`${p}: kiln.state ${sel} must reference a token, got ${raw}`);
+  else if (!ALLOWED[t.tier].includes(tokens.get(m[1]).tier) && tokens.get(m[1]).tier !== t.tier) errors.push(`${p}: kiln.state ${sel} -> ${tokens.get(m[1]).tier} ${m[1]}`);
+}
+if (errors.length) { console.error(`✗ token build failed:\n  ${errors.join('\n  ')}`); process.exit(1); }
+const stateBlock = (list) => list.flatMap(([p, t]) => Object.entries(t.state).map(([sel, raw]) => {
+  const deps = [...tokens.keys()].filter((d) => dependsOn(d, p)).map((d) => `${cssName(d)}: ${cssValue(d)};`).join(' ');
+  return `:where(${SCOPE}${sel}) { ${cssName(p)}: var(${cssName(raw.slice(1, -1))}); ${deps} }\n:where(${SCOPE}:not(${sel})) { ${cssName(p)}: ${cssValue(p)}; ${deps} }`;
+})).join('\n');
+const keep = stated.filter(([, t]) => t.reduced === 'keep'), move = stated.filter(([, t]) => t.reduced !== 'keep');
+const stateCss = stated.length ? `
+/* State rhythm: fast into a state, slow out of it (kiln.state) */
+${stateBlock(keep)}
+${move.length ? `@media (prefers-reduced-motion: no-preference) {\n${stateBlock(move)}\n}` : ''}
+` : '';
+
 const motionCss = `
-/* Reduced motion — durations are zero everywhere; movement distances too. */
+/* Reduced motion — durations are zero everywhere, except fades marked kiln.reduced "keep"; movement distances too. */
 @media (prefers-reduced-motion: reduce) {
   :root, [data-environment] {
 ${durations}
@@ -190,12 +221,12 @@ const spanCss = `
 ${tokens.has('grid.columns') ? `[data-ds-span] { --ds-span: var(--ds-span-base, var(${cssName('grid.columns')})); grid-column: span min(var(--ds-span), var(${cssName('grid.columns')})); }\n${BPS.map((bp) => `@media (min-width: ${resolve(`breakpoint.${bp}`)}) { [data-ds-span-${bp}] { --ds-span: var(--ds-span-${bp}); } }`).join('\n')}` : ''}
 `;
 const json = Object.fromEntries(
-  [...tokens].map(([p, t]) => [p, { tier: t.tier, type: t.type, value: format(t.type, resolve(p)), ref: typeof t.raw === 'string' && REF.test(t.raw) ? t.raw.slice(1, -1) : null, css: cssName(p), description: t.description ?? null, why: t.why ?? null, ...(t.bp ? { breakpoints: Object.fromEntries(Object.entries(t.bp).map(([bp, r]) => [bp, { ref: r.slice(1, -1), value: format(t.type, resolve(r.slice(1, -1))) }])) } : {}), ...(t.theme ? { themes: Object.fromEntries(Object.entries(t.theme).map(([th, r]) => [th, { ref: r.slice(1, -1), value: format(t.type, resolve(r.slice(1, -1))) }])) } : {}) }]),
+  [...tokens].map(([p, t]) => [p, { tier: t.tier, type: t.type, value: format(t.type, resolve(p)), ref: typeof t.raw === 'string' && REF.test(t.raw) ? t.raw.slice(1, -1) : null, css: cssName(p), description: t.description ?? null, why: t.why ?? null, ...(t.state ? { state: t.state } : {}), ...(t.bp ? { breakpoints: Object.fromEntries(Object.entries(t.bp).map(([bp, r]) => [bp, { ref: r.slice(1, -1), value: format(t.type, resolve(r.slice(1, -1))) }])) } : {}), ...(t.theme ? { themes: Object.fromEntries(Object.entries(t.theme).map(([th, r]) => [th, { ref: r.slice(1, -1), value: format(t.type, resolve(r.slice(1, -1))) }])) } : {}) }]),
 );
 
 mkdirSync(path.join(ROOT, 'build', 'css'), { recursive: true });
 mkdirSync(path.join(ROOT, 'build', 'json'), { recursive: true });
-writeFileSync(path.join(ROOT, 'build', 'css', 'tokens.css'), css.replace('/* Translucent surfaces', `/* Themes: ${BASE} is the base ($value); others via [data-theme] or prefers-color-scheme */\n${themeCss}\n\n/* Translucent surfaces`) + motionCss + '\n/* responsive layout */\n' + bpBlocks + '\n' + spanCss);
+writeFileSync(path.join(ROOT, 'build', 'css', 'tokens.css'), css.replace('/* Translucent surfaces', `/* Themes: ${BASE} is the base ($value); others via [data-theme] or prefers-color-scheme */\n${themeCss}\n\n/* Translucent surfaces`) + motionCss + stateCss + '\n/* responsive layout */\n' + bpBlocks + '\n' + spanCss);
 
 // ---- other formats for consuming projects: ESM + types, SCSS ----
 mkdirSync(path.join(ROOT, 'build', 'js'), { recursive: true });

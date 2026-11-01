@@ -30,6 +30,7 @@
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { docsConfig, ROOT, budget } from './config.mjs';
+import { springProblems } from './motion-probes.mjs';
 
 const C = docsConfig();
 const SYS = (() => { try { return JSON.parse(readFileSync(path.join(ROOT, 'system', 'kiln.config.json'), 'utf8')); } catch { return {}; } })();
@@ -125,6 +126,8 @@ if (existsSync(compDir)) for (const name of readdirSync(compDir).filter((n) => s
   if (!existsSync(whyFile)) { add('components', `${name}: no ${name}.why.json`); continue; }
   const why = JSON.parse(readFileSync(whyFile, 'utf8'));
   const derived = !pending.has(name);
+  // a declared mechanism moves on a spring that neither wobbles nor creeps (docs/style-recipes/tactile.md)
+  if (why.mechanism?.spring) for (const x of springProblems(why.mechanism.spring, `${name} mechanism.spring`)) add('motion', x);
   if (!derived) notices.push(`${name}: awaiting its derivation round (rationale.pendingDerivation); its current form is not derived from the concept`);
   if (derived) {
     if (why.identity === false) { if (String(why.identity_reason ?? '').split(/\s+/).length < 8) add('derivation', `${name}: identity false needs identity_reason (why this has no form of its own)`); }

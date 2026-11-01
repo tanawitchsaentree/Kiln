@@ -1,5 +1,5 @@
 {
-  "$comment": "Intake question 3 (app type) picks one entry. 'core' is built by every system in wave 1 (it holds the docs book's own controls). An app type adds its own components to wave 1, then lists what waves 2 and 3 take on and which working scenarios open the book. milestone.mjs reads intake.appType from kiln.config.json and requires core + the type's wave1. Names follow Pane's catalog, so a component's derivation in Pane can be read as a worked example.",
+  "$comment": "Intake question 3 (app type) picks one entry. 'core' is built by every system in wave 1 (it holds the docs book's own controls). An app type adds its own components to wave 1, then lists what waves 2 and 3 take on and which working scenarios open the book. milestone.mjs reads intake.appType from kiln.config.json and requires core + the type's wave1. Names follow the catalog of the first system kiln built, so each one has a worked derivation to read.",
   "core": ["Container", "Grid", "Stack", "Text", "Heading", "Button", "IconButton", "Input", "Select", "Slider", "Switch", "Checkbox", "Card", "Dialog", "Toast"],
   "types": {
     "dashboard": {

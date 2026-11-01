@@ -112,3 +112,14 @@ with the single biggest generic-AI attractor that existing checks (fonts, palett
 backgrounds) never covered: the flat-rounded-pill-with-N-intent-fills button, the bordered-rect-
 8px-radius input, the white-rect-soft-shadow-12-16px-radius card, the iOS-clone switch. Dodge =
 derive silhouette/depth from FORM.md, never from instinct or "what every other library does."
+
+## Material and mechanism
+
+When the lineage is a made object (metalwork, a radio, a machine panel, a printed poster), derive
+the form from two declarations before any variant. **One material** comes first: height, gloss,
+roughness and mass, all lit by the system's one light. Then **one mechanism per interactive control**
+(key, rocker, rotary, fader, lever), written into why.json as `mechanism` with its detents, travel and
+spring. The three variants then differ in material or in mechanism, never in decoration. The recipe and
+its numbers are in `docs/style-recipes/tactile.md`, and the worked example in `docs/style-recipes/tactile-lab.html`. The
+rationale check fails a spring that wobbles (ζ < 0.75 outside a declared signature moment), creeps
+(ζ > 1) or takes longer than 600ms to settle.

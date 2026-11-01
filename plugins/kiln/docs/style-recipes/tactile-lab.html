@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>kiln lab · tactile Bauhaus, three materials</title>
+<!--
+  kiln lab: material & mechanism (docs/style-recipes/tactile.md). One control panel, the same four
+  mechanisms (key, rocker, rotary with detents, fader with detents), three materials. Every shade comes
+  from one light at the top left; every movement is a spring whose mass and damping come from the
+  material, pressed fast and released slowly. Keyboard: Tab to a control, Space/Enter to press or flip,
+  arrows to turn or slide one detent, Home/End for the ends. Reduce motion: no throw, detents fade.
+-->
+<style>
+  :root {
+    --paper: #efe9dd; --ink: #111; --red: #d7261e; --yellow: #f2b90f; --blue: #1d4e9e;
+    --light-x: -1; --light-y: -1; /* one light, top left: highlight up-left, shadow down-right */
+    font-family: "Futura", "Avenir Next", "Century Gothic", system-ui, sans-serif;
+    color: var(--ink); background: var(--paper);
+  }
+  body { margin: 0; padding: 32px; }
+  h1 { font-size: 22px; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 4px; }
+  p.lead { margin: 0 0 24px; max-width: 70ch; line-height: 1.5; }
+  .row { display: grid; grid-template-columns: repeat(3, minmax(300px, 1fr)); gap: 28px; }
+  @media (max-width: 1050px) { .row { grid-template-columns: 1fr; } }
+
+  /* a material is a set of numbers; the mechanisms read them */
+  .panel { --h: 6px; --gloss: .55; --rough: 2px; --body: #e7e1d3; --edge: rgba(0,0,0,.22);
+    position: relative; padding: 22px 22px 26px; border-radius: var(--r, 4px); background: var(--body);
+    box-shadow: calc(var(--h) * 1.4) calc(var(--h) * 1.4) calc(var(--h) * 2.4) rgba(0,0,0,.18), inset 1px 1px 0 rgba(255,255,255,var(--gloss)), inset -1px -1px 0 var(--edge); }
+  .panel h2 { margin: 0 0 2px; font-size: 15px; letter-spacing: .08em; text-transform: uppercase; }
+  .panel .note { margin: 0 0 18px; font-size: 13px; line-height: 1.45; color: #333; min-height: 3.6em; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px 18px; align-items: center; justify-items: center; }
+  .label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; margin-top: 8px; text-align: center; }
+  .cell { display: flex; flex-direction: column; align-items: center; }
+
+  /* key: a block on the panel; pressing removes its height, so its shadow collapses under it */
+  .key { --t: 0; width: 76px; height: 76px; border: 0; padding: 0; cursor: pointer; border-radius: var(--key-r, 4px);
+    background: var(--key, var(--red)); color: #fff; font: inherit; font-size: 12px; letter-spacing: .12em;
+    transform: translate(calc(var(--t) * var(--h) * .6), calc(var(--t) * var(--h) * .6));
+    box-shadow: calc((1 - var(--t)) * var(--h)) calc((1 - var(--t)) * var(--h)) calc((1 - var(--t)) * var(--rough) * 2 + 1px) rgba(0,0,0,.32),
+      inset 2px 2px var(--rough) rgba(255,255,255,calc(var(--gloss) * (1 - var(--t) * .5))), inset -2px -2px var(--rough) rgba(0,0,0,.25); }
+  .key[aria-pressed="true"] { background: var(--key-on, var(--ink)); }
+
+  /* rocker: two faces on a pivot; the pressed face goes down and loses its light */
+  .rocker { --a: -1; display: grid; grid-template-rows: 1fr 1fr; width: 64px; height: 92px; padding: 0; border: 0; cursor: pointer;
+    border-radius: var(--key-r, 4px); background: var(--ink); box-shadow: calc(var(--h) * .8) calc(var(--h) * .8) var(--rough) rgba(0,0,0,.3); overflow: hidden; }
+  .rocker span { display: grid; place-items: center; color: #fff; font-size: 11px; letter-spacing: .12em; }
+  .rocker .on { background: linear-gradient(rgba(255,255,255,calc(var(--gloss) * max(0, var(--a)) * .5)), transparent), var(--yellow); color: var(--ink);
+    box-shadow: inset 0 calc(max(0, -1 * var(--a)) * -6px) 8px rgba(0,0,0,.35); }
+  .rocker .off { background: linear-gradient(rgba(255,255,255,calc(var(--gloss) * max(0, -1 * var(--a)) * .35)), transparent), #2a2a2a;
+    box-shadow: inset 0 calc(max(0, var(--a)) * 6px) 8px rgba(0,0,0,.45); }
+
+  /* rotary: a disc with an index line, 11 detents over 270° */
+  .knob { --deg: -135; width: 92px; height: 92px; border-radius: 50%; position: relative; cursor: grab; touch-action: none; outline-offset: 6px;
+    background: radial-gradient(circle at 32% 30%, rgba(255,255,255,calc(var(--gloss) * .9)) 0 calc(6% + var(--rough) * 2), transparent calc(30% + var(--rough) * 6)), var(--knob, var(--blue));
+    box-shadow: var(--h) var(--h) calc(var(--h) * 1.6) rgba(0,0,0,.32), inset -3px -3px 6px rgba(0,0,0,.3); }
+  .knob::after { content: ""; position: absolute; left: 50%; top: 8px; width: 4px; height: 26px; margin-left: -2px; background: var(--paper); border-radius: 2px;
+    transform-origin: 2px 38px; transform: rotate(calc(var(--deg) * 1deg)); }
+  .dial { position: relative; width: 140px; height: 120px; display: grid; place-items: center; }
+  .dial i { position: absolute; left: 50%; top: 50%; width: 2px; height: 6px; background: var(--ink); transform-origin: 1px 0; }
+
+  /* fader: a groove cut into the panel and a block that rides in it, 5 detents */
+  .fader { position: relative; width: 150px; height: 44px; cursor: pointer; touch-action: none; outline-offset: 6px; }
+  .fader .groove { position: absolute; left: 10px; right: 10px; top: 19px; height: 6px; border-radius: 3px; background: rgba(0,0,0,.55);
+    box-shadow: inset 2px 2px 3px rgba(0,0,0,.6), 1px 1px 0 rgba(255,255,255,var(--gloss)); }
+  .fader .tick { position: absolute; top: 32px; width: 2px; height: 6px; background: var(--ink); }
+  .fader .cap { --x: 0; position: absolute; top: 4px; left: calc(var(--x) * (100% - 28px)); width: 28px; height: 36px; border-radius: var(--key-r, 3px);
+    background: var(--cap, var(--paper)); box-shadow: calc(var(--h) * .7) calc(var(--h) * .7) var(--rough) rgba(0,0,0,.35), inset 1px 1px 0 rgba(255,255,255,var(--gloss)), inset -1px -1px 0 rgba(0,0,0,.25); }
+  .fader .cap::after { content: ""; position: absolute; left: 4px; right: 4px; top: 17px; height: 2px; background: var(--ink); }
+  :focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
+
+  /* the three materials: same mechanisms, different numbers */
+  .enamel { --h: 5px; --gloss: .75; --rough: 1px; --body: #f4efe4; --r: 6px; --key-r: 6px; }
+  .bakelite { --h: 9px; --gloss: .32; --rough: 3px; --body: #2b2622; --edge: rgba(0,0,0,.5); --r: 14px; --key-r: 12px; --key: #7a1b14; --knob: #3b2a1f; --cap: #c9b48f; color: #efe6d3; }
+  .bakelite .note { color: #d8cdb8; } .bakelite .dial i, .bakelite .fader .tick { background: #d8cdb8; } .bakelite :focus-visible { outline-color: #f2b90f; }
+  .print { --h: 4px; --gloss: 0; --rough: 0px; --body: var(--paper); --r: 0; --key-r: 0; --cap: var(--yellow); border: 2px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); }
+  .print .fader .cap { border: 2px solid var(--ink); box-sizing: border-box; }
+  .print .key, .print .rocker, .print .fader .cap { box-shadow: calc((1 - var(--t, 0)) * 4px) calc((1 - var(--t, 0)) * 4px) 0 var(--ink); }
+  .print .knob { background: var(--blue); box-shadow: 4px 4px 0 var(--ink); }
+  .print .fader .groove { background: var(--ink); box-shadow: none; }
+
+  .readout { font-variant-numeric: tabular-nums; font-size: 12px; margin-top: 2px; min-height: 1.3em; }
+  footer { margin-top: 28px; font-size: 13px; line-height: 1.5; max-width: 80ch; }
+  @media (prefers-reduced-motion: reduce) { .key, .rocker span, .knob::after, .fader .cap { transition: opacity 120ms; } }
+</style>
+</head>
+<body>
+<h1>Material &amp; mechanism · Bauhaus panel</h1>
+<p class="lead">The same four mechanisms in three materials. Shade comes from one light at the top left. Movement is a spring whose mass and damping belong to the material: a press goes down in about 60ms and comes back on the spring, and the rotary and the fader settle into their detents. Try the keyboard too.</p>
+
+<div class="row">
+  <section class="panel enamel" data-mass="1" data-stiffness="520" data-damping="38" aria-labelledby="h-a">
+    <h2 id="h-a">A · Enamel on steel</h2>
+    <p class="note">Light and glossy, a short throw. Springs are stiff and well damped (ζ ≈ 0.83), so it settles in about 200ms with no bounce.</p>
+    <div class="grid" data-panel></div>
+  </section>
+  <section class="panel bakelite" data-mass="2.2" data-stiffness="420" data-damping="50" aria-labelledby="h-b">
+    <h2 id="h-b">B · Bakelite</h2>
+    <p class="note">Heavy and matte, a deep throw. More mass and softer springs (ζ ≈ 0.82): the same press takes longer to come back, as a heavy part would.</p>
+    <div class="grid" data-panel></div>
+  </section>
+  <section class="panel print" data-mass="1" data-stiffness="900" data-damping="60" aria-labelledby="h-c">
+    <h2 id="h-c">C · Print (flat Bauhaus)</h2>
+    <p class="note">No gloss and no blur, an offset ink shadow. The springs are very stiff (ζ = 1), so parts click into place like a registration mark.</p>
+    <div class="grid" data-panel></div>
+  </section>
+</div>
+
+<footer>Usability stays the same in every material. Labels are at least 4.5:1, every target is 44px or more, the rotary and the fader are sliders with arrow keys, and every control has its focus ring. Under Reduce motion nothing is thrown, and the detents fade instead of travelling.</footer>
+
+<script>
+const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// one damped spring per moving part: x'' = (-k(x - target) - c·v) / m, stepped at 120 Hz
+function spring(panel, apply, x0 = 0) {
+  const m = +panel.dataset.mass, k = +panel.dataset.stiffness, c = +panel.dataset.damping;
+  let x = x0, v = 0, target = x0, raf = 0, last = 0;
+  const tick = (t) => {
+    const dt = Math.min(0.032, (t - (last || t)) / 1000 || 1 / 120); last = t;
+    for (let i = 0, n = Math.ceil(dt * 120); i < n; i++) { const a = (-k * (x - target) - c * v) / m; v += a / 120; x += v / 120; }
+    apply(x);
+    if (Math.abs(x - target) < 1e-3 && Math.abs(v) < 1e-3) { x = target; apply(x); raf = 0; last = 0; return; }
+    raf = requestAnimationFrame(tick);
+  };
+  return {
+    to(t, { snap = false } = {}) { target = t; if (snap || REDUCED) { x = t; v = 0; apply(x); return; } if (!raf) raf = requestAnimationFrame(tick); },
+    get value() { return x; },
+  };
+}
+
+function build(panel) {
+  const g = panel.querySelector('[data-panel]');
+  const cell = (el, label) => { const d = document.createElement('div'); d.className = 'cell'; d.append(el); const l = document.createElement('div'); l.className = 'label'; l.textContent = label; d.append(l); g.append(d); return d; };
+
+  // key: down at once (fast on), back up on the spring (slow off)
+  const key = document.createElement('button'); key.className = 'key'; key.textContent = 'REC'; key.setAttribute('aria-pressed', 'false');
+  const ks = spring(panel, (t) => key.style.setProperty('--t', t.toFixed(3)));
+  const down = () => ks.to(1, { snap: true });
+  const up = () => ks.to(0);
+  key.addEventListener('pointerdown', down); key.addEventListener('pointerup', up); key.addEventListener('pointerleave', up);
+  key.addEventListener('keydown', (e) => { if (e.key === ' ' || e.key === 'Enter') down(); });
+  key.addEventListener('keyup', (e) => { if (e.key === ' ' || e.key === 'Enter') up(); });
+  key.addEventListener('click', () => key.setAttribute('aria-pressed', key.getAttribute('aria-pressed') === 'true' ? 'false' : 'true'));
+  cell(key, 'Key');
+
+  // rocker: flips with a throw past the pivot and settles
+  const rk = document.createElement('button'); rk.className = 'rocker'; rk.setAttribute('role', 'switch'); rk.setAttribute('aria-checked', 'false'); rk.setAttribute('aria-label', 'Power');
+  rk.innerHTML = '<span class="on" aria-hidden="true">ON</span><span class="off" aria-hidden="true">OFF</span>';
+  const rs = spring(panel, (a) => rk.style.setProperty('--a', a.toFixed(3)), -1);
+  rk.addEventListener('click', () => { const on = rk.getAttribute('aria-checked') !== 'true'; rk.setAttribute('aria-checked', String(on)); rs.to(on ? 1 : -1); });
+  cell(rk, 'Rocker');
+
+  // rotary: 11 detents over 270°, drag or arrows; releases into the nearest detent
+  const dial = document.createElement('div'); dial.className = 'dial';
+  for (let i = 0; i <= 10; i++) { const t = document.createElement('i'); const deg = -135 + i * 27; t.style.transform = `rotate(${deg + 180}deg) translateY(56px)`; dial.append(t); }
+  const knob = document.createElement('div'); knob.className = 'knob'; knob.tabIndex = 0; knob.setAttribute('role', 'slider'); knob.setAttribute('aria-label', 'Level');
+  knob.setAttribute('aria-valuemin', '0'); knob.setAttribute('aria-valuemax', '10'); dial.append(knob);
+  const out = document.createElement('div'); out.className = 'readout';
+  let step = 3;
+  const kspring = spring(panel, (d) => knob.style.setProperty('--deg', d.toFixed(2)), -135 + step * 27);
+  const setStep = (s, opts) => { step = Math.max(0, Math.min(10, s)); knob.setAttribute('aria-valuenow', String(step)); out.textContent = `Level ${step}`; kspring.to(-135 + step * 27, opts); };
+  setStep(step, { snap: true });
+  knob.addEventListener('keydown', (e) => { const m = { ArrowUp: 1, ArrowRight: 1, ArrowDown: -1, ArrowLeft: -1 }[e.key]; if (m) { e.preventDefault(); setStep(step + m); } if (e.key === 'Home') setStep(0); if (e.key === 'End') setStep(10); });
+  knob.addEventListener('pointerdown', (e) => {
+    knob.setPointerCapture(e.pointerId); const y0 = e.clientY, d0 = kspring.value;
+    const move = (ev) => { const d = Math.max(-135, Math.min(135, d0 + (y0 - ev.clientY) * 1.6)); kspring.to(d, { snap: true }); out.textContent = `Level ${Math.round((d + 135) / 27)}`; };
+    const end = () => { knob.removeEventListener('pointermove', move); setStep(Math.round((kspring.value + 135) / 27)); };
+    knob.addEventListener('pointermove', move); knob.addEventListener('pointerup', end, { once: true });
+  });
+  const c3 = cell(dial, 'Rotary'); c3.append(out);
+
+  // fader: 5 detents in a groove
+  const f = document.createElement('div'); f.className = 'fader'; f.tabIndex = 0; f.setAttribute('role', 'slider'); f.setAttribute('aria-label', 'Volume');
+  f.setAttribute('aria-valuemin', '0'); f.setAttribute('aria-valuemax', '4');
+  f.innerHTML = '<div class="groove"></div>' + [0, 1, 2, 3, 4].map((i) => `<div class="tick" style="left:calc(14px + ${i} * (100% - 28px) / 4 - 1px)"></div>`).join('') + '<div class="cap"></div>';
+  const cap = f.querySelector('.cap'); const fo = document.createElement('div'); fo.className = 'readout';
+  let fv = 1;
+  const fs = spring(panel, (x) => cap.style.setProperty('--x', x.toFixed(4)), fv / 4);
+  const setF = (v, o) => { fv = Math.max(0, Math.min(4, v)); f.setAttribute('aria-valuenow', String(fv)); fo.textContent = `Volume ${fv}`; fs.to(fv / 4, o); };
+  setF(fv, { snap: true });
+  f.addEventListener('keydown', (e) => { const m = { ArrowUp: 1, ArrowRight: 1, ArrowDown: -1, ArrowLeft: -1 }[e.key]; if (m) { e.preventDefault(); setF(fv + m); } if (e.key === 'Home') setF(0); if (e.key === 'End') setF(4); });
+  f.addEventListener('pointerdown', (e) => {
+    f.setPointerCapture(e.pointerId); const r = f.getBoundingClientRect();
+    const at = (ev) => Math.max(0, Math.min(1, (ev.clientX - r.left - 14) / (r.width - 28)));
+    const move = (ev) => fs.to(at(ev), { snap: true }); move(e);
+    const end = (ev) => { f.removeEventListener('pointermove', move); setF(Math.round(at(ev) * 4)); };
+    f.addEventListener('pointermove', move); f.addEventListener('pointerup', end, { once: true });
+  });
+  const c4 = cell(f, 'Fader'); c4.append(fo);
+}
+document.querySelectorAll('.panel').forEach(build);
+</script>
+</body>
+</html>

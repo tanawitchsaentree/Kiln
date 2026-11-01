@@ -59,3 +59,45 @@ Motion tied to a value changing is the one kind that earns itself. A number that
 that just arrived, a status that just changed. Mark it briefly and let it settle.
 
 Motion tied to nothing is decoration, and decoration that repeats becomes irritation.
+
+## Rhythm
+
+Smooth is the floor, never the goal. A system that eases every change over the same 300ms feels like
+syrup, and one that fades everything in 100ms feels raw. Rhythm is the difference between those two. Each kind of change
+gets its own way in and its own way out, and the gates measure both (G-MO1 in the
+page, G-MO2 on the tokens, proven by `tooling/kiln/motion-probes.proof.mjs`).
+
+**Fast on, slow off.** A state answers the moment it is entered and lets go slowly. Hover lights up in
+about 130ms and fades over about 360ms when the pointer leaves; a press goes down in about 70ms and
+comes back over about 300ms. The way out is at least 1.6 times the way in. The token says it in one
+place, with `$extensions["kiln.state"]`, and the build turns it into a rule on each component root:
+
+```json
+"hover": { "$type": "duration", "$value": "{duration.linger}",
+  "$extensions": { "kiln.state": { ":hover": "{duration.brisk}" }, "kiln.reduced": "keep" } }
+```
+
+A CSS transition takes its duration from the state it is going to, so components keep writing
+`transition: background-color var(--ds-motion-hover) var(--ds-motion-easing)` and get both halves.
+
+**Decelerate in, accelerate out.** Anything that arrives starts fast and settles, so its curve is
+steeper at the start than at the end. For a cubic-bezier (x1, y1, x2, y2) the slope at the start is
+y1 / x1 and at the end (1 − y2) / (1 − x2); arrival needs the first to be larger. An exit does the
+opposite and is shorter than the entrance, about 0.6 of it, with no stagger, because nobody watches a
+thing leave.
+
+**Duration follows distance.** For travel, duration = clamp(min, a + b·√d, max) with d in px. With
+a = 120 and b = 12 a 100px move takes 240ms, 400px takes 360ms and 900px takes 480ms. Fades and state
+changes do not travel, so they stay on the state tokens.
+
+**Springs for direct manipulation.** A thumb, a knob or a sheet that follows a finger keeps moving after
+release, so it settles on a spring rather than a curve. Damping ratio ζ = c / (2√(k·m)) stays between
+0.75 and 1 on interface state (no visible bounce), and the time to settle is about 4 / (ζ·ω₀) with
+ω₀ = √(k / m). A bounce is a signature moment, at most one per system, and it is declared in CONCEPT.
+
+**Choreography.** Stagger s ≤ 40ms per item and cap the whole entrance at 240ms, so at most 1 + 240 / s
+items stagger and the rest arrive together. A parent arrives before its children, and children never
+start before the parent has covered half its travel.
+
+**Reduced motion.** Travel and scale go to zero. Fades of colour and light that move nothing keep their
+rhythm (`kiln.reduced: "keep"`), because a control that snaps reads as broken (Pane D-039).

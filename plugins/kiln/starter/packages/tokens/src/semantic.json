@@ -375,15 +375,34 @@
   "motion": {
     "hover": {
       "$type": "duration",
-      "$value": "{duration.gentle}"
+      "$value": "{duration.linger}",
+      "$description": "a hover lights up fast and fades slowly when the pointer leaves",
+      "$extensions": {
+        "kiln.state": {
+          ":hover": "{duration.brisk}"
+        },
+        "kiln.reduced": "keep"
+      }
     },
     "press": {
       "$type": "duration",
-      "$value": "{duration.quick}"
+      "$value": "{duration.release}",
+      "$description": "a press goes down at once and comes back up slowly",
+      "$extensions": {
+        "kiln.state": {
+          ":active": "{duration.snap}"
+        },
+        "kiln.reduced": "keep"
+      }
     },
     "enter": {
       "$type": "duration",
       "$value": "{duration.slow}"
+    },
+    "exit": {
+      "$type": "duration",
+      "$value": "{duration.exit}",
+      "$description": "leaving is shorter than arriving"
     },
     "scene": {
       "$type": "duration",
@@ -396,6 +415,10 @@
     "easing": {
       "$type": "cubicBezier",
       "$value": "{easing.soft}"
+    },
+    "easing-exit": {
+      "$type": "cubicBezier",
+      "$value": "{easing.depart}"
     },
     "easing-inout": {
       "$type": "cubicBezier",

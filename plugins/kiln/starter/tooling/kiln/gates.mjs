@@ -27,6 +27,8 @@
 //   leaks        G-LK1 page styles never reach inside a component (clone outside main, compare layout)
 //   nesting      G-NC1 a shape near a rounded parent's corner nests it (even inset, inner = outer − inset)
 //   shape        G-CH1 a card is never a pill · G-RW1 controls in one row share their edges
+//   motion       G-MO2 the motion tokens keep the rhythm (fast on, slow off; decelerate in, accelerate out)
+//                G-MO1 every control on a component page answers its hover and press in that rhythm
 //   text fields  G-TX1 fields hold Thai marks and keep their size while typing
 //   glow         G-GL1 only [data-glow] parts emit light in dark, visibly and within reach; text never; nothing in light
 //   rhythm       G-RH1 a stage and a tab bar ≥24px from neighbouring blocks (own code/caption/heading ≥8, intro ≥16)
@@ -44,6 +46,7 @@ import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 import { docsConfig, routes, componentPages, url, routeFilter } from './config.mjs';
 import { serveDist } from './serve-dist.mjs';
+import { motionTokenProblems, stateRhythm } from './motion-probes.mjs';
 import { glassCssProblems, glassRecipeProbe, bareSurfaceProbe, meshShareProbe, cardStats, anchorDrift, pillCardProbe, rowEdgeProbe } from './surface-probes.mjs';
 
 const C = docsConfig();
@@ -1481,6 +1484,38 @@ try {
     for (const r of routes) { await go(r); for (const x of await page.evaluate(pillCardProbe, { selector: `main [data-example-live] ${SURFACE}, main [data-example-live] [data-component="Card"]` })) bad.push(`${r}: ${x}`); }
     fail(bad, 'pill-shaped cards');
     return `${routes.length} pages`;
+  });
+
+  await gate('G-MO2', 'the motion tokens keep the rhythm: fast into a state and slow out of it, decelerating arrivals, accelerating exits, nothing linear or over the UI ceiling', async () => {
+    // user, 2026-11-01: "motion ต้องรู้จังหวะ เข้าเร็วออกช้า ไม่ใช่สักแต่จะ smooth"
+    const tokFile = path.join(C.root, 'packages/tokens/build/json/tokens.json');
+    expect(existsSync(tokFile), 'no built tokens json');
+    const toks = JSON.parse(readFileSync(tokFile, 'utf8'));
+    const states = Object.values(toks).filter((t) => t.state).length;
+    expect(states, 'no motion token has kiln.state (a hover and a press with their own way in), so every state change is symmetric');
+    fail(motionTokenProblems(toks, C.motion ?? {}), 'motion tokens off rhythm');
+    return `${states} stated tokens`;
+  });
+
+  await gate('G-MO1', 'every control on a component page answers hover and press in the rhythm: a transition, fast in, slow out, never the browser default', async () => {
+    const routes = ROUTES.filter((r) => r.startsWith(`${C.componentsBase}/`) && r.endsWith('/code')).slice(0, C.motion?.pages ?? 24);
+    if (!routes.length) throw new Error('NO pages to check');
+    // measured as most people see it (no preference) on every page, and under Reduce motion on the first
+    // eight: there travel stops but a fade of colour keeps its rhythm (Pane R-044: the primitives behind hover
+    // and press were zeroed, so every control snapped for a user with Reduce motion on)
+    const bad = []; let n = 0;
+    const mc = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'no-preference' });
+    const mp = await mc.newPage();
+    for (const [pg, list, mode] of [[mp, routes, 'motion'], [page, routes.slice(0, 8), 'reduced motion']]) {
+      for (const r of list) {
+        if (pg === page) await go(r); else await mp.goto(url(srv.base, r, {}, C), { waitUntil: 'networkidle' });
+        const res = await stateRhythm(pg, { limit: C.motion?.perPage ?? 3, bands: C.motion ?? {} });
+        n += res.checked; for (const x of res.problems) bad.push(`${r} (${mode}): ${x}`);
+      }
+    }
+    await mc.close();
+    fail(bad, 'controls off rhythm');
+    return `${n} controls on ${routes.length} pages`;
   });
 
   await gate('G-RW1', 'controls set side by side in one row share their top and bottom edges', async () => {
