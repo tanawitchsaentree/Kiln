@@ -59,13 +59,14 @@ const STEPS = [
   ['token-contract', ['node', 'tooling/kiln/token-contract.mjs'], { needs: ['tokens'], quick: true }],
   ['rationale', ['node', 'tooling/kiln/rationale.mjs'], { needs: ['tokens'], quick: true }],
   ['i18n', ['node', 'tooling/kiln/i18n-lint.mjs'], { quick: true }],
-  ['treeshake', ['node', 'tooling/kiln/treeshake-probe.mjs'], { quick: true }],
   ['meta', ['node', 'tooling/kiln/meta.mjs'], { quick: true }],
   ['design-md', ['node', 'tooling/kiln/design-md.mjs'], { needs: ['tokens'], quick: true }],
   ['agent-setup', ['node', 'tooling/kiln/agent-setup.mjs'], { quick: true }],
   ['build', ['sh', '-c', `pnpm --filter ${REACT} build && pnpm --filter ${DOCS} build`], { needs: ['tokens', 'meta', 'design-md', 'agent-setup'], quick: true }],
   // the book typechecks against the built package's types, so it runs after the build (a fresh clone has no dist yet)
   ['typecheck', ['sh', '-c', `pnpm --filter ${REACT} typecheck && pnpm --filter ${DOCS} exec tsc --noEmit -p .`], { needs: ['build'], quick: true }],
+  // it bundles the built package, so it waits for the build (a fresh clone has no dist; kiln 2.5.1)
+  ['treeshake', ['node', 'tooling/kiln/treeshake-probe.mjs'], { needs: ['build'], quick: true }],
   ['smoke-import', ['node', 'tooling/smoke-import.mjs'], { needs: ['build'] }],
   ['spec-capture', ['node', 'tooling/kiln/spec-capture.mjs'], { needs: ['build'], browser: true }],
   ['evidence', ['node', 'tooling/kiln/evidence.mjs'], { needs: ['build'], browser: true }],

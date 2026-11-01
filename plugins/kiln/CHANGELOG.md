@@ -1,5 +1,9 @@
 # kiln — changelog
 
+## 2.5.1
+
+- verify runs the tree-shake probe after the build. In a fresh repo it ran first, found no dist and failed `verify:quick` (found by creating a system from a clean clone of the marketplace).
+
 ## 2.5.0 — onboard your agent
 
 - `agent-setup.mjs` (a verify step) writes `/agent-setup/prompt.md` and the one line the book's home page copies, from `kiln.config.json` → `agentSetup`. The agent reads the project first, asks once, installs into the project only, never touches a credential, proves the setup with a typecheck and a build, and ends by naming what it cannot measure. The starter's `AgentOnboard` shows the button once a site is set. See `docs/AGENT-SETUP.md`.
