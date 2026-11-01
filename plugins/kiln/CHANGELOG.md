@@ -1,5 +1,9 @@
 # kiln — changelog
 
+## 2.5.4
+
+- G-NC1 judges a nested shape at the corner it faces in its container. Before, it read only the top-left radius, so the last key of a segmented bank was judged by its 6px seam to its neighbour instead of its nested end (dial K-12). Pane stays green.
+
 ## 2.5.3 — what dial's wave 1 hit
 
 - G-SL1 no longer holds a rotary to the 200px slider length. A knob marked `data-mechanism="rotary"`, or named in `docs.sliderExempt` (Rotary and Knob by default), is skipped. Before, it blocked M1.

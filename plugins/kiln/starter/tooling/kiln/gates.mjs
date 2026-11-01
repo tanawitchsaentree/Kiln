@@ -1554,7 +1554,9 @@ try {
           const lineOnly = cs.boxShadow !== 'none' && cs.boxShadow.split(/,(?![^(]*\))/).every((l) => /inset/.test(l) && /(^|\s)0px\s+-?[\d.]+px\s+0px(\s|$)/.test(l.replace(/rgba?\([^)]*\)/, '').trim()));
           return solid || cs.backgroundImage !== 'none' || (cs.boxShadow !== 'none' && !lineOnly) || ['Top', 'Right', 'Bottom', 'Left'].every((k) => parseFloat(cs[`border${k}Width`]) > 0); // a one-side rule is a line, not a shape
         };
-        const rad = (el) => parseFloat(getComputedStyle(el).borderTopLeftRadius) || 0;
+        // the radius of one named corner; the nest is judged at the corner the child faces, since its other corners
+        // may be seams (dial K-12: the last key of a segmented bank read its 6px seam, not its nested end)
+        const rad = (el, c = 'TopLeft') => parseFloat(getComputedStyle(el)[`border${c}Radius`]) || 0;
         const name = (el) => el.closest('[data-component]')?.getAttribute('data-component') ?? (el.className && typeof el.className === 'string' ? `.${el.className.split(' ')[0]}` : el.tagName.toLowerCase());
         for (const el of document.querySelectorAll('body *')) {
           if (el.closest(`svg, [aria-hidden="true"] [aria-hidden="true"], [data-nc-exempt]${EXEMPT ? `, ${EXEMPT}` : ''}`) || !drawn(el)) continue;
@@ -1564,9 +1566,11 @@ try {
           if (b.width < 12 || b.height < 12 || b.width > 600) continue;
           let p = el.parentElement; while (p && p !== document.body && !drawn(p)) p = p.parentElement;
           if (!p || p === document.body) continue;
-          const pb = p.getBoundingClientRect(); const R = Math.min(rad(p), pb.height / 2, pb.width / 2);
-          if (R < 10 || pb.height > 160) continue;
+          const pb = p.getBoundingClientRect();
           const l = b.left - pb.left, rr = pb.right - b.right, t = b.top - pb.top, bo = pb.bottom - b.bottom;
+          const corner = `${t <= bo ? 'Top' : 'Bottom'}${l <= rr ? 'Left' : 'Right'}`;
+          const R = Math.min(rad(p, corner), pb.height / 2, pb.width / 2);
+          if (R < 10 || pb.height > 160) continue;
           if (Math.min(l, rr, t, bo) < -0.5) continue; // not inside: a lens, a tooltip, a popover
           // only boxes that sit in a corner region: both their inline and block insets smaller than the corner
           const h = Math.min(l, rr), v = Math.min(t, bo);
@@ -1575,7 +1579,7 @@ try {
           if (Math.max(h, v) > 0.6 * R) continue;
           // flush against a parent that clips its children (a code block's bar) the parent's own corner does the work
           if (Math.max(h, v) < 1 && getComputedStyle(p).overflow !== 'visible') continue;
-          const want = Math.max(0, R - Math.max(h, v)); const got = Math.min(rad(el), b.height / 2, b.width / 2);
+          const want = Math.max(0, R - Math.max(h, v)); const got = Math.min(rad(el, corner), b.height / 2, b.width / 2);
           // a pill's end is set by its height, so a pill only owes the even inset, never a radius
           const pill = got >= Math.min(b.height, b.width) / 2 - 1;
           const uneven = Math.abs(h - v) > Math.max(2, 0.25 * Math.max(h, v)) && Math.min(h, v) < 0.6 * Math.max(h, v);
