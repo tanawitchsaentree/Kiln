@@ -118,3 +118,10 @@ Exactly two per run, per the calling order's own rule if one is active, otherwis
 default: one after Phase 0 + audit (ranked punch list, ≤15 lines + screenshots), one after the
 full run (before/after numbers, gate status, screenshots). No cheerleading, no summary beyond the
 computed numbers.
+
+## The showcase is working flows (Pane R-040, gate G-SC1)
+
+A showcase holds one small product per row, wired end to end, each with a switch for the states a real
+screen meets (ready, loading, empty, failing) and controls that do something. A grid of separate parts
+side by side is a parts list, not a showcase. Mark each flow with `data-scenario` and set
+`docs.showcaseRoute`; G-SC1 fails a scenario with fewer than three states or fewer than three live controls.

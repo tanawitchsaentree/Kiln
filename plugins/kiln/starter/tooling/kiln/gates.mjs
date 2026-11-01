@@ -29,6 +29,9 @@
 //   shape        G-CH1 a card is never a pill · G-RW1 controls in one row share their edges
 //   motion       G-MO2 the motion tokens keep the rhythm (fast on, slow off; decelerate in, accelerate out)
 //                G-MO1 every control on a component page answers its hover and press in that rhythm
+//   from Pane    G-CP1 search lists a label once · G-BJ1 a bar's jobs look different · G-FR1 focus rings are
+//                not clipped · G-SP1 a split menu lines up with the whole button · G-SC1 the showcase is working
+//                flows · G-PG1 a playground starts on its tokens (ui-probes.mjs, proven by ui-probes.proof.mjs)
 //   text fields  G-TX1 fields hold Thai marks and keep their size while typing
 //   glow         G-GL1 only [data-glow] parts emit light in dark, visibly and within reach; text never; nothing in light
 //   rhythm       G-RH1 a stage and a tab bar ≥24px from neighbouring blocks (own code/caption/heading ≥8, intro ≥16)
@@ -47,6 +50,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { docsConfig, routes, componentPages, url, routeFilter } from './config.mjs';
 import { serveDist } from './serve-dist.mjs';
 import { motionTokenProblems, stateRhythm } from './motion-probes.mjs';
+import { duplicateOptionsProbe, barJobsProbe, focusClipProbe, splitAlignProbe, showcaseProbe, playgroundProbe } from './ui-probes.mjs';
 import { glassCssProblems, glassRecipeProbe, bareSurfaceProbe, meshShareProbe, cardStats, anchorDrift, pillCardProbe, rowEdgeProbe } from './surface-probes.mjs';
 
 const C = docsConfig();
@@ -1521,6 +1525,71 @@ try {
     await mc.close();
     fail(bad, 'controls off rhythm');
     return `${n} controls on ${routes.length} pages`;
+  });
+
+  await gate('G-CP1', 'the book\'s search never lists the same label twice for one query', async () => {
+    if (C.search === false) return 'the book has no search (docs.search false)';
+    const keys = C.searchShortcut ?? 'Meta+K'; const queries = C.searchQueries ?? ['button', 'colour', 'card', 'motion'];
+    await go('/'); await page.keyboard.press(keys); await page.waitForTimeout(300);
+    const box = page.locator(C.searchInput ?? '[role=dialog] input, [role=combobox] input, input[role=combobox]').first();
+    if (!(await box.isVisible().catch(() => false))) return `${keys} opens no search on the home page (set docs.search false if the book has none)`;
+    const bad = [];
+    for (const q of queries) { await box.fill(q); await page.waitForTimeout(250); for (const x of await page.evaluate(duplicateOptionsProbe, { options: C.searchOptions ?? '[role=option]' })) bad.push(`"${q}": ${x}`); }
+    await page.keyboard.press('Escape');
+    fail(bad, 'repeated results');
+    return `${queries.length} queries`;
+  });
+
+  await gate('G-BJ1', 'controls in one bar that do different jobs (a field, a button, a link) do not share one look', async () => {
+    await go('/');
+    fail(await page.evaluate(barJobsProbe, { bars: C.barSelector ?? 'header, [role=banner], [role=toolbar]' }), 'jobs that look alike');
+  });
+
+  await gate('G-FR1', 'a focus ring is never cut off by a parent that clips', async () => {
+    const routes = ROUTES.filter((r) => r.startsWith(`${C.componentsBase}/`) && r.endsWith('/code')).slice(0, C.focusPages ?? 16);
+    if (!routes.length) throw new Error('NO pages to check');
+    const bad = new Set(); let n = 0;
+    for (const r of routes) {
+      await go(r); await page.evaluate(() => document.querySelector('main [data-example-live]')?.scrollIntoView());
+      const first = page.locator('main [data-example-live] :is(button, a[href], input, [tabindex="0"], [role=slider])').first();
+      if (!(await first.count())) continue;
+      // start just before the demo and walk it with Tab, so every stop is keyboard focus (:focus-visible)
+      await first.focus().catch(() => {}); await page.keyboard.press('Shift+Tab');
+      for (let i = 0; i < 10; i++) {
+        await page.keyboard.press('Tab');
+        if (!(await page.evaluate(() => !!document.activeElement?.closest('main [data-example-live]')))) break;
+        n++; for (const x of await page.evaluate(focusClipProbe)) bad.add(`${r}: ${x}`);
+      }
+    }
+    fail([...bad], 'clipped focus rings');
+    return `${n} focus stops on ${routes.length} pages`;
+  });
+
+  await gate('G-SP1', 'a split button\'s menu lines up with the whole button', async () => {
+    const r = ROUTES.find((x) => /\/split-button(\/code)?$/.test(x));
+    if (!r) return 'no SplitButton in this book';
+    await go(r);
+    const root = page.locator('main [data-example-live] [data-component="SplitButton"]').first();
+    if (!(await root.count())) return 'no SplitButton in a live demo';
+    await root.locator('[aria-haspopup="menu"]').first().click(); await page.waitForTimeout(400);
+    const id = await root.evaluate((e) => { e.setAttribute('data-sp-probe', ''); return true; });
+    const res = id ? await page.evaluate(splitAlignProbe, { root: '[data-sp-probe]', menu: '[role=menu]' }) : [];
+    await page.keyboard.press('Escape');
+    fail(res, 'split menu off its button');
+  });
+
+  await gate('G-SC1', 'the showcase is working flows: each scenario has a state switch (ready, loading, empty, failing) and live controls', async () => {
+    const r = C.showcaseRoute ?? (ROUTES.includes('/showcase') ? '/showcase' : null);
+    if (!r) return 'no showcase page yet (docs.showcaseRoute)';
+    await go(r);
+    fail(await page.evaluate(showcaseProbe, { scenario: C.scenarioSelector ?? '[data-scenario]', min: 3 }), 'showcase problems');
+  });
+
+  await gate('G-PG1', 'a playground starts on the values of the tokens it models', async () => {
+    const bad = []; let n = 0;
+    for (const r of ROUTES.filter((x) => x.startsWith(`${C.foundationsBase}/`))) { await go(r); const res = await page.evaluate(playgroundProbe); n += res.checked; for (const x of res.problems) bad.push(`${r}: ${x}`); }
+    fail(bad, 'playgrounds off their tokens');
+    return n ? `${n} marked controls` : 'no control is marked data-playground-token yet';
   });
 
   await gate('G-RW1', 'controls set side by side in one row share their top and bottom edges', async () => {

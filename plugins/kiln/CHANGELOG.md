@@ -1,5 +1,15 @@
 # kiln — changelog
 
+## 2.6.0 — six gates from Pane's complaints
+
+- G-CP1: the book's search never lists one label twice for a query.
+- G-BJ1: a field, a button and a link in one bar do not share one look.
+- G-FR1: a keyboard walk through each live demo finds no focus ring cut off by a clipping parent.
+- G-SP1: a split button's menu lines up with the whole button.
+- G-SC1: the showcase is working flows, each with three or more states and live controls (`docs.showcaseRoute`, docs-engine rule).
+- G-PG1: a playground control marked `data-playground-token` starts on its token's value.
+- `ui-probes.proof.mjs` proves all six with 13 cases in gate:selftest. Pane passes every one; G-PG1 has no marked controls in Pane yet. Still open: a popup opened inside a popup stacks above it, and docs controls with three options or fewer are segmented.
+
 ## 2.5.4
 
 - G-NC1 judges a nested shape at the corner it faces in its container. Before, it read only the top-left radius, so the last key of a segmented bank was judged by its 6px seam to its neighbour instead of its nested end (dial K-12). Pane stays green.
