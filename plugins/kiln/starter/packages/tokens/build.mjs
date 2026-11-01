@@ -180,6 +180,13 @@ ${[...tokens.keys()].filter((p) => p === 'scale.press').map((p) => `    ${cssNam
 // keep their environment value in dark and take the theme value in light, so the environment blocks
 // are repeated inside each theme scope. A page with no data-theme follows prefers-color-scheme.
 const THEMES = [...new Set([...tokens.values()].flatMap((t) => Object.keys(t.theme ?? {})))];
+// $value describes BASE and kiln.theme holds the others, so an override named BASE means the config and the
+// source disagree (dial K-7: baseTheme "light" on the dark seed built "themes: light, light" and lost dark)
+if (THEMES.includes(BASE)) {
+  const other = [...new Set([...tokens.values()].flatMap((t) => Object.keys(t.theme ?? {})))].filter((t) => t !== BASE);
+  console.error(`✗ token build: kiln.config tokens.baseTheme is "${BASE}", but the tokens carry "${BASE}" overrides, so their $value describes another theme${other.length ? '' : ' (the seed: dark)'}. Keep baseTheme on the theme $value describes until Phase 2 rewrites the values, then flip both together.`);
+  process.exit(1);
+}
 const themed = [...tokens].filter(([, t]) => t.theme);
 const themeDeps = [...tokens.keys()].filter((p) => themed.some(([o]) => dependsOn(p, o)));
 const themeBody = (th, indent) => [

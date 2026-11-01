@@ -57,9 +57,21 @@ const run = (cmd, a, opts = {}) => {
   const r = spawnSync(cmd, a, { cwd: dest, stdio: 'inherit', ...opts });
   if (r.status !== 0) { console.error(`✗ ${cmd} ${a.join(' ')} failed`); process.exit(r.status ?? 1); }
 };
+// pnpm may not be on PATH (dial, 2026-11-01: "zsh: command not found: pnpm"); fall back to corepack, which
+// ships with Node, then to npx with the version package.json pins, and say which one ran
+const pnpm = (() => {
+  const ok = (c, a) => spawnSync(c, [...a, '--version'], { cwd: dest, stdio: 'ignore' }).status === 0;
+  if (ok('pnpm', [])) return ['pnpm', []];
+  if (ok('corepack', ['pnpm'])) return ['corepack', ['pnpm']];
+  let pin = 'pnpm@9'; try { pin = JSON.parse(readFileSync(path.join(dest, 'package.json'), 'utf8')).packageManager?.split('+')[0] || pin; } catch {}
+  if (ok('npx', ['--yes', pin])) return ['npx', ['--yes', pin]];
+  return null;
+})();
 if (!flag('--no-install')) {
-  run('pnpm', ['install']);
-  run('pnpm', ['--filter', `${name}-tokens`, 'build']);
+  if (!pnpm) { console.error('✗ pnpm is not installed and neither corepack nor npx could run it. Run `corepack enable pnpm` (it ships with Node) and create again.'); process.exit(1); }
+  if (pnpm[0] !== 'pnpm') console.log(`! pnpm is not on PATH; using ${[pnpm[0], ...pnpm[1]].join(' ')}. \`corepack enable pnpm\` makes the plain \`pnpm\` commands below work.`);
+  run(pnpm[0], [...pnpm[1], 'install']);
+  run(pnpm[0], [...pnpm[1], '--filter', `${name}-tokens`, 'build']);
 }
 if (!flag('--no-git')) {
   run('git', ['init', '-q']);

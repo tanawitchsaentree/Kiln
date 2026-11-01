@@ -182,7 +182,7 @@ main td p, main [data-example-live] p { max-inline-size: none; }
 .icon-cell { inline-size: 28px; block-size: 28px; }
 .pattern-narrow { inline-size: min(100%, 400px); }
 .wide-card { inline-size: min(100%, 560px); }
-.feed-media { block-size: 200px; border-radius: var(--ds-corner-media); background: center / cover url(/scenes/night-sm.jpg); }
+.feed-media { block-size: 200px; border-radius: var(--ds-corner-media); background: var(--ds-surface-solid); }
 .settings-list { margin: var(--ds-gap-lg) 0 0; display: flex; flex-direction: column; }
 .settings-row { display: flex; justify-content: space-between; gap: var(--ds-gap-2xl); padding-block: var(--ds-gap-lg); border-block-end: var(--ds-width-hairline) solid var(--ds-line-divider); }
 .settings-row dt { font-weight: var(--ds-type-weight-medium); }

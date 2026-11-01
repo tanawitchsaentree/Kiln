@@ -18,6 +18,9 @@ try {
 }
 const file = input?.tool_input?.file_path;
 if (!file) process.exit(0);
+// the lab renders candidates before any token exists, with raw estimated values on purpose (the full lint
+// skips apps/lab too); dial K-2: 116 violations blocked the anchor round
+if (/(^|\/)apps\/lab\//.test(file)) process.exit(0);
 
 const r = spawnSync(process.execPath, [LINT, file], { encoding: 'utf8', cwd: input.cwd || process.cwd() });
 if (r.status === 0) process.exit(0);

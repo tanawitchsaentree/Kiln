@@ -1,8 +1,9 @@
 {
-  "kiln": "01389da+dirty",
-  "syncedAt": "2026-11-01T08:09:13.196Z",
+  "kiln": "20ca1dd+dirty",
+  "syncedAt": "2026-11-01T09:13:32.723Z",
   "files": {
     "agent-setup.mjs": "3bb420830fe59565bfd37746176dfb6f5c8a3b802cbb4cbc350b201179d5c8bd",
+    "anchor-contrast.mjs": "9f3ae49241c62efdb32f580afd5aa45ef5d170f03fedaed5d5be094ba2423282",
     "anchor-likeness.mjs": "fbd252410b5651156ed38797a3ae1e4722a98186008fd90f5b53a5d9d9182198",
     "app-types.json": "3ef423f021ea8cd3485dd31cfe7b0a0db03656923c8fdd876a9e6ada43931df3",
     "config.mjs": "8c7bd749fce3e5c107211150dea72e572eea781b4577cf1566c95d38b0dfc2fa",

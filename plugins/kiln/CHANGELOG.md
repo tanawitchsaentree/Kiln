@@ -1,5 +1,15 @@
 # kiln — changelog
 
+## 2.5.2 — what the first system after Pane hit
+
+- `create` works without a global pnpm. It falls back to `corepack pnpm`, then to `npx` with the pinned version, and says which one ran.
+- The lint hook skips `apps/lab/`, where candidates hold raw estimated values before any token exists.
+- The book's principle parser stops at the next `## ` heading, so a section after the last principle no longer joins it.
+- `docs:preview` moves to the next free port when 4173 is taken.
+- The starter no longer points at a scene image it does not ship.
+- `anchor-contrast.mjs` checks every text in the anchor lab at 4.5:1 in every theme and screenshots each variant.
+- The token build stops with a clear message when `baseTheme` names a theme the tokens already override, and no longer drops a theme without a word.
+
 ## 2.5.1
 
 - verify runs the tree-shake probe after the build. In a fresh repo it ran first, found no dist and failed `verify:quick` (found by creating a system from a clean clone of the marketplace).
