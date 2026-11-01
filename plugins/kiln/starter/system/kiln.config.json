@@ -125,5 +125,9 @@
       "maxDeltaRim": 0.4,
       "$comment": "G-AN1: at the anchor lock run node tooling/kiln/anchor-likeness.mjs --record apps/lab/anchor/<picked>.html, then set route to the book page whose example carries data-anchor on the current card."
     }
+  },
+  "agentSetup": {
+    "site": null,
+    "$comment": "Onboard your agent: set site (and packages[].tarball, stylesheet, mcp, skill, starter) and agent-setup.mjs writes /agent-setup/prompt.md and the line the home page copies. See kiln docs/AGENT-SETUP.md."
   }
 }

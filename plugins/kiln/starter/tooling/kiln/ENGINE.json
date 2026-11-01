@@ -1,7 +1,8 @@
 {
-  "kiln": "5f690b7+dirty",
-  "syncedAt": "2026-11-01T06:49:29.334Z",
+  "kiln": "7a9ecee+dirty",
+  "syncedAt": "2026-11-01T07:04:12.588Z",
   "files": {
+    "agent-setup.mjs": "3bb420830fe59565bfd37746176dfb6f5c8a3b802cbb4cbc350b201179d5c8bd",
     "anchor-likeness.mjs": "fbd252410b5651156ed38797a3ae1e4722a98186008fd90f5b53a5d9d9182198",
     "app-types.json": "3ef423f021ea8cd3485dd31cfe7b0a0db03656923c8fdd876a9e6ada43931df3",
     "config.mjs": "8c7bd749fce3e5c107211150dea72e572eea781b4577cf1566c95d38b0dfc2fa",
@@ -29,7 +30,7 @@
     "tone-gate.mjs": "0b0abc6e1f9006f2d375165dd82be8763c78f99ec95103694dfdf3714a51bdfe",
     "treeshake-probe.mjs": "f7c6af1078d2f3460b5bf5791da27be26faf8fdbd0bf172e0e3d87099a4602a9",
     "usage.mjs": "4591e0804f3ae9757e39c809c4964004a38b8c91f849d5f70172c8f627e2a907",
-    "verify.mjs": "f81f097f53bf719130272b7935298277fdb838ee07989fc6bc110deec4b71f6f",
+    "verify.mjs": "f341e3b47c095806619c24ac06cec18a5504d2e8b1b8e35ef2d3b4fb04d4f118",
     "data/carbon-depth.json": "ae53753abf953e435e738b1beb15662fe68e2f00c13df21d58cc94dfebe9b4b7",
     "data/topics/accessibility.json": "5069d71f1f1bb86719a06a4a11ecc4f1aeceb2b31cb8744c832df0becc7d3892",
     "data/topics/brands.json": "f663a2b603ae95806c0a3cf0406ea498b431f1c45d0b42c1eaa8135c1fb848df",

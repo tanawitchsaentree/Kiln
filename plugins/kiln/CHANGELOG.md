@@ -1,5 +1,9 @@
 # kiln — changelog
 
+## 2.5.0 — onboard your agent
+
+- `agent-setup.mjs` (a verify step) writes `/agent-setup/prompt.md` and the one line the book's home page copies, from `kiln.config.json` → `agentSetup`. The agent reads the project first, asks once, installs into the project only, never touches a credential, proves the setup with a typecheck and a build, and ends by naming what it cannot measure. The starter's `AgentOnboard` shows the button once a site is set. See `docs/AGENT-SETUP.md`.
+
 ## 2.4.0 — motion rhythm, material and mechanism
 
 - Motion has a rhythm the gates measure. A token can hold another value inside a state (`kiln.state`), so hover lights up in about 130ms and fades over 380ms, and a press goes down in 70ms and rises over 300ms. G-MO2 checks the tokens, and G-MO1 hovers and presses real controls on the component pages, in normal and Reduce motion. `motion-probes.proof.mjs` proves both with 20 cases.
