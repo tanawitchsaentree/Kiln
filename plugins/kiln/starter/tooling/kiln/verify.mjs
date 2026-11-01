@@ -61,7 +61,8 @@ const STEPS = [
   ['i18n', ['node', 'tooling/kiln/i18n-lint.mjs'], { quick: true }],
   ['treeshake', ['node', 'tooling/kiln/treeshake-probe.mjs'], { quick: true }],
   ['meta', ['node', 'tooling/kiln/meta.mjs'], { quick: true }],
-  ['build', ['sh', '-c', `pnpm --filter ${REACT} build && pnpm --filter ${DOCS} build`], { needs: ['tokens', 'meta'], quick: true }],
+  ['design-md', ['node', 'tooling/kiln/design-md.mjs'], { needs: ['tokens'], quick: true }],
+  ['build', ['sh', '-c', `pnpm --filter ${REACT} build && pnpm --filter ${DOCS} build`], { needs: ['tokens', 'meta', 'design-md'], quick: true }],
   // the book typechecks against the built package's types, so it runs after the build (a fresh clone has no dist yet)
   ['typecheck', ['sh', '-c', `pnpm --filter ${REACT} typecheck && pnpm --filter ${DOCS} exec tsc --noEmit -p .`], { needs: ['build'], quick: true }],
   ['smoke-import', ['node', 'tooling/smoke-import.mjs'], { needs: ['build'] }],
