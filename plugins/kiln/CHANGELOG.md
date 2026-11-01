@@ -1,5 +1,9 @@
 # kiln — changelog
 
+## 2.6.1
+
+- The starter's LICENSE names the new system's own contributors. Before, every system shipped "Copyright (c) 2026 Dial contributors", the name of kiln's first system.
+
 ## 2.6.0 — six gates from Pane's complaints
 
 - G-CP1: the book's search never lists one label twice for a query.
