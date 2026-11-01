@@ -1,5 +1,13 @@
 # kiln — changelog
 
+## 2.3.0 — app type, budget, platforms and DESIGN.md
+
+- Intake asks which kind of app the system is for. Eleven app types in `app-types.json` each add their own components to wave 1 and list the next two waves and the book's scenarios.
+- A budget of lean, standard or full sets how much prose and how many derivation rounds a milestone asks for. Lean and standard let a component follow a derived sibling of its family. Contrast, the anchor, the three tiers, the a11y gate and human-tone stay the same at every budget (`docs/BUDGET.md`).
+- `usage.mjs` prints what a system has cost so far, per day, from its own transcripts.
+- The starter's token build also writes Swift, Kotlin, Dart, a Tailwind preset and Figma variables, described in `docs/TARGETS.md`.
+- `design-md.mjs` writes DESIGN.md from the tokens, the concept, every why.json and the decisions, and verify runs it before the book is built.
+
 ## 2.2.1 — the lessons from Pane, built into the factory
 
 - One rules block in the starter and the kit, checked to match, with the rules on small output, checking only what changed, and install lines that must work.
