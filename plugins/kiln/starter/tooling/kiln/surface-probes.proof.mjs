@@ -3,7 +3,7 @@
 // it, expect green). Each case is a small page shaped like the book's markup, run through the same probe
 // gates.mjs uses. Usage: node tooling/engine/surface-probes.proof.mjs   (exit 1 when any case is wrong)
 import { chromium } from 'playwright';
-import { glassCssProblems, glassRecipeProbe, bareSurfaceProbe, meshShareProbe, cardStats, anchorDrift } from './surface-probes.mjs';
+import { glassCssProblems, glassRecipeProbe, bareSurfaceProbe, meshShareProbe, cardStats, anchorDrift, pillCardProbe, rowEdgeProbe } from './surface-probes.mjs';
 
 // a photo stand-in: a striped bright image as a data URL, so "on a photo" is real pixels and a url() ground
 const PHOTO = `url("data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><rect width="40" height="40" fill="#e8d9a0"/><rect width="20" height="40" fill="#f6f1e0"/></svg>')}")`;
@@ -32,6 +32,12 @@ const cases = [
   // G-AN1: the anchor is thin glass; a card tuned toward opaque (R-032) is red, the same recipe is green
   { gate: 'G-AN1', want: 'red', anchor: card('background:rgba(20,21,24,.45);box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)'), now: card('background:rgba(20,21,24,.92);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)') },
   { gate: 'G-AN1', want: 'green', anchor: card('background:rgba(20,21,24,.45);box-shadow:inset 0 0 0 1px rgba(255,255,255,.35)'), now: card('background:rgba(20,21,24,.47);box-shadow:inset 0 0 0 1px rgba(255,255,255,.33)') },
+  // G-CH1: a 40px-corner card 60px tall is a pill; 120px tall it reads as a card
+  { gate: 'G-CH1', want: 'red', html: '<div data-component="Card" style="border-radius:40px;padding:22px;height:60px;box-sizing:border-box;background:#333">Tag</div>', probe: pillCardProbe, arg: { selector: '[data-component="Card"]' } },
+  { gate: 'G-CH1', want: 'green', html: '<div data-component="Card" style="border-radius:40px;padding:22px;height:120px;box-sizing:border-box;background:#333">Tag</div>', probe: pillCardProbe, arg: { selector: '[data-component="Card"]' } },
+  // G-RW1: a 30px track beside a 32px select is red; equal heights on one line are green
+  { gate: 'G-RW1', want: 'red', html: '<div class="row" style="display:flex;gap:12px;align-items:end"><div role="radiogroup" style="height:30px;width:120px;background:#444"></div><button role="combobox" style="height:32px;width:100px"></button></div>', probe: rowEdgeProbe, arg: { rows: '.row', controls: '[role=radiogroup], [role=combobox]' } },
+  { gate: 'G-RW1', want: 'green', html: '<div class="row" style="display:flex;gap:12px;align-items:end"><div role="radiogroup" style="height:32px;width:120px;background:#444"></div><button role="combobox" style="height:32px;width:100px"></button></div>', probe: rowEdgeProbe, arg: { rows: '.row', controls: '[role=radiogroup], [role=combobox]' } },
 ];
 
 const browser = await chromium.launch();

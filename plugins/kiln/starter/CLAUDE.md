@@ -99,7 +99,7 @@ rule below that cites a date comes from something that went wrong there and cost
     recipe: blur, saturate and brightness through tokens; Pane's Navbar blurred only and its text fell to
     3.4:1), G-BR1 (a subject shown as its own surface paints one, and no live text sits on the photo with
     no pane), G-AN1 (the card stays within set deltas of the locked anchor's body and rim; R-032) and
-    G-MS1 (a mesh gradient covers at most 10% of its region, never a wallpaper; user rule 2026-10-31).
+    G-MS1 (a mesh gradient covers at most 10% of its region, never a wallpaper; user rule 2026-10-31), G-CH1 (a card is never shorter than its two corners and an inset), G-RW1 (controls side by side share top and bottom edges).
     Each is proven red on a planted violation (`tooling/kiln/surface-probes.proof.mjs` for the last
     four). When a shared container changes (a stage, a shell), re-check every component that takes its
     size from its container.

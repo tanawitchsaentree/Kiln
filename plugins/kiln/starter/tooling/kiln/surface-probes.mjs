@@ -148,3 +148,32 @@ export function anchorDrift(ref, now, { maxDeltaL = 0.05, maxDeltaC = 0.03, maxD
   if (Math.abs(now.rim - ref.rim) > maxDeltaRim) out.push(`rim contrast ${now.rim}:1 against the anchor's ${ref.rim}:1 (allowed ±${maxDeltaRim})`);
   return out;
 }
+
+/** G-CH1 (Pane R-038): a card shorter than its two corners and an inset reads as a pill around its content. */
+export function pillCardProbe({ selector }) {
+  const out = [];
+  for (const el of document.querySelectorAll(selector)) {
+    if (el.closest('[data-pill-ok]')) continue;
+    const b = el.getBoundingClientRect(); if (b.width < 40 || b.height < 20) continue;
+    const cs = getComputedStyle(el); const R = parseFloat(cs.borderTopLeftRadius) || 0; const pad = parseFloat(cs.paddingTop) || 0;
+    if (R >= 12 && b.height < 2 * R + pad - 1) out.push(`${el.getAttribute('data-component') || el.className?.toString().split(' ')[0] || el.tagName.toLowerCase()}: ${Math.round(b.height)}px tall with ${Math.round(R)}px corners (needs ${Math.round(2 * R + pad)})`);
+  }
+  return out;
+}
+
+/** G-RW1 (Pane R-037): controls laid out in one row share their top and bottom edges. */
+export function rowEdgeProbe({ rows, controls }) {
+  const out = [];
+  for (const row of document.querySelectorAll(rows)) {
+    const boxes = [...row.querySelectorAll(controls)].map((c) => c.getBoundingClientRect()).filter((r) => r.width > 0 && r.height > 0);
+    // only controls standing side by side: group by vertical overlap
+    const lines = [];
+    for (const r of boxes) { const line = lines.find((l) => r.top < l.bottom && r.bottom > l.top); if (line) { line.items.push(r); line.top = Math.min(line.top, r.top); line.bottom = Math.max(line.bottom, r.bottom); } else lines.push({ top: r.top, bottom: r.bottom, items: [r] }); }
+    for (const l of lines) if (l.items.length > 1) {
+      const tops = l.items.map((r) => r.top), bots = l.items.map((r) => r.bottom);
+      const dt = Math.max(...tops) - Math.min(...tops), db = Math.max(...bots) - Math.min(...bots);
+      if (dt > 1.5 || db > 1.5) out.push(`${row.className?.toString().split(' ')[0] || row.tagName.toLowerCase()}: controls in one row are ${Math.round(dt)}px apart at the top and ${Math.round(db)}px at the bottom`);
+    }
+  }
+  return out;
+}

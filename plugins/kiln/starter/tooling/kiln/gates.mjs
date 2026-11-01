@@ -26,6 +26,7 @@
 //   overlap      G-OV1 neighbours in a demo never overlap
 //   leaks        G-LK1 page styles never reach inside a component (clone outside main, compare layout)
 //   nesting      G-NC1 a shape near a rounded parent's corner nests it (even inset, inner = outer − inset)
+//   shape        G-CH1 a card is never a pill · G-RW1 controls in one row share their edges
 //   text fields  G-TX1 fields hold Thai marks and keep their size while typing
 //   glow         G-GL1 only [data-glow] parts emit light in dark, visibly and within reach; text never; nothing in light
 //   rhythm       G-RH1 a stage and a tab bar ≥24px from neighbouring blocks (own code/caption/heading ≥8, intro ≥16)
@@ -43,7 +44,7 @@ import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 import { docsConfig, routes, componentPages, url, routeFilter } from './config.mjs';
 import { serveDist } from './serve-dist.mjs';
-import { glassCssProblems, glassRecipeProbe, bareSurfaceProbe, meshShareProbe, cardStats, anchorDrift } from './surface-probes.mjs';
+import { glassCssProblems, glassRecipeProbe, bareSurfaceProbe, meshShareProbe, cardStats, anchorDrift, pillCardProbe, rowEdgeProbe } from './surface-probes.mjs';
 
 const C = docsConfig();
 const ROUTES = routeFilter(routes(C));
@@ -1469,6 +1470,27 @@ try {
     }
     const u = [...new Set(bad.map((x) => x.replace(/^\S+: /, '')))];
     if (u.length) throw new Error(`${u.length} components restyled by the page: ${u.slice(0, 8).join(' | ')}`);
+    return `${routes.length} pages`;
+  });
+
+  await gate('G-CH1', 'a card is never shorter than its two corners and an inset, or it reads as a pill around its content', async () => {
+    // Pane R-038: a Tag alone in a 40px-corner card made a pill that looked like the component itself
+    const routes = ROUTES.filter((r) => r.startsWith(`${C.componentsBase}/`) && r.endsWith('/code'));
+    if (!routes.length) throw new Error('NO pages to check');
+    const bad = [];
+    for (const r of routes) { await go(r); for (const x of await page.evaluate(pillCardProbe, { selector: `main [data-example-live] ${SURFACE}, main [data-example-live] [data-component="Card"]` })) bad.push(`${r}: ${x}`); }
+    fail(bad, 'pill-shaped cards');
+    return `${routes.length} pages`;
+  });
+
+  await gate('G-RW1', 'controls set side by side in one row share their top and bottom edges', async () => {
+    // Pane R-037: a segmented control without a shown label stood beside a labelled Select, 2px short and off its line
+    const rows = C.controlRows ?? '.live-demo-controls, [data-controls]';
+    const routes = ROUTES.filter((r) => r.startsWith(`${C.componentsBase}/`) && r.endsWith('/code')).slice(0, 40);
+    if (!routes.length) throw new Error('NO pages to check');
+    const bad = [];
+    for (const r of routes) { await go(r); for (const x of await page.evaluate(rowEdgeProbe, { rows, controls: '[role=radiogroup], button[role=combobox], [role=combobox]:not(input), input:not([type=hidden])' })) bad.push(`${r}: ${x}`); }
+    fail(bad, 'rows out of line');
     return `${routes.length} pages`;
   });
 

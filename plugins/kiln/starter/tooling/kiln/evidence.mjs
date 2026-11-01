@@ -42,8 +42,12 @@ async function open(mode, href) {
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1, forcedColors: opt.forcedColors ?? 'none', reducedMotion: 'reduce' });
   const page = await ctx.newPage();
   if (opt.features) await (await ctx.newCDPSession(page)).send('Emulation.setEmulatedMedia', { features: opt.features });
+  // the page's clock is held once it has loaded, so a countdown or a ticking time cannot change the text between
+  // finding it and photographing it (Pane: an OTP resend timer read as 1.15:1 because the digits moved)
+  await page.clock.install();
   await page.goto(href, { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
+  await page.clock.pauseAt(await page.evaluate(() => Date.now() + 1000));
   // folded sections are measured open, as a reader who opens them sees them
   await page.evaluate(() => { for (const d of document.querySelectorAll('details')) d.open = true; });
   const active = await page.evaluate((m) => ({ normal: true, 'reduced-transparency': matchMedia('(prefers-reduced-transparency: reduce)').matches, 'forced-colors': matchMedia('(forced-colors: active)').matches })[m], mode);
