@@ -29,7 +29,7 @@
 // Usage: node tooling/kiln/rationale.mjs [--json]
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import path from 'node:path';
-import { docsConfig, ROOT } from './config.mjs';
+import { docsConfig, ROOT, budget } from './config.mjs';
 
 const C = docsConfig();
 const SYS = (() => { try { return JSON.parse(readFileSync(path.join(ROOT, 'system', 'kiln.config.json'), 'utf8')); } catch { return {}; } })();
@@ -128,6 +128,11 @@ if (existsSync(compDir)) for (const name of readdirSync(compDir).filter((n) => s
   if (!derived) notices.push(`${name}: awaiting its derivation round (rationale.pendingDerivation); its current form is not derived from the concept`);
   if (derived) {
     if (why.identity === false) { if (String(why.identity_reason ?? '').split(/\s+/).length < 8) add('derivation', `${name}: identity false needs identity_reason (why this has no form of its own)`); }
+    else if (why.family) {
+      // lean/standard budget: follows a sibling's derivation round (derivation-guard checks the sibling)
+      if (!budget().families) add('derivation', `${name}: family "${why.family}" needs budget lean or standard (this system is ${budget().name})`);
+      if (String(why.family_difference ?? '').split(/\s+/).length < 8) add('derivation', `${name}: family_difference says what it changes from ${why.family}`);
+    }
     else {
       const avoid = why.default_to_avoid ?? [];
       if (!avoid.length) add('derivation', `${name}: name the generic default it avoids (default_to_avoid) and where that default comes from`);

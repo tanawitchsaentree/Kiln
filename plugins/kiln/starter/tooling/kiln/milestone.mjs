@@ -11,13 +11,24 @@
 // Usage: node tooling/kiln/milestone.mjs [M1]   (also prints the milestone's "still missing" menu)
 import { readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
-import { ROOT, docsConfig, componentPages, sourceHash } from './config.mjs';
+import { ROOT, docsConfig, componentPages, sourceHash, budget } from './config.mjs';
 
 const C = docsConfig();
 const SYS = JSON.parse(readFileSync(path.join(ROOT, 'system', 'kiln.config.json'), 'utf8'));
 const M = process.argv[2] ?? SYS.milestone?.current ?? 'M1';
 const DEF = { M1: { minComponents: 12, requires: ['Container', 'Grid', 'Stack'], controls: ['Select', 'Slider'] }, ...(SYS.milestone?.definitions ?? {}) }[M];
 if (!DEF) { console.log(`✗ milestone ${M} has no definition (system/kiln.config.json milestone.definitions)`); process.exit(1); }
+// The app type (intake question 3) adds its own wave-1 components to M1, and the budget (question 10)
+// sets how many M1 needs: lean stops at core + the type's wave 1, standard and full need at least 12.
+const B = budget();
+const APP = JSON.parse(readFileSync(path.join(path.dirname(new URL(import.meta.url).pathname), 'app-types.json'), 'utf8'));
+const TYPE = APP.types[SYS.intake?.appType];
+if (SYS.intake?.appType && !TYPE) { console.log(`✗ intake.appType "${SYS.intake.appType}" is not one of: ${Object.keys(APP.types).join(', ')}`); process.exit(1); }
+if (M === 'M1') {
+  if (TYPE) DEF.requires = [...new Set([...DEF.requires, ...APP.core, ...TYPE.wave1])];
+  DEF.minComponents = B.name === 'lean' && TYPE ? DEF.requires.length : Math.max(DEF.minComponents, TYPE ? DEF.requires.length : 0);
+}
+console.log(`budget ${B.name} (${B.scope}); app type ${TYPE ? TYPE.label : 'not set (intake.appType)'}\n`);
 const json = (f) => (existsSync(f) ? JSON.parse(readFileSync(f, 'utf8')) : null);
 const text = (f) => (existsSync(path.join(ROOT, f)) ? readFileSync(path.join(ROOT, f), 'utf8') : '');
 

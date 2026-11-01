@@ -1,0 +1,83 @@
+{
+  "$comment": "Intake question 3 (app type) picks one entry. 'core' is built by every system in wave 1 (it holds the docs book's own controls). An app type adds its own components to wave 1, then lists what waves 2 and 3 take on and which working scenarios open the book. milestone.mjs reads intake.appType from kiln.config.json and requires core + the type's wave1. Names follow Pane's catalog, so a component's derivation in Pane can be read as a worked example.",
+  "core": ["Container", "Grid", "Stack", "Text", "Heading", "Button", "IconButton", "Input", "Select", "Slider", "Switch", "Checkbox", "Card", "Dialog", "Toast"],
+  "types": {
+    "dashboard": {
+      "label": "Dashboard or admin tool",
+      "wave1": ["Table", "Tabs", "Badge", "Sidebar", "Stat"],
+      "wave2": ["DataGrid", "Pagination", "SearchInput", "Menu", "DatePicker", "LineChart", "BarChart", "Sparkline", "EmptyState", "Skeleton"],
+      "wave3": ["CommandPalette", "Popover", "TreeView", "Drawer", "NotificationCenter", "SettingsLayout"],
+      "scenarios": ["a metrics overview with a date range", "a table of records with filters, bulk actions and an empty state", "a settings page that saves and fails"]
+    },
+    "commerce": {
+      "label": "Shop or marketplace",
+      "wave1": ["Image", "Badge", "RadioCards", "NumberInput", "Tag"],
+      "wave2": ["Carousel", "Rating", "Stepper", "Form", "Banner", "EmptyState", "Skeleton", "SearchInput", "Pagination", "Drawer"],
+      "wave3": ["Combobox", "OTPFlow", "AuthForm", "Snackbar", "BottomNav"],
+      "scenarios": ["a product page with size, quantity and a cart total", "checkout in steps with a refused payment", "search results with filters and nothing found"]
+    },
+    "media": {
+      "label": "Media, music or video",
+      "wave1": ["Image", "Progress", "Badge", "Tabs", "Avatar"],
+      "wave2": ["Carousel", "List", "Sheet", "Menu", "Skeleton", "EmptyState", "AspectRatio", "Banner"],
+      "wave3": ["VirtualList", "BottomNav", "PullToRefresh", "ActionSheet", "Feed"],
+      "scenarios": ["a player that really plays, with a queue", "a library grid that loads and is empty", "offline mode said in words"]
+    },
+    "booking": {
+      "label": "Booking or scheduling",
+      "wave1": ["RadioCards", "Badge", "Stepper", "Calendar", "Tabs"],
+      "wave2": ["DatePicker", "TimePicker", "Form", "FormField", "Banner", "EmptyState", "Skeleton", "Timeline", "Popover"],
+      "wave3": ["OTPFlow", "AuthForm", "Snackbar", "Sheet", "Wizard"],
+      "scenarios": ["pick a date and a slot, closed days greyed", "confirm with a code that can be wrong", "a booking that is full"]
+    },
+    "chat": {
+      "label": "Chat, social or messaging",
+      "wave1": ["Avatar", "Badge", "Textarea", "List", "Tabs"],
+      "wave2": ["ChatMessage", "ChatComposer", "Feed", "Popover", "Menu", "EmptyState", "Skeleton", "FileUpload"],
+      "wave3": ["NotificationCenter", "VirtualList", "PullToRefresh", "ContextMenu", "Snackbar"],
+      "scenarios": ["a conversation that sends, fails and resends", "a feed that loads more and runs out", "a profile with an empty state"]
+    },
+    "ai-assistant": {
+      "label": "AI assistant or agent tool",
+      "wave1": ["Avatar", "Badge", "Textarea", "Tabs", "Progress"],
+      "wave2": ["ChatMessage", "ChatComposer", "Citation", "ConfidenceChip", "AgentStatus", "CodeBlock", "Skeleton", "EmptyState"],
+      "wave3": ["HumanHandoff", "CommandPalette", "Drawer", "TreeView", "Snackbar"],
+      "scenarios": ["an answer that streams with sources", "a step the agent cannot do and hands to a person", "a long task with progress and a stop"]
+    },
+    "finance": {
+      "label": "Banking or finance",
+      "wave1": ["Table", "Badge", "NumberInput", "Tabs", "Stat"],
+      "wave2": ["DataGrid", "LineChart", "Sparkline", "Form", "Stepper", "Banner", "EmptyState", "Skeleton", "DatePicker"],
+      "wave3": ["OTPFlow", "AuthForm", "PinInput", "Snackbar", "SettingsLayout"],
+      "scenarios": ["a transfer with a limit and a code", "a statement table filtered by month", "a balance that cannot load"]
+    },
+    "productivity": {
+      "label": "Productivity, notes or project tool",
+      "wave1": ["Tabs", "Badge", "Textarea", "Menu", "Avatar"],
+      "wave2": ["KanbanBoard", "TreeView", "Editable", "TagInput", "DatePicker", "EmptyState", "Skeleton", "Popover", "ContextMenu"],
+      "wave3": ["CommandPalette", "RichTextEditor", "Drawer", "Timeline", "NotificationCenter"],
+      "scenarios": ["a board where cards move between columns", "a note that saves as you type and fails", "a command palette that finds anything"]
+    },
+    "learning": {
+      "label": "Learning or education",
+      "wave1": ["Progress", "RadioCards", "Badge", "Tabs", "Image"],
+      "wave2": ["Stepper", "Accordion", "Meter", "List", "EmptyState", "Skeleton", "Banner", "Rating"],
+      "wave3": ["Wizard", "Timeline", "CoachMark", "Snackbar", "BottomNav"],
+      "scenarios": ["a lesson with a quiz that marks answers", "a course path with progress", "a streak that breaks"]
+    },
+    "home-iot": {
+      "label": "Smart home or device control",
+      "wave1": ["SegmentedControl", "Badge", "Tabs", "Progress", "Chip"],
+      "wave2": ["RangeSlider", "Meter", "List", "Sheet", "Banner", "EmptyState", "Skeleton", "TimePicker"],
+      "wave3": ["BottomNav", "ActionSheet", "PullToRefresh", "Snackbar", "Environment"],
+      "scenarios": ["a room whose lights follow the sliders", "a device that stops answering", "a schedule for night"]
+    },
+    "content": {
+      "label": "Content site, blog or documentation",
+      "wave1": ["Link", "Image", "Tabs", "Badge", "Divider"],
+      "wave2": ["Breadcrumb", "TableOfContents", "Navbar", "CodeBlock", "Accordion", "Pagination", "SearchInput", "EmptyState"],
+      "wave3": ["NavigationMenu", "CommandPalette", "Drawer", "Feed", "Kbd"],
+      "scenarios": ["an article with a table of contents that follows", "search with nothing found", "a docs page with code to copy"]
+    }
+  }
+}

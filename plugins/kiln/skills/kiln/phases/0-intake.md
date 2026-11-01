@@ -18,6 +18,13 @@ when `autonomy.picks` is `"agent"`. A missing answer gets a default written into
 "(default, agent)". Per-step questions stalled Pane for days; the user asked for this
 explicitly (2026-10-27). The adaptive questions below are what goes into that one batch.
 
+Two of INTAKE's questions set the scope before any design. The **app type** (question 3) is one key of
+`tooling/kiln/app-types.json`; it adds that kind of product's components to wave 1, lists the next
+waves and names the working scenarios the book opens with, so the system grows toward the screens the
+product will need. The **budget** (question 10, `docs/BUDGET.md`) says how much prose and how many
+derivation rounds the user can pay for. Ask both in the first batch, and when either is left blank
+write the default (standard, and the type that INTAKE question 2 describes best) as "(default, agent)".
+
 ## The three questions
 
 Adaptive, not scripted. Ask only what the brief hasn't already answered, and stop at three even if

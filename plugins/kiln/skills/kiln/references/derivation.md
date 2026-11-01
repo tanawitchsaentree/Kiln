@@ -86,3 +86,11 @@ assumes a card behind it leaves its words on a raw photo. A component with no su
 says so and never draws text on the scene without one. Check it on the brightest photo scene with
 no card around it. (Pane RETRO R-025: Table and List rows on a photo failed about 500 contrast
 checks per scene until each carried its own glass. Gate G-BR1 now measures this.)
+
+## Families (budget lean or standard)
+
+A component that is a variation of one already derived (PasswordInput and SearchInput of the text
+field, RangeSlider of Slider) may skip its own round when `kiln.config.json` → `budget` is lean or
+standard. Its why.json names the head with `"family": "<Name>"` and says in `family_difference`
+what it changes. The head must have been derived in its own round, and a family never chains. The
+derivation guard and the rationale gate both check this, and at budget full they refuse it.

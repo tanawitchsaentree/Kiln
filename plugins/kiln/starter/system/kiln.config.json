@@ -1,6 +1,12 @@
 {
   "$comment": "Per-system settings the kiln engine and gates read. Created by kiln create; Phase 0 fills the names, Phase 2 flips tokens.allowSeed to false. Empty lists make gates FAIL on purpose (nothing proven), never pass.",
   "name": "{{name}}",
+  "intake": {
+    "appType": null,
+    "$comment": "intake question 3: a key of tooling/kiln/app-types.json; milestone M1 requires its wave 1"
+  },
+  "budget": "standard",
+  "$budget": "intake question 10: lean, standard or full (docs/BUDGET.md). Only prose depth, derivation by family and M1 scope move; every measurement stays.",
   "autonomy": {
     "picks": "agent",
     "$comment": "agent = after the intake and anchor pick, the agent makes every derivation pick itself and records it in system/REVIEW.md for the milestone review (user setting, 2026-10-27). user = ask for each pick."

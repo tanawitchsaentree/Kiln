@@ -45,6 +45,19 @@ the milestone compares it with the files on disk.
 `--only` lists. Pane's verify ran `gates --only <the ones that passed>`, which hid every new red.
 Advisory is honest only if it is temporary, so a milestone refuses to close while any is red.
 
+## Budget and app type
+
+Two intake answers change what M1 asks for, and nothing else. `intake.appType` (question 3) adds the
+type's wave 1 from `tooling/kiln/app-types.json` to the required components, so a booking system has
+its Calendar at M1 and a dashboard has its Table. `budget` (question 10) sets the count and the depth.
+At lean, M1 is exactly core plus that wave 1, usage prose is held to 0.25 × Carbon, and a component
+may follow a derived sibling with `family` and `family_difference` in its why.json. Standard keeps the
+families and asks 0.35 × and at least 12 components. Full is Pane's bar.
+
+The measurements do not move with the budget. Contrast evidence, the anchor, the three tiers, the a11y
+gate and human-tone are the same at lean as at full. `docs/BUDGET.md` has the measured cost of Pane
+and the estimate for each budget, and `node tooling/kiln/usage.mjs` prints a system's own.
+
 ## Later milestones
 
 M2 and later are one wave each (molecules, then organisms), with the same per-component bar and the

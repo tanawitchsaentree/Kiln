@@ -37,6 +37,10 @@ kiln asks every question in `system/INTAKE.md` in one batch. That covers the pro
 the references, the language of the book, the platforms and who picks the variants. After that it
 asks one visual question, which anchor to build from.
 
+Two of those answers set the scope. The app type picks wave 1's extra components and the next waves
+from `tooling/kiln/app-types.json`, and the budget (lean, standard or full, `docs/BUDGET.md`) sets how
+much prose and how many derivation rounds the milestones ask for.
+
 It renders the relationship card, the lineage and three or four anchor variants in
 `apps/lab/anchor/`, all on the same backdrops.
 

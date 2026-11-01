@@ -19,10 +19,25 @@ const DEFAULTS = {
   catalog: 'docs/CATALOG.md', benchmark: null, depthRatio: 0.5,
 };
 
+// Budget (kiln.config.json → "budget", intake question 10): how much prose and how many derivation
+// rounds a milestone asks for. It never changes what is measured: contrast, the anchor, three-tier
+// tokens, keyboard and the a11y gate are the same at every budget (docs/BUDGET.md). A system may still
+// set any docs key itself; the profile only moves the defaults.
+export const BUDGETS = {
+  lean: { depthRatio: 0.25, families: true, patterns: 4, scope: 'core + the app type\'s wave 1' },
+  standard: { depthRatio: 0.35, families: true, patterns: 8, scope: 'core + the app type\'s wave 1, at least 12' },
+  full: { depthRatio: 0.5, families: false, patterns: 12, scope: 'at least 12, every component derived on its own' },
+};
+export function budget() {
+  const file = path.join(ROOT, 'system', 'kiln.config.json');
+  const name = (existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')).budget : null) ?? 'full';
+  return { name, ...(BUDGETS[name] ?? BUDGETS.full) };
+}
+
 export function docsConfig() {
   const file = path.join(ROOT, 'system', 'kiln.config.json');
   const sys = existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')).docs ?? {} : {};
-  const c = { ...DEFAULTS, ...sys, contrast: { ...DEFAULTS.contrast, ...(sys.contrast ?? {}) }, tone: { ...DEFAULTS.tone, ...(sys.tone ?? {}) } };
+  const c = { ...DEFAULTS, depthRatio: budget().depthRatio, ...sys, contrast: { ...DEFAULTS.contrast, ...(sys.contrast ?? {}) }, tone: { ...DEFAULTS.tone, ...(sys.tone ?? {}) } };
   // KILN_DIST measures a snapshot of the build (so long runs do not block rebuilds); KILN_SCENES picks scenes
   if (process.env.KILN_DIST) c.dist = process.env.KILN_DIST;
   if (process.env.KILN_SCENES) c.scenes = process.env.KILN_SCENES.split(',').map((x) => x.trim()).filter(Boolean);

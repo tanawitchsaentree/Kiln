@@ -12,7 +12,7 @@
 // Reads the hook payload on stdin; exit 2 blocks the call and tells the agent what is missing.
 import { readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
-import { docsConfig, ROOT } from './config.mjs';
+import { docsConfig, ROOT, budget } from './config.mjs';
 
 let payload = {};
 try { payload = JSON.parse(readFileSync(0, 'utf8') || '{}'); } catch { process.exit(0); }
@@ -44,6 +44,15 @@ for (const file of targets) {
   const missing = [];
   if (!why) missing.push(`${name}.why.json does not exist`);
   else if (why.identity === false) { if (!why.identity_reason) missing.push('identity: false needs identity_reason'); }
+  // lean and standard budgets: a component may follow a derived sibling of the same family (one round
+  // for TextField covers PasswordInput and SearchInput) when it names the family and what differs
+  else if (why.family) {
+    const head = path.join(comp, why.family, `${why.family}.why.json`);
+    const fam = existsSync(head) ? JSON.parse(readFileSync(head, 'utf8')) : null;
+    if (!budget().families) missing.push(`family "${why.family}" is allowed only at budget lean or standard (this system is ${budget().name})`);
+    else if (!fam || fam.family || !(fam.derivation ?? []).length || !fam.variants?.picked) missing.push(`family "${why.family}" must be a component derived in its own round`);
+    if (String(why.family_difference ?? '').split(/\s+/).length < 8) missing.push('family_difference (what this one changes from its family, in a sentence)');
+  }
   else {
     if (!(why.default_to_avoid ?? []).length) missing.push('default_to_avoid (the generic pattern this must not become)');
     if ((why.derivation ?? []).length < 3) missing.push('derivation (≥3 steps quoting the principles\' Therefore text)');
