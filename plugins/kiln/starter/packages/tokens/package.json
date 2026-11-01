@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": false,
   "type": "module",
-  "description": "kiln-ds design tokens: CSS custom properties, JSON, ESM (+types) and SCSS, built from DTCG in three tiers.",
+  "description": "kiln-ds design tokens built from DTCG in three tiers: CSS custom properties, JSON, ESM (+types), SCSS, Swift, Kotlin, Dart, a Tailwind preset and Figma variables.",
   "exports": {
     "./css": {
       "types": "./css.d.ts",
@@ -15,6 +15,11 @@
       "default": "./build/js/tokens.mjs"
     },
     "./scss": "./build/scss/_tokens.scss",
+    "./tailwind": "./build/tailwind/preset.cjs",
+    "./figma": "./build/figma/variables.json",
+    "./swift": "./build/swift/Tokens.swift",
+    "./kotlin": "./build/kotlin/Tokens.kt",
+    "./dart": "./build/dart/tokens.dart",
     "./package.json": "./package.json"
   },
   "files": [
