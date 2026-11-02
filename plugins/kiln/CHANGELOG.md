@@ -1,5 +1,9 @@
 # kiln — changelog
 
+## 2.6.3
+
+- A limited conformance run (`KILN_CHECKS=…`) no longer reports components as untested when their checks sit in a skipped file that checks a list in a loop (`for (const name of ['Dialog', 'Sheet', …]) await check(name, …)`). `conformance-names.mjs` counts any quoted chapter name in a skipped file as covered; before, only a literal `check('Name'` was read, so Pane's `KILN_CHECKS=09` wrote reds for Dialog, Sheet, Drawer and ActionSheet into conformance.json. Proof: `conformance-names.proof.mjs` (4 cases) in gate:selftest.
+
 ## 2.6.2 — G-MO3: a toggle changes, it does not swap
 
 - G-MO3 clicks real toggles (aria-pressed, aria-checked, aria-selected, data-state on/off/checked/active) in the component demos and samples every frame for 700ms. Red when a neighbour moves more than 4px between two frames, or when a fill, ::before, ::after or direct child is already at its end 60ms after the press. From Pane R-048 ("switching chips feels stiff"): a gradient fill swapped in one frame and a check mark put in the DOM widened the chip at once. `motion-probes.proof.mjs` adds six cases (gradient swap, snap and DOM-inserted mark go red; colour transition, registered fill with a 0fr→1fr check track, and a radio group go green), 26 in all.

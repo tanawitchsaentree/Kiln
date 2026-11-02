@@ -1,13 +1,15 @@
 {
-  "kiln": "58add02+dirty",
-  "syncedAt": "2026-11-02T02:01:27.312Z",
+  "kiln": "6ebdee3+dirty",
+  "syncedAt": "2026-11-02T02:03:47.919Z",
   "files": {
     "agent-setup.mjs": "3bb420830fe59565bfd37746176dfb6f5c8a3b802cbb4cbc350b201179d5c8bd",
     "anchor-contrast.mjs": "9f3ae49241c62efdb32f580afd5aa45ef5d170f03fedaed5d5be094ba2423282",
     "anchor-likeness.mjs": "fbd252410b5651156ed38797a3ae1e4722a98186008fd90f5b53a5d9d9182198",
     "app-types.json": "3ef423f021ea8cd3485dd31cfe7b0a0db03656923c8fdd876a9e6ada43931df3",
     "config.mjs": "8c7bd749fce3e5c107211150dea72e572eea781b4577cf1566c95d38b0dfc2fa",
-    "conformance.mjs": "ad6102b3959a52582641866835472e4c559df1b2f912edbcfc778603c11eb6e5",
+    "conformance-names.mjs": "e51bfeeba0db0fb80247dcb9bdb9e539ab13b0b675fc0f5563e45ff91aadd495",
+    "conformance-names.proof.mjs": "68682d35ebac66c922a4bfdb65b41e2ef12aaecd68f954b955ae92b33bd0ad6d",
+    "conformance.mjs": "4365ac9acf4fb588479a65728fd453342f8ebb1d4e39a9bb001ce6233bf8eb6d",
     "derivation-guard.mjs": "7af131bd558c64ed79fafba9eefc0e0f107f110f1570a79a5af3c7d8fbf70921",
     "design-md.mjs": "8c38146f5b821f3e65e42c08f6ffe47e53ffc7ecab73e2481f4f671f37c61db3",
     "evidence.mjs": "ee60696161359c7bde81065eb716f227aa132053cd4937922524a3668797acc8",

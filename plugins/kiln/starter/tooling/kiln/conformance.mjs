@@ -10,6 +10,7 @@
 //
 // Usage: node tooling/kiln/conformance.mjs [--no-build]
 // Writes <docs.app>/public/conformance.json. Exit 1 on any failed check.
+import { coveredIn } from './conformance-names.mjs';
 import { readFileSync, writeFileSync, existsSync, readdirSync, mkdirSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
@@ -95,8 +96,9 @@ const systemFiles = existsSync(SYSTEM_CHECKS) ? readdirSync(SYSTEM_CHECKS).filte
 // the demo floor and coverage loops to those components); a full run, without them, is still the one that counts
 const COVERED = new Set();
 // a limited run (KILN_CHECKS) still knows which components have checks in the files it skipped, so it does not
-// report every other component as untested (Pane, 2026-11-01: a one-file run flagged 120 components)
-if ((process.env.KILN_CHECKS ?? '').trim()) for (const f of systemFiles) for (const m of readFileSync(path.join(SYSTEM_CHECKS, f), 'utf8').matchAll(/check\(\s*['"]([A-Z][A-Za-z]+)['"]/g)) COVERED.add(m[1]);
+// report every other component as untested
+// (Pane, 2026-11-01: a one-file run flagged 120 components), including files that check a list in a loop
+if ((process.env.KILN_CHECKS ?? '').trim()) for (const f of systemFiles) for (const n of coveredIn(readFileSync(path.join(SYSTEM_CHECKS, f), 'utf8'), CHAPTERS.map((c) => c.name))) COVERED.add(n);
 const ONLY_FILES = (process.env.KILN_CHECKS ?? '').split(',').map((x) => x.trim()).filter(Boolean);
 const ONLY_ROUTES = new Set((process.env.KILN_ROUTES ?? '').split(',').map((x) => x.trim()).filter(Boolean));
 const inScope = (slug) => !ONLY_ROUTES.size || ONLY_ROUTES.has(`/components/${slug}`);
