@@ -111,6 +111,103 @@ export async function stateRhythm(page, { scope = 'main [data-example-live]', co
   return { checked: seen, problems: out };
 }
 
+// ---------------------------------------------------------------- G-MO3 a toggle changing state
+// Pane R-048 ("switching chips feels stiff"): a chosen fill was a gradient, which no transition can
+// interpolate, so it swapped in one frame; a check mark was added to the DOM and the chip widened at once,
+// so its neighbour jumped. G-MO1 never saw it, because it only hovers and presses.
+// The probe clicks real toggles, samples every animation frame for `window` ms after the press, and goes
+// red when (a) a neighbour moves more than `jump` px between two frames, or (b) a paint property of the
+// toggle (its own fill, its ::before/::after, its direct children) already equals its end value at `early`
+// ms after the press while it started elsewhere.
+export const TOGGLE_SELECTOR = ':is([aria-pressed], [aria-checked], [aria-selected], [data-state=on], [data-state=off], [data-state=checked], [data-state=unchecked], [data-state=active], [data-state=inactive]):not([aria-haspopup]):not([aria-expanded]):not([disabled]):not([aria-disabled=true])';
+
+/** In-page sampler (serialised into the page): records per frame the neighbour's x and the toggle's paint. */
+const SAMPLER = ([sel, ms]) => {
+  const el = document.querySelector(sel);
+  const sib = (e) => { for (const d of ['nextElementSibling', 'previousElementSibling']) { let s = e[d]; while (s && !(s.getBoundingClientRect().width > 0)) s = s[d]; if (s) return s; } return null; };
+  // a toggle wrapped in a label or an item cell: the neighbour is the wrapper's
+  let host = el; while (host.parentElement && !sib(host) && host.parentElement !== document.body) host = host.parentElement;
+  const nb = sib(host);
+  const PAINT = ['backgroundColor', 'backgroundImage', 'color', 'borderColor', 'boxShadow', 'opacity'];
+  const read = (e, pseudo) => { const cs = getComputedStyle(e, pseudo); return PAINT.map((k) => cs[k]); };
+  const look = () => [...read(el), ...read(el, '::before'), ...read(el, '::after'), ...[...el.children].slice(0, 6).flatMap((c) => read(c))];
+  return new Promise((done) => {
+    const frames = []; let t0 = null;
+    el.addEventListener('pointerdown', () => { t0 = performance.now(); }, { capture: true, once: true });
+    const start = performance.now();
+    const tick = () => {
+      const t = performance.now();
+      frames.push({ t, x: nb ? nb.getBoundingClientRect().x : null, look: look() });
+      if (t0 !== null && t - t0 > ms) return done({ t0, frames, neighbour: !!nb });
+      if (t - start > ms + 3000) return done({ t0, frames, neighbour: !!nb });
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+};
+
+/** Pure judgement over one sampled change, shared with the proof. */
+export function judgeToggle({ t0, frames }, { jump = 4, early = 60, settle = 300 } = {}) {
+  const out = [];
+  if (t0 === null || frames.length < 3) return ['the press never reached the toggle'];
+  const before = frames.filter((f) => f.t <= t0).at(-1) ?? frames[0];
+  const after = frames.filter((f) => f.t > t0);
+  const end = frames.at(-1);
+  let worst = 0;
+  const seq = [before, ...after];
+  for (let i = 1; i < seq.length; i++) {
+    if (seq[i].t - t0 > settle || seq[i].x === null || seq[i - 1].x === null) continue;
+    worst = Math.max(worst, Math.abs(seq[i].x - seq[i - 1].x));
+  }
+  if (worst > jump) out.push(`its neighbour jumps ${worst.toFixed(1)}px in one frame (over ${jump}px): the toggle changes size at once`);
+  const mid = after.find((f) => f.t - t0 >= early);
+  if (mid) {
+    const snapped = end.look.map((v, k) => (before.look[k] !== v && mid.look[k] === v ? k : -1)).filter((k) => k >= 0);
+    if (snapped.length) {
+      const PAINT = ['background-color', 'background-image', 'color', 'border-color', 'box-shadow', 'opacity'];
+      const where = (k) => `${['', '::before ', '::after '][Math.floor(k / 6)] ?? `child ${Math.floor(k / 6) - 2} `}${PAINT[k % 6]}`;
+      const img = snapped.some((k) => k % 6 === 1);
+      out.push(`${where(snapped[0])} is already at its end ${Math.round(mid.t - t0)}ms after the press: it swaps instead of changing${img ? ' (a gradient cannot be transitioned; paint it from two registered colours, --ds-fill-top and --ds-fill-foot)' : ''}`);
+    }
+  }
+  return out;
+}
+
+/** Clicks toggles in the demos and judges each change both ways where it can go back. */
+export async function toggleChange(page, { scope = 'main [data-example-live]', limit = 4, window: ms = 700, jump = 4, early = 60, settle = 300 } = {}) {
+  const out = []; let seen = 0, tag = 0;
+  const handles = (await page.$$(`${scope} ${TOGGLE_SELECTOR}`)).slice(0, limit * 4);
+  for (const h of handles) {
+    if (seen >= limit) break;
+    const box = await h.boundingBox().catch(() => null);
+    if (!box || box.width < 8 || box.height < 8) continue;
+    const id = `kiln-mo3-${tag++}`;
+    const info = await h.evaluate((el, id) => {
+      el.setAttribute('data-kiln-probe', id);
+      const radio = /^(radio|tab|option)$/.test(el.getAttribute('role') ?? '') || (el.hasAttribute('aria-selected') && !el.hasAttribute('aria-pressed'));
+      return { radio, on: ['true', 'on', 'checked', 'active'].includes(el.getAttribute('aria-pressed') ?? el.getAttribute('aria-checked') ?? el.getAttribute('aria-selected') ?? el.dataset.state), name: `${el.closest('[data-component]')?.dataset.component ?? el.tagName.toLowerCase()} "${(el.getAttribute('aria-label') ?? el.textContent ?? '').trim().slice(0, 24)}"` };
+    }, id);
+    if (info.radio && info.on) continue; // pressing the chosen option changes nothing
+    seen++;
+    const sel = `[data-kiln-probe="${id}"]`;
+    const press = async () => {
+      // rest on the toggle first so the hover transition is over before the change is sampled
+      const b = await h.boundingBox(); if (!b) return null;
+      await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2); await page.waitForTimeout(600);
+      const sampling = page.evaluate(SAMPLER, [sel, ms]);
+      await page.waitForTimeout(50); await page.mouse.down(); await page.mouse.up();
+      return sampling;
+    };
+    for (const dir of info.radio ? ['on'] : ['on', 'off']) {
+      const s = await press().catch(() => null);
+      if (!s) break;
+      for (const p of judgeToggle(s, { jump, early, settle })) out.push(`${info.name} (${dir === 'on' ? 'first press' : 'pressed back'}): ${p}`);
+    }
+    await page.mouse.move(1, 1);
+  }
+  return { checked: seen, problems: out };
+}
+
 // ---------------------------------------------------------------- springs (why.json mechanism.spring)
 /** A part on a damped spring: ζ = c / (2√(k·m)) between 0.75 and 1 (no wobble, no creep) and a settle time
  *  4 / (ζ·ω₀), ω₀ = √(k/m), under 600ms. A declared signature moment (signature: true) may go to ζ 0.5. */

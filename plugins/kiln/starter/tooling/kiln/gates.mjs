@@ -29,6 +29,7 @@
 //   shape        G-CH1 a card is never a pill · G-RW1 controls in one row share their edges
 //   motion       G-MO2 the motion tokens keep the rhythm (fast on, slow off; decelerate in, accelerate out)
 //                G-MO1 every control on a component page answers its hover and press in that rhythm
+//                G-MO3 a toggle changes state without a swap: no neighbour jumps, no fill already at its end at 60ms
 //   from Pane    G-CP1 search lists a label once · G-BJ1 a bar's jobs look different · G-FR1 focus rings are
 //                not clipped · G-SP1 a split menu lines up with the whole button · G-SC1 the showcase is working
 //                flows · G-PG1 a playground starts on its tokens (ui-probes.mjs, proven by ui-probes.proof.mjs)
@@ -49,7 +50,7 @@ import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 import { docsConfig, routes, componentPages, url, routeFilter } from './config.mjs';
 import { serveDist } from './serve-dist.mjs';
-import { motionTokenProblems, stateRhythm } from './motion-probes.mjs';
+import { motionTokenProblems, stateRhythm, toggleChange } from './motion-probes.mjs';
 import { duplicateOptionsProbe, barJobsProbe, focusClipProbe, splitAlignProbe, showcaseProbe, playgroundProbe } from './ui-probes.mjs';
 import { glassCssProblems, glassRecipeProbe, bareSurfaceProbe, meshShareProbe, cardStats, anchorDrift, pillCardProbe, rowEdgeProbe } from './surface-probes.mjs';
 
@@ -1525,6 +1526,24 @@ try {
     await mc.close();
     fail(bad, 'controls off rhythm');
     return `${n} controls on ${routes.length} pages`;
+  });
+
+  await gate('G-MO3', 'a toggle changes state, it does not swap: its neighbour never jumps more than 4px in a frame and no fill is already at its end 60ms after the press', async () => {
+    // Pane R-048 ("switching chips feels stiff"): a gradient fill swapped in one frame and a check mark put in
+    // the DOM widened the chip at once, while G-MO1 only hovers and presses
+    const routes = ROUTES.filter((r) => r.startsWith(`${C.componentsBase}/`) && r.endsWith('/code')).slice(0, C.motion?.pages ?? 24);
+    if (!routes.length) throw new Error('NO pages to check');
+    const bad = []; let n = 0;
+    const mc = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'no-preference' });
+    const mp = await mc.newPage();
+    for (const r of routes) {
+      await mp.goto(url(srv.base, r, {}, C), { waitUntil: 'networkidle' });
+      const res = await toggleChange(mp, { limit: C.motion?.togglesPerPage ?? 3, jump: C.motion?.jump ?? 4, early: C.motion?.early ?? 60 });
+      n += res.checked; for (const x of res.problems) bad.push(`${r}: ${x}`);
+    }
+    await mc.close();
+    fail(bad, 'toggles that swap');
+    return `${n} toggles on ${routes.length} pages`;
   });
 
   await gate('G-CP1', 'the book\'s search never lists the same label twice for one query', async () => {

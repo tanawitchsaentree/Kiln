@@ -64,7 +64,7 @@ Motion tied to nothing is decoration, and decoration that repeats becomes irrita
 
 Smooth is the floor, never the goal. A system that eases every change over the same 300ms feels like
 syrup, and one that fades everything in 100ms feels raw. Rhythm is the difference between those two. Each kind of change
-gets its own way in and its own way out, and the gates measure both (G-MO1 in the
+gets its own way in and its own way out, and the gates measure both (G-MO1 and G-MO3 in the
 page, G-MO2 on the tokens, proven by `tooling/kiln/motion-probes.proof.mjs`).
 
 **Fast on, slow off.** A state answers the moment it is entered and lets go slowly. Hover lights up in
@@ -98,6 +98,22 @@ release, so it settles on a spring rather than a curve. Damping ratio ζ = c / (
 **Choreography.** Stagger s ≤ 40ms per item and cap the whole entrance at 240ms, so at most 1 + 240 / s
 items stagger and the rest arrive together. A parent arrives before its children, and children never
 start before the parent has covered half its travel.
+
+**A toggle changes, it never swaps (G-MO3).** Choosing a chip, a segment, a switch or a tab is a state
+change like hover, and it gets the same rhythm. Two things break it, and G-MO3 clicks real toggles to
+catch both:
+
+- *Never swap a gradient on a state change.* A gradient is an image, so no transition can interpolate it
+  and it changes in one frame. Paint the fill from the two registered colours the token build declares,
+  `background: linear-gradient(var(--ds-fill-top), var(--ds-fill-foot))`, set both from tokens per state,
+  and transition `--ds-fill-top, --ds-fill-foot`. A flat fill transitions `background-color` as usual.
+- *Never let a toggle change size at once.* A check mark added to the DOM, or a label that turns bold,
+  widens the toggle in one frame and its neighbour jumps. Keep the mark in the DOM inside a track that
+  opens with `grid-template-columns: 0fr → 1fr` on the state's duration, and reserve the bold width of
+  the label.
+
+The gate goes red when a neighbour moves more than 4px between two frames, or when a fill is already
+at its end 60ms after the press (Pane R-048).
 
 **Reduced motion.** Travel and scale go to zero. Fades of colour and light that move nothing keep their
 rhythm (`kiln.reduced: "keep"`), because a control that snaps reads as broken (Pane D-039).

@@ -29,7 +29,7 @@ walk(path.join(C.abs(C.app), 'src'));
 walk(C.abs(C.componentsDir));
 
 const declared = new Set();
-const decl = (text) => { for (const m of text.matchAll(/(--ds-[a-z0-9-]+)\s*:/g)) declared.add(m[1]); for (const m of text.matchAll(/['"`](--ds-[a-z0-9-]+)['"`]\s*[,:\]]/g)) declared.add(m[1]); };
+const decl = (text) => { for (const m of text.matchAll(/(--ds-[a-z0-9-]+)\s*:/g)) declared.add(m[1]); for (const m of text.matchAll(/@property\s+(--ds-[a-z0-9-]+)/g)) declared.add(m[1]); for (const m of text.matchAll(/['"`](--ds-[a-z0-9-]+)['"`]\s*[,:\]]/g)) declared.add(m[1]); };
 decl(readFileSync(TOKENS_CSS, 'utf8'));
 const uses = [];
 for (const f of files) {

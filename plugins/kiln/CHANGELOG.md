@@ -1,5 +1,11 @@
 # kiln — changelog
 
+## 2.6.2 — G-MO3: a toggle changes, it does not swap
+
+- G-MO3 clicks real toggles (aria-pressed, aria-checked, aria-selected, data-state on/off/checked/active) in the component demos and samples every frame for 700ms. Red when a neighbour moves more than 4px between two frames, or when a fill, ::before, ::after or direct child is already at its end 60ms after the press. From Pane R-048 ("switching chips feels stiff"): a gradient fill swapped in one frame and a check mark put in the DOM widened the chip at once. `motion-probes.proof.mjs` adds six cases (gradient swap, snap and DOM-inserted mark go red; colour transition, registered fill with a 0fr→1fr check track, and a radio group go green), 26 in all.
+- The starter's token build declares `@property --ds-fill-top` and `--ds-fill-foot` (`<color>`), so a gradient fill can transition: paint `linear-gradient(var(--ds-fill-top), var(--ds-fill-foot))` and transition the two properties. `token-contract` counts names declared with `@property`.
+- `references/foundations/motion.md`: never swap a gradient on a state change, never let a toggle change size at once.
+
 ## 2.6.1
 
 - The starter's LICENSE names the new system's own contributors. Before, every system shipped "Copyright (c) 2026 Dial contributors", the name of kiln's first system.
