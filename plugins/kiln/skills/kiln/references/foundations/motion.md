@@ -110,13 +110,19 @@ catch both:
   and it changes in one frame. Paint the fill from the two registered colours the token build declares,
   `background: linear-gradient(var(--ds-fill-top), var(--ds-fill-foot))`, set both from tokens per state,
   and transition `--ds-fill-top, --ds-fill-foot`. A flat fill transitions `background-color` as usual.
+- *Keep shadow lists in step.* Two `box-shadow` lists interpolate only when they have the same number of
+  layers with `inset` in the same places; otherwise the shadow swaps under a transition just like a
+  gradient. Pad the shorter list with transparent layers.
 - *Never let a toggle change size at once.* A check mark added to the DOM, or a label that turns bold,
   widens the toggle in one frame and its neighbour jumps. Keep the mark in the DOM inside a track that
   opens with `grid-template-columns: 0fr → 1fr` on the state's duration, and reserve the bold width of
   the label.
 
-The gate goes red when a neighbour moves more than 4px between two frames, or when a fill is already
-at its end 60ms after the press (Pane R-048).
+The gate times the change from the moment the state attribute flips (not from the press, so `:active`
+keeps its own fast way in) and ignores what focus paints, since a focus ring is instant. It goes red when one
+frame carries more than 4px and at least half of a neighbour's move, or when a fill or shadow is already at
+its end 60ms after the flip (Pane R-048). A toggle it cannot reach, or whose state never flips, is counted
+as skipped.
 
 **Reduced motion.** Travel and scale go to zero. Fades of colour and light that move nothing keep their
 rhythm (`kiln.reduced: "keep"`), because a control that snaps reads as broken (Pane D-039).

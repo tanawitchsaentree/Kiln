@@ -27,6 +27,13 @@ const NAME = (SYS.name && !/\{\{/.test(SYS.name) ? SYS.name : null) ?? concept.m
 const slug = NAME.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 const pkgs = A.packages ?? [];
 const installs = pkgs.map((p) => (p.tarball ? abs(p.tarball) : p.name));
+// the lead sentence says where the install comes from, and is only as true as the config: a package with a
+// tarball, or one not listed in docs.published, installs from the site; a published registry name does not
+// need the explanation (Pane, 2026-11-02: pane-react 0.8.1 went to npm and the old sentence went false)
+const fromSite = pkgs.filter((p) => p.tarball || !(C.published ?? []).includes(p.name));
+const installLead = fromSite.length === 0 ? 'Install it with your package manager:'
+  : fromSite.length === pkgs.length ? `${NAME} is installed from the tarball${pkgs.length > 1 ? 's' : ''} its site hosts, so the line works before the package is on a registry:`
+  : `${fromSite.map((p) => p.name).join(' and ')} ${fromSite.length > 1 ? 'come' : 'comes'} from the tarball its site hosts, the rest from the registry:`;
 const mcp = A.mcp;
 const mcpArgs = mcp ? mcp.command.split(/\s+/) : [];
 
@@ -53,7 +60,7 @@ If there is no package.json, offer to start one, and do nothing until the person
 
 ## 2. Install
 
-${NAME} is installed from the tarball${pkgs.length > 1 ? 's' : ''} its site hosts, so the line works before the package is on a registry:
+${installLead}
 
 \`\`\`sh
 <package manager> add ${installs.join(' ')}

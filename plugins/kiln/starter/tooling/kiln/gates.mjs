@@ -1529,22 +1529,22 @@ try {
     return `${n} controls on ${routes.length} pages`;
   });
 
-  await gate('G-MO3', 'a toggle changes state, it does not swap: its neighbour never jumps more than 4px in a frame and no fill is already at its end 60ms after the press', async () => {
+  await gate('G-MO3', 'a toggle changes state, it does not swap: no one frame carries a neighbour\'s move and no fill or shadow is already at its end 60ms after the state flips', async () => {
     // Pane R-048 ("switching chips feels stiff"): a gradient fill swapped in one frame and a check mark put in
     // the DOM widened the chip at once, while G-MO1 only hovers and presses
     const routes = ROUTES.filter((r) => r.startsWith(`${C.componentsBase}/`) && r.endsWith('/code')).slice(0, C.motion?.pages ?? 24);
     if (!routes.length) throw new Error('NO pages to check');
-    const bad = []; let n = 0;
+    const bad = []; let n = 0, sk = 0;
     const mc = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'no-preference' });
     const mp = await mc.newPage();
     for (const r of routes) {
       await mp.goto(url(srv.base, r, {}, C), { waitUntil: 'networkidle' });
       const res = await toggleChange(mp, { limit: C.motion?.togglesPerPage ?? 3, jump: C.motion?.jump ?? 4, early: C.motion?.early ?? 60 });
-      n += res.checked; for (const x of res.problems) bad.push(`${r}: ${x}`);
+      n += res.checked; sk += res.skipped.length; for (const x of res.problems) bad.push(`${r}: ${x}`);
     }
     await mc.close();
     fail(bad, 'toggles that swap');
-    return `${n} toggles on ${routes.length} pages`;
+    return `${n} toggles on ${routes.length} pages${sk ? `, ${sk} skipped (not reachable, or no state change on a click)` : ''}`;
   });
 
   await gate('G-MO4', 'an overlay arrives on a decelerating curve, leaves on an accelerating one, and leaves in at most 0.6 × its entrance (never in one frame)', async () => {

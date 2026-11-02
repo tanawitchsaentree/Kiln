@@ -1,5 +1,16 @@
 # kiln — changelog
 
+## 2.6.5 — G-MO3 measures the choice, not the press, the focus ring or the book
+
+Pane ran 2.6.3's G-MO3 on 11 toggle pages and got 25 reds, most of them from how the probe sampled. Re-run read-only on Pane's built book after these changes: 22 toggles, 2 reds, both real.
+- The change is timed from the moment the state attribute flips (a MutationObserver on aria-pressed / aria-checked / aria-selected / data-state), after a click held 90ms, not from pointer down. A property `:active` already moved is left to G-MO1's rhythm. Before, the deliberate 70ms press-on that G-MO2 asks for read as a swap.
+- What focus paints is read once with focus taken away and is never judged: a focus ring is instant by rule. Tabs had no box-shadow transition, and the red there was its ring.
+- A jump is one frame that carries more than 4px **and** at least half of the neighbour's whole move. A 0fr→1fr check track on a decelerating curve moves 5px in its first frame and is smooth.
+- Only toggles inside a `[data-component]` are judged, so the book's own scene picker in each demo is no longer counted against every component. Toggles the press cannot land on, or whose state never flips on a click, are skipped and counted in the gate's line, not red.
+- New hint and rule: two `box-shadow` lists interpolate only with the same layers and `inset` in the same places. Pane's RadioCards swapped its shadow under a 300ms transition. motion.md now says "keep shadow lists in step".
+- Proof: 37 cases (fast press with slow choice, instant focus ring, steep track, covered toggle, shadow layers mismatched and matched).
+- `agent-setup.mjs`: the install sentence follows the config. "Installed from the tarball its site hosts" only when a package has `tarball` or is missing from `docs.published`. With registry names only it says "Install it with your package manager:", and a mix names the tarball ones.
+
 ## 2.6.4 — G-MO4: overlays decelerate in, accelerate out
 
 - G-MO4 opens each overlay trigger in the component demos (`aria-haspopup`, or `aria-expanded` with `aria-controls`) with a real click, closes it with Escape, and reads both halves from `document.getAnimations()`. Red when the entrance does not decelerate, the exit does not accelerate, the exit runs longer than 0.6 × the entrance (`motion.exitRatio`), or the overlay arrives with motion and vanishes in one frame. Five proof cases in `motion-probes.proof.mjs` (31 in all). Duration-follows-distance is still to come.

@@ -132,14 +132,21 @@ const SAMPLER = ([sel, ms]) => {
   const read = (e, pseudo) => { const cs = getComputedStyle(e, pseudo); return PAINT.map((k) => cs[k]); };
   const look = () => [...read(el), ...read(el, '::before'), ...read(el, '::after'), ...[...el.children].slice(0, 6).flatMap((c) => read(c))];
   return new Promise((done) => {
-    const frames = []; let t0 = null;
-    el.addEventListener('pointerdown', () => { t0 = performance.now(); }, { capture: true, once: true });
+    // the choice starts when the state attribute flips (on the click, after the press), not on pointer
+    // down: :active has its own fast way in (G-MO1, G-MO2), and timing from the press punished it (Pane, 2.6.3)
+    const frames = []; let t0 = null, down = null;
+    const mo = new MutationObserver(() => { if (t0 === null) t0 = performance.now(); });
+    mo.observe(el, { attributes: true, attributeFilter: ['aria-pressed', 'aria-checked', 'aria-selected', 'data-state'] });
+    window.addEventListener('pointerdown', () => { down = performance.now(); }, { capture: true, once: true });
     const start = performance.now();
+    // what focus paints (a ring, which motion.md keeps instant) is read once with focus taken away, so it is
+    // never judged as the choice snapping (Pane, 2.6.3: Tabs had no box-shadow transition; the ring was focus)
+    const end = (r) => { mo.disconnect(); const had = document.activeElement; had?.blur?.(); el.blur(); r.blurred = look(); had?.focus?.({ preventScroll: true }); done(r); };
     const tick = () => {
       const t = performance.now();
       frames.push({ t, x: nb ? nb.getBoundingClientRect().x : null, look: look() });
-      if (t0 !== null && t - t0 > ms) return done({ t0, frames, neighbour: !!nb });
-      if (t - start > ms + 3000) return done({ t0, frames, neighbour: !!nb });
+      if (t0 !== null && t - t0 > ms) return end({ t0, down, frames, neighbour: !!nb });
+      if (t - start > ms + 2000) return end({ t0, down, frames, neighbour: !!nb });
       requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
@@ -147,65 +154,85 @@ const SAMPLER = ([sel, ms]) => {
 };
 
 /** Pure judgement over one sampled change, shared with the proof. */
-export function judgeToggle({ t0, frames }, { jump = 4, early = 60, settle = 300 } = {}) {
+export function judgeToggle({ t0, down = null, frames, blurred = null }, { jump = 4, share = 0.5, early = 60, settle = 300 } = {}) {
   const out = [];
-  if (t0 === null || frames.length < 3) return ['the press never reached the toggle'];
+  if (t0 === null || frames.length < 3) return out; // the state never flipped: nothing to judge (toggleChange counts it as skipped)
+  const rest = (down !== null ? frames.filter((f) => f.t <= down).at(-1) : null) ?? frames[0];
   const before = frames.filter((f) => f.t <= t0).at(-1) ?? frames[0];
   const after = frames.filter((f) => f.t > t0);
   const end = frames.at(-1);
-  let worst = 0;
+  // a jump is one frame that carries most of the move: a track opening 0fr → 1fr on a decelerating curve
+  // moves a few px in its first frame and is smooth (Pane, 2.6.3: 5.2px of a 14px track was red at a flat 4px)
+  let worst = 0, total = 0;
   const seq = [before, ...after];
   for (let i = 1; i < seq.length; i++) {
-    if (seq[i].t - t0 > settle || seq[i].x === null || seq[i - 1].x === null) continue;
-    worst = Math.max(worst, Math.abs(seq[i].x - seq[i - 1].x));
+    if (seq[i].x === null || seq[i - 1].x === null || before.x === null) continue;
+    total = Math.max(total, Math.abs(seq[i].x - before.x));
+    if (seq[i].t - t0 <= settle) worst = Math.max(worst, Math.abs(seq[i].x - seq[i - 1].x));
   }
-  if (worst > jump) out.push(`its neighbour jumps ${worst.toFixed(1)}px in one frame (over ${jump}px): the toggle changes size at once`);
+  if (worst > jump && worst >= share * total) out.push(`its neighbour jumps ${worst.toFixed(1)}px of its ${total.toFixed(1)}px move in one frame: the toggle changes size at once`);
   const mid = after.find((f) => f.t - t0 >= early);
   if (mid) {
-    const snapped = end.look.map((v, k) => (before.look[k] !== v && mid.look[k] === v ? k : -1)).filter((k) => k >= 0);
+    // a property the press already moved belongs to :active and its own rhythm, not to the choice; one that
+    // focus painted (it changes when focus leaves) belongs to the focus ring
+    const snapped = end.look.map((v, k) => (rest.look[k] === before.look[k] && before.look[k] !== v && mid.look[k] === v && (!blurred || blurred[k] === v) ? k : -1)).filter((k) => k >= 0);
     if (snapped.length) {
       const PAINT = ['background-color', 'background-image', 'color', 'border-color', 'box-shadow', 'opacity'];
       const where = (k) => `${['', '::before ', '::after '][Math.floor(k / 6)] ?? `child ${Math.floor(k / 6) - 2} `}${PAINT[k % 6]}`;
-      const img = snapped.some((k) => k % 6 === 1);
-      out.push(`${where(snapped[0])} is already at its end ${Math.round(mid.t - t0)}ms after the press: it swaps instead of changing${img ? ' (a gradient cannot be transitioned; paint it from two registered colours, --ds-fill-top and --ds-fill-foot)' : ''}`);
+      const img = snapped.some((k) => k % 6 === 1), sh = snapped.find((k) => k % 6 === 4) !== undefined;
+      const why = img ? ' (a gradient cannot be transitioned; paint it from two registered colours, --ds-fill-top and --ds-fill-foot)'
+        : sh ? ' (two shadow lists interpolate only when they have the same layers with inset in the same places; pad the shorter one with transparent layers)' : '';
+      out.push(`${snapped.map(where).slice(0, 3).join(', ')} already at its end ${Math.round(mid.t - t0)}ms after the press: it swaps instead of changing${why}`);
     }
   }
   return out;
 }
 
 /** Clicks toggles in the demos and judges each change both ways where it can go back. */
-export async function toggleChange(page, { scope = 'main [data-example-live]', limit = 4, window: ms = 700, jump = 4, early = 60, settle = 300 } = {}) {
-  const out = []; let seen = 0, tag = 0;
+export async function toggleChange(page, { scope = 'main [data-example-live]', limit = 4, window: ms = 700, jump = 4, early = 60, settle = 300, hold = 90 } = {}) {
+  const out = [], skipped = []; let seen = 0, tag = 0;
   const handles = (await page.$$(`${scope} ${TOGGLE_SELECTOR}`)).slice(0, limit * 4);
   for (const h of handles) {
     if (seen >= limit) break;
+    await h.scrollIntoViewIfNeeded().catch(() => {});
     const box = await h.boundingBox().catch(() => null);
     if (!box || box.width < 8 || box.height < 8) continue;
     const id = `kiln-mo3-${tag++}`;
     const info = await h.evaluate((el, id) => {
       el.setAttribute('data-kiln-probe', id);
       const radio = /^(radio|tab|option)$/.test(el.getAttribute('role') ?? '') || (el.hasAttribute('aria-selected') && !el.hasAttribute('aria-pressed'));
-      return { radio, on: ['true', 'on', 'checked', 'active'].includes(el.getAttribute('aria-pressed') ?? el.getAttribute('aria-checked') ?? el.getAttribute('aria-selected') ?? el.dataset.state), name: `${el.closest('[data-component]')?.dataset.component ?? el.tagName.toLowerCase()} "${(el.getAttribute('aria-label') ?? el.textContent ?? '').trim().slice(0, 24)}"` };
+      return { radio, inComponent: !!el.closest('[data-component]'), on: ['true', 'on', 'checked', 'active'].includes(el.getAttribute('aria-pressed') ?? el.getAttribute('aria-checked') ?? el.getAttribute('aria-selected') ?? el.dataset.state), name: `${el.closest('[data-component]')?.dataset.component ?? el.tagName.toLowerCase()} "${(el.getAttribute('aria-label') ?? el.textContent ?? '').trim().slice(0, 24)}"` };
     }, id);
     if (info.radio && info.on) continue; // pressing the chosen option changes nothing
-    seen++;
+    if (!info.inComponent) continue; // the book's own chrome in a demo (a scene picker) is not the component under test
     const sel = `[data-kiln-probe="${id}"]`;
-    const press = async () => {
-      // rest on the toggle first so the hover transition is over before the change is sampled
+    // the point pressed must land on the toggle (or its label): a covered or off-screen toggle is skipped and
+    // counted, never judged on a press that went somewhere else (Pane: a Calendar under the stage picker)
+    const reach = async () => {
       const b = await h.boundingBox(); if (!b) return null;
-      await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2); await page.waitForTimeout(600);
+      const pt = { x: b.x + b.width / 2, y: b.y + b.height / 2 };
+      const hits = await page.evaluate(([s, x, y]) => { const el = document.querySelector(s), at = document.elementFromPoint(x, y); return !!at && (el === at || el.contains(at) || at.contains(el) || at.closest('label')?.contains(el)); }, [sel, pt.x, pt.y]);
+      return hits ? pt : null;
+    };
+    const press = async () => {
+      const pt = await reach(); if (!pt) return null;
+      // rest on the toggle first so the hover transition is over, then a click held as long as a person holds one
+      await page.mouse.move(pt.x, pt.y); await page.waitForTimeout(600);
       const sampling = page.evaluate(SAMPLER, [sel, ms]);
-      await page.waitForTimeout(50); await page.mouse.down(); await page.mouse.up();
+      await page.waitForTimeout(50); await page.mouse.down(); await page.waitForTimeout(hold); await page.mouse.up();
       return sampling;
     };
+    let judged = false;
     for (const dir of info.radio ? ['on'] : ['on', 'off']) {
       const s = await press().catch(() => null);
-      if (!s) break;
+      if (!s || s.t0 === null) { skipped.push(`${info.name}: ${s ? 'its state never flipped on a click' : 'the press does not land on it'}`); break; }
+      judged = true;
       for (const p of judgeToggle(s, { jump, early, settle })) out.push(`${info.name} (${dir === 'on' ? 'first press' : 'pressed back'}): ${p}`);
     }
+    if (judged) seen++;
     await page.mouse.move(1, 1);
   }
-  return { checked: seen, problems: out };
+  return { checked: seen, problems: out, skipped };
 }
 
 // ---------------------------------------------------------------- G-MO4 an overlay arriving and leaving

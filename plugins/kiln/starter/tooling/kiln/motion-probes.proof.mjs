@@ -66,6 +66,17 @@ const cases = [
   { gate: 'G-MO3 check added to the DOM', want: 'red', toggle: chips(CHIP + '.t{background:#444;transition:background-color 300ms cubic-bezier(.4,0,.2,1)}.t[aria-pressed=true]{background:#36c}', 'mark') },
   { gate: 'G-MO3 colour transition', want: 'green', toggle: chips(CHIP + '.t{background:#444;transition:background-color 300ms cubic-bezier(.4,0,.2,1)}.t[aria-pressed=true]{background:#36c}') },
   { gate: 'G-MO3 registered fill + check track', want: 'green', toggle: chips(FILL + CHIP + TRACK + '.t{--ds-fill-top:#444;--ds-fill-foot:#333;background:linear-gradient(var(--ds-fill-top),var(--ds-fill-foot));transition:--ds-fill-top 300ms cubic-bezier(.4,0,.2,1),--ds-fill-foot 300ms cubic-bezier(.4,0,.2,1)}.t[aria-pressed=true]{--ds-fill-top:#36c;--ds-fill-foot:#249}', 'track') },
+  // Pane 2.6.3: a fast :active shadow (70ms in) plus a 300ms choice must stay green; it was red when timed from pointer down
+  { gate: 'G-MO3 fast press, slow choice', want: 'green', toggle: chips(CHIP + '.t{background:#444;box-shadow:0 0 0 0 #000;transition:background-color 300ms cubic-bezier(.4,0,.2,1),box-shadow 300ms cubic-bezier(.4,0,.2,1)}.t:active{box-shadow:0 0 0 3px #000;transition-duration:70ms;transition-timing-function:cubic-bezier(.22,1,.36,1)}.t[aria-pressed=true]{background:#36c}') },
+  // a focus ring that appears at once on the press is focus, not the choice snapping
+  { gate: 'G-MO3 instant focus ring', want: 'green', toggle: chips(CHIP + '.t{background:#444;transition:background-color 300ms cubic-bezier(.4,0,.2,1)}.t:focus{box-shadow:0 0 0 2px #fff;outline:0}.t[aria-pressed=true]{background:#36c}') },
+  // a 20px track opening on a steep decelerating curve moves over 4px in its first frame and is still smooth
+  { gate: 'G-MO3 steep track', want: 'green', toggle: chips(FILL + CHIP + TRACK.replace('320ms cubic-bezier(.4,0,.2,1)', '300ms cubic-bezier(.22,1,.36,1)').replace('width:14px', 'width:20px') + '.t{background:#444;transition:background-color 300ms cubic-bezier(.4,0,.2,1)}.t[aria-pressed=true]{background:#36c}', 'track') },
+  // shadows with layers that do not line up swap even under a transition (Pane RadioCards, 2.6.4)
+  { gate: 'G-MO3 shadow layers mismatch', want: 'red', toggle: chips(CHIP + '.t{background:#444;box-shadow:inset 0 1px 0 #fff,0 2px 6px #000;transition:box-shadow 300ms cubic-bezier(.4,0,.2,1)}.t[aria-pressed=true]{box-shadow:0 4px 10px #000,inset 0 0 0 1px #000}') },
+  { gate: 'G-MO3 shadow layers matched', want: 'green', toggle: chips(CHIP + '.t{background:#444;box-shadow:inset 0 1px 0 #fff,0 2px 6px #000;transition:box-shadow 300ms cubic-bezier(.4,0,.2,1)}.t[aria-pressed=true]{box-shadow:inset 0 0 0 1px #000,0 4px 10px #000}') },
+  // a toggle the press cannot reach is skipped, not red
+  { gate: 'G-MO3 covered toggle skipped', want: 'green', toggle: chips(CHIP + '.t{background:#444}.t[aria-pressed=true]{background:#36c}.row{position:relative}.row::after{content:"";position:absolute;inset:0}') },
   { gate: 'G-MO3 radio group', want: 'green', toggle: chips(CHIP + '.t{background:#444;transition:background-color 300ms cubic-bezier(.4,0,.2,1)}.t[aria-checked=true]{background:#36c}', 'radio') },
   // G-MO4, an overlay opened with a click and closed with Escape
   { gate: 'G-MO4 decelerate in, accelerate out', want: 'green', overlay: overlay(IN, OUT) },
