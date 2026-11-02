@@ -208,6 +208,81 @@ export async function toggleChange(page, { scope = 'main [data-example-live]', l
   return { checked: seen, problems: out };
 }
 
+// ---------------------------------------------------------------- G-MO4 an overlay arriving and leaving
+// motion.md "Decelerate in, accelerate out": a dialog, sheet, popover or menu arrives on a decelerating curve,
+// leaves on an accelerating one, and leaves faster, exit ≤ `exitRatio` × enter. An overlay that arrives with
+// motion and vanishes in one frame is red too: the way out is part of the rhythm (Pane handoff, item 7).
+export const OVERLAY_TRIGGER = ':is([aria-haspopup]:not([aria-haspopup=false]), [aria-expanded=false][aria-controls]):not([disabled]):not([aria-disabled=true])';
+
+/** In-page: records every animation that starts in the next `ms` ms, except the trigger's own. */
+const ANIMS = ([sel, ms]) => new Promise((done) => {
+  const trig = document.querySelector(sel);
+  const seen = new Map(); const start = performance.now();
+  // an entrance with fill: both stays in getAnimations() after it ends; only what starts from now counts
+  const before = new Set(document.getAnimations());
+  const timing = (a) => {
+    const eff = a.effect; if (!eff?.getTiming) return null;
+    const t = eff.getTiming(); const kf = eff.getKeyframes?.() ?? [];
+    // a CSS transition carries its curve on the timing, a CSS animation on its first keyframe
+    const easing = t.easing && t.easing !== 'linear' ? t.easing : (kf[0]?.easing ?? t.easing);
+    const tgt = eff.target; const props = kf.flatMap((k) => Object.keys(k).filter((x) => !['offset', 'easing', 'composite', 'computedOffset'].includes(x)));
+    return { duration: Number(t.duration) || 0, delay: Number(t.delay) || 0, easing, props: [...new Set(props.concat(a.transitionProperty ? [a.transitionProperty] : []))], on: tgt ? `${tgt.tagName.toLowerCase()}${tgt.getAttribute('role') ? `[role=${tgt.getAttribute('role')}]` : ''}` : '?' };
+  };
+  const tick = () => {
+    for (const a of document.getAnimations()) {
+      const tgt = a.effect?.target;
+      if (seen.has(a) || before.has(a) || !tgt || (trig && (tgt === trig || trig.contains(tgt)))) continue;
+      const t = timing(a); if (t && t.duration > 0) seen.set(a, t);
+    }
+    if (performance.now() - start > ms) return done([...seen.values()]);
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+});
+
+/** Pure judgement over what moved on the way in and on the way out. */
+export function judgeOverlay(enter, exit, { exitRatio = 0.6 } = {}) {
+  const out = [];
+  const main = (list) => list.slice().sort((a, b) => b.duration + b.delay - (a.duration + a.delay))[0];
+  const e = main(enter), x = main(exit);
+  if (!e) return out; // arrives with no motion: G-MO1/G-MO2 own the quiet case
+  const curve = (s) => parseTimings(s)[0]?.bezier ?? null;
+  const ec = curve(e.easing);
+  if (ec && !decelerates(ec)) out.push(`arrives on "${e.easing}" (${e.on}), which does not decelerate`);
+  if (!x) { out.push(`arrives over ${Math.round(e.duration)}ms and leaves in one frame: give it an exit, about ${Math.round(e.duration * exitRatio)}ms, accelerating`); return out; }
+  const xc = curve(x.easing);
+  if (xc && !accelerates(xc)) out.push(`leaves on "${x.easing}" (${x.on}), which does not accelerate away`);
+  if (x.duration > e.duration * exitRatio + 1) out.push(`leaves over ${Math.round(x.duration)}ms, more than ${exitRatio} × its ${Math.round(e.duration)}ms entrance`);
+  return out;
+}
+
+/** Opens each overlay trigger in the demos with a real click, closes it with Escape, judges both halves. */
+export async function overlayChoreography(page, { scope = 'main [data-example-live]', limit = 3, window: ms = 900, exitRatio = 0.6 } = {}) {
+  const out = []; let seen = 0, tag = 0;
+  const handles = (await page.$$(`${scope} ${OVERLAY_TRIGGER}`)).slice(0, limit * 3);
+  for (const h of handles) {
+    if (seen >= limit) break;
+    const box = await h.boundingBox().catch(() => null);
+    if (!box || box.width < 8 || box.height < 8) continue;
+    const id = `kiln-mo4-${tag++}`;
+    const name = await h.evaluate((el, id) => { el.setAttribute('data-kiln-probe', id); return `${el.closest('[data-component]')?.dataset.component ?? el.tagName.toLowerCase()} "${(el.getAttribute('aria-label') ?? el.textContent ?? '').trim().slice(0, 24)}"`; }, id);
+    const sel = `[data-kiln-probe="${id}"]`;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2); await page.waitForTimeout(500);
+    const inP = page.evaluate(ANIMS, [sel, ms]);
+    await page.waitForTimeout(30); await page.mouse.down(); await page.mouse.up();
+    const enter = await inP.catch(() => []);
+    const opened = await h.evaluate((el) => el.getAttribute('aria-expanded') === 'true' || el.dataset.state === 'open' || !!document.querySelector('[role=dialog],[role=alertdialog],[role=menu],[role=listbox],[popover]:popover-open'));
+    if (!opened) continue;
+    seen++;
+    const outP = page.evaluate(ANIMS, [sel, ms]);
+    await page.waitForTimeout(30); await page.keyboard.press('Escape');
+    const exit = await outP.catch(() => []);
+    for (const p of judgeOverlay(enter, exit, { exitRatio })) out.push(`${name}: ${p}`);
+    await page.mouse.move(1, 1); await page.waitForTimeout(200);
+  }
+  return { checked: seen, problems: out };
+}
+
 // ---------------------------------------------------------------- springs (why.json mechanism.spring)
 /** A part on a damped spring: ζ = c / (2√(k·m)) between 0.75 and 1 (no wobble, no creep) and a settle time
  *  4 / (ζ·ω₀), ω₀ = √(k/m), under 600ms. A declared signature moment (signature: true) may go to ζ 0.5. */

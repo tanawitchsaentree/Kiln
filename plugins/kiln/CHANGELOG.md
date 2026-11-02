@@ -1,5 +1,9 @@
 # kiln — changelog
 
+## 2.6.4 — G-MO4: overlays decelerate in, accelerate out
+
+- G-MO4 opens each overlay trigger in the component demos (`aria-haspopup`, or `aria-expanded` with `aria-controls`) with a real click, closes it with Escape, and reads both halves from `document.getAnimations()`. Red when the entrance does not decelerate, the exit does not accelerate, the exit runs longer than 0.6 × the entrance (`motion.exitRatio`), or the overlay arrives with motion and vanishes in one frame. Five proof cases in `motion-probes.proof.mjs` (31 in all). Duration-follows-distance is still to come.
+
 ## 2.6.3
 
 - A limited conformance run (`KILN_CHECKS=…`) no longer reports components as untested when their checks sit in a skipped file that checks a list in a loop (`for (const name of ['Dialog', 'Sheet', …]) await check(name, …)`). `conformance-names.mjs` counts any quoted chapter name in a skipped file as covered; before, only a literal `check('Name'` was read, so Pane's `KILN_CHECKS=09` wrote reds for Dialog, Sheet, Drawer and ActionSheet into conformance.json. Proof: `conformance-names.proof.mjs` (4 cases) in gate:selftest.

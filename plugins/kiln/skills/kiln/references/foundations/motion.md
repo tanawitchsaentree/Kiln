@@ -84,7 +84,10 @@ A CSS transition takes its duration from the state it is going to, so components
 steeper at the start than at the end. For a cubic-bezier (x1, y1, x2, y2) the slope at the start is
 y1 / x1 and at the end (1 − y2) / (1 − x2); arrival needs the first to be larger. An exit does the
 opposite and is shorter than the entrance, about 0.6 of it, with no stagger, because nobody watches a
-thing leave.
+thing leave. An overlay that arrives with motion never leaves in one frame. G-MO4 opens every
+overlay in the demos with a click, closes it with Escape and reads both halves from `document.getAnimations()`:
+red when the entrance does not decelerate, the exit does not accelerate, the exit runs longer than 0.6 × the
+entrance, or there is no exit at all.
 
 **Duration follows distance.** For travel, duration = clamp(min, a + b·√d, max) with d in px. With
 a = 120 and b = 12 a 100px move takes 240ms, 400px takes 360ms and 900px takes 480ms. Fades and state

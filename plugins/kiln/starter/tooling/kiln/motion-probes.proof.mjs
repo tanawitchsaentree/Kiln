@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-// Gate proof for G-MO1, G-MO2 and G-MO3 (Gate Proof Rule: plant the violation, expect red; repair it, expect green).
+// Gate proof for G-MO1 to G-MO4 (Gate Proof Rule: plant the violation, expect red; repair it, expect green).
 // Usage: node tooling/engine/motion-probes.proof.mjs   (exit 1 when any case is wrong)
 import { chromium } from 'playwright';
-import { motionTokenProblems, stateRhythm, toggleChange, decelerates, accelerates, springProblems } from './motion-probes.mjs';
+import { motionTokenProblems, stateRhythm, toggleChange, overlayChoreography, decelerates, accelerates, springProblems } from './motion-probes.mjs';
 
 const tok = (over) => ({
   'motion.hover': { tier: 'semantic', type: 'duration', value: '360ms', state: { ':hover': '{duration.brisk}' } },
@@ -31,6 +31,11 @@ const chips = (css, mode = '') => {
   const b = (l, on) => `<button class="t" ${attr}="${on}" onclick="${flip}">${inner(l)}</button>`;
   return `<style>${css}</style><div data-example-live=""><div data-component="Chips" class="row"${mode === 'radio' ? ' role="radiogroup"' : ''}>${b('Brick', mode === 'radio')}${b('Plate', false)}${b('Tile', false)}</div></div>`;
 };
+
+// overlays: a trigger opens a [role=dialog]; Escape closes it with an exit animation (or none)
+const overlay = (inA, outA) => `<style>@keyframes kin{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}@keyframes kout{from{opacity:1;transform:none}to{opacity:0;transform:translateY(8px)}}.d{position:fixed;inset:40px auto auto 40px;width:240px;height:120px;background:#333;color:#fff}.d.in{animation:${inA}}.d.out{animation:${outA ?? 'none'}}</style>
+<div data-example-live=""><div data-component="Dialog"><button aria-haspopup="dialog" aria-expanded="false" onclick="const d=document.createElement('div');d.className='d in';d.setAttribute('role','dialog');d.textContent='Hi';document.body.append(d);this.setAttribute('aria-expanded','true');const b=this;document.addEventListener('keydown',function k(e){if(e.key!=='Escape')return;document.removeEventListener('keydown',k);b.setAttribute('aria-expanded','false');${outA ? "d.className='d out';d.addEventListener('animationend',()=>d.remove())" : 'd.remove()'}})">Open</button></div></div>`;
+const IN = 'kin 320ms cubic-bezier(.22,1,.36,1) both', OUT = 'kout 180ms cubic-bezier(.4,0,1,1) both';
 
 const cases = [
   { gate: 'bezier', want: 'green', run: () => (decelerates([0.22, 1, 0.36, 1]) && accelerates([0.4, 0, 1, 1]) && !decelerates([0.4, 0, 1, 1]) ? [] : ['curve maths']) },
@@ -62,6 +67,12 @@ const cases = [
   { gate: 'G-MO3 colour transition', want: 'green', toggle: chips(CHIP + '.t{background:#444;transition:background-color 300ms cubic-bezier(.4,0,.2,1)}.t[aria-pressed=true]{background:#36c}') },
   { gate: 'G-MO3 registered fill + check track', want: 'green', toggle: chips(FILL + CHIP + TRACK + '.t{--ds-fill-top:#444;--ds-fill-foot:#333;background:linear-gradient(var(--ds-fill-top),var(--ds-fill-foot));transition:--ds-fill-top 300ms cubic-bezier(.4,0,.2,1),--ds-fill-foot 300ms cubic-bezier(.4,0,.2,1)}.t[aria-pressed=true]{--ds-fill-top:#36c;--ds-fill-foot:#249}', 'track') },
   { gate: 'G-MO3 radio group', want: 'green', toggle: chips(CHIP + '.t{background:#444;transition:background-color 300ms cubic-bezier(.4,0,.2,1)}.t[aria-checked=true]{background:#36c}', 'radio') },
+  // G-MO4, an overlay opened with a click and closed with Escape
+  { gate: 'G-MO4 decelerate in, accelerate out', want: 'green', overlay: overlay(IN, OUT) },
+  { gate: 'G-MO4 vanishes on close', want: 'red', overlay: overlay(IN, null) },
+  { gate: 'G-MO4 exit as long as entrance', want: 'red', overlay: overlay(IN, 'kout 320ms cubic-bezier(.4,0,1,1) both') },
+  { gate: 'G-MO4 arrives on ease-in', want: 'red', overlay: overlay('kin 320ms cubic-bezier(.42,0,1,1) both', OUT) },
+  { gate: 'G-MO4 exit decelerates', want: 'red', overlay: overlay(IN, 'kout 180ms cubic-bezier(.22,1,.36,1) both') },
 ];
 
 const browser = await chromium.launch();
@@ -71,8 +82,8 @@ for (const c of cases) {
   let problems;
   if (c.run) problems = c.run();
   else {
-    await page.setContent(`<!doctype html><html><body style="margin:0;font:16px system-ui"><main style="padding:40px">${c.html ?? c.toggle}</main></body></html>`);
-    problems = c.toggle ? (await toggleChange(page, { limit: 2 })).problems : (await stateRhythm(page, { limit: 2 })).problems;
+    await page.setContent(`<!doctype html><html><body style="margin:0;font:16px system-ui"><main style="padding:40px">${c.html ?? c.toggle ?? c.overlay}</main></body></html>`);
+    problems = c.overlay ? (await overlayChoreography(page, { limit: 1 })).problems : c.toggle ? (await toggleChange(page, { limit: 2 })).problems : (await stateRhythm(page, { limit: 2 })).problems;
   }
   const got = problems.length ? 'red' : 'green';
   if (got !== c.want) wrong++;

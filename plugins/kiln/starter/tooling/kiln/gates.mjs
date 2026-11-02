@@ -30,6 +30,7 @@
 //   motion       G-MO2 the motion tokens keep the rhythm (fast on, slow off; decelerate in, accelerate out)
 //                G-MO1 every control on a component page answers its hover and press in that rhythm
 //                G-MO3 a toggle changes state without a swap: no neighbour jumps, no fill already at its end at 60ms
+//                G-MO4 an overlay decelerates in, accelerates out, and leaves in at most 0.6 × its entrance
 //   from Pane    G-CP1 search lists a label once · G-BJ1 a bar's jobs look different · G-FR1 focus rings are
 //                not clipped · G-SP1 a split menu lines up with the whole button · G-SC1 the showcase is working
 //                flows · G-PG1 a playground starts on its tokens (ui-probes.mjs, proven by ui-probes.proof.mjs)
@@ -50,7 +51,7 @@ import { chromium } from 'playwright';
 import AxeBuilder from '@axe-core/playwright';
 import { docsConfig, routes, componentPages, url, routeFilter } from './config.mjs';
 import { serveDist } from './serve-dist.mjs';
-import { motionTokenProblems, stateRhythm, toggleChange } from './motion-probes.mjs';
+import { motionTokenProblems, stateRhythm, toggleChange, overlayChoreography } from './motion-probes.mjs';
 import { duplicateOptionsProbe, barJobsProbe, focusClipProbe, splitAlignProbe, showcaseProbe, playgroundProbe } from './ui-probes.mjs';
 import { glassCssProblems, glassRecipeProbe, bareSurfaceProbe, meshShareProbe, cardStats, anchorDrift, pillCardProbe, rowEdgeProbe } from './surface-probes.mjs';
 
@@ -1544,6 +1545,23 @@ try {
     await mc.close();
     fail(bad, 'toggles that swap');
     return `${n} toggles on ${routes.length} pages`;
+  });
+
+  await gate('G-MO4', 'an overlay arrives on a decelerating curve, leaves on an accelerating one, and leaves in at most 0.6 × its entrance (never in one frame)', async () => {
+    // motion.md "Decelerate in, accelerate out"; Pane handoff item 7
+    const routes = ROUTES.filter((r) => r.startsWith(`${C.componentsBase}/`) && r.endsWith('/code')).slice(0, C.motion?.pages ?? 24);
+    if (!routes.length) throw new Error('NO pages to check');
+    const bad = []; let n = 0;
+    const mc = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'no-preference' });
+    const mp = await mc.newPage();
+    for (const r of routes) {
+      await mp.goto(url(srv.base, r, {}, C), { waitUntil: 'networkidle' });
+      const res = await overlayChoreography(mp, { limit: C.motion?.overlaysPerPage ?? 2, exitRatio: C.motion?.exitRatio ?? 0.6 });
+      n += res.checked; for (const x of res.problems) bad.push(`${r}: ${x}`);
+    }
+    await mc.close();
+    fail(bad, 'overlays off rhythm');
+    return `${n} overlays on ${routes.length} pages`;
   });
 
   await gate('G-CP1', 'the book\'s search never lists the same label twice for one query', async () => {
